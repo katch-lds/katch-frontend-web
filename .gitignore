@@ -1,0 +1,56 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Testing
+coverage/
+.nyc_output/
+jest-coverage/
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.user
+*.suo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# React-specific
+.cache/
+.parcel-cache/
+
+# ESLint cache
+.eslintcache
+
+# Playwright
+test-results/
+blob-report/
+playwright/.auth/
+
+# IDE
+.idea/
+*.swp
