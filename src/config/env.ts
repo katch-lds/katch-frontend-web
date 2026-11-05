@@ -1,3 +1,5 @@
+import { trimTrailingSlashes } from '../utils/url';
+
 // Configuração por ambiente (I120). Os valores vêm dos ficheiros .env.* do Vite (VITE_*), sem segredos.
 export interface AppConfig {
   /** Endereço base da API REST, sem a barra final (por exemplo, http://localhost:5180). */
@@ -14,6 +16,6 @@ function readTimeout(value: string | undefined): number {
 }
 
 export const appConfig: AppConfig = {
-  apiBaseUrl: (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, ''),
+  apiBaseUrl: trimTrailingSlashes(import.meta.env.VITE_API_BASE_URL ?? ''),
   apiTimeoutMs: readTimeout(import.meta.env.VITE_API_TIMEOUT_MS),
 };

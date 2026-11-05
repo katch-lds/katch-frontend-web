@@ -1,4 +1,5 @@
 import type { SessionStore } from '../session/SessionStore';
+import { trimTrailingSlashes } from '../utils/url';
 import { ApiError } from './ApiError';
 import type { ConnectionMonitor } from './ConnectionMonitor';
 import type { IApiClient } from './IApiClient';
@@ -28,7 +29,7 @@ export class HttpApiClient implements IApiClient {
   private readonly fetchFn: FetchFn;
 
   constructor(options: HttpApiClientOptions) {
-    this.baseUrl = options.baseUrl.replace(/\/+$/, '');
+    this.baseUrl = trimTrailingSlashes(options.baseUrl);
     this.timeoutMs = options.timeoutMs;
     this.session = options.session;
     this.monitor = options.monitor;
