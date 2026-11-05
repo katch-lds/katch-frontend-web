@@ -1,0 +1,144 @@
+name: CI
+
+# Pipeline CI do frontend web (I120), no modelo da pipeline do backend (I066): QG-01 (build), QG-05 (ESLint,
+# Prettier e análise SonarQube com o Quality Gate «Katch QG-05») e a cobertura mínima de 40% das linhas dos testes
+# unitários (Jest). O passo do QG-06 (Playwright) fica preparado e corre logo que exista playwright.config.ts.
+# Corre em cada Merge Request para a main e em cada push na main; a regra de proteção da main exige os dois jobs com
+# sucesso antes do merge.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '24'
+  # Endereço da API usado no build; vem das variáveis do repositório (sem segredos), se existir.
+  VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+
+jobs:
+  build-and-test:
+    name: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: QG-01 Build (tsc e Vite)
+        run: npm run build
+
+      - name: QG-05 ESLint
+        run: npm run lint
+
+      - name: QG-05 Prettier
+        run: npm run format:check
+
+      - name: Testes unitários e cobertura de linhas ≥ 40% (Jest)
+        run: |
+          npm run test:coverage -- --ci
+          node -e "const s=require('./coverage/coverage-summary.json').total.lines; console.log('Cobertura de linhas: ' + s.pct + '%')"
+
+      - name: Resumo da cobertura
+        if: always()
+        run: |
+          if [[ -f coverage/coverage-summary.json ]]; then
+            pct="$(jq -r '.total.lines.pct' coverage/coverage-summary.json)"
+            {
+              echo "## Testes unitários (Jest)"
+              echo
+              echo "Cobertura de linhas: **${pct}%** (mínimo: 40%)"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: QG-06 Testes de sistema (Playwright)
+        if: hashFiles('playwright.config.ts') != ''
+        run: |
+          npx playwright install --with-deps
+          npx playwright test
+
+      - name: Publicar relatório de cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+          if-no-files-found: ignore
+
+  static-analysis:
+    name: static-analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      # Instância SonarQube Community Build criada para cada execução e configurada por
+      # scripts/sonarqube/configure.sh (Quality Profile «Sonar way» de TypeScript e JavaScript e Quality Gate
+      # «Katch QG-05»), como no backend.
+      sonarqube:
+        image: sonarqube:26.10.0.133078-community
+        env:
+          SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: 'true'
+        ports:
+          - 9000:9000
+    env:
+      SONAR_HOST_URL: http://localhost:9000
+      SONAR_PROJECT_KEY: katch-frontend-web
+      SONAR_LANGUAGES: 'ts js'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Configurar a instância SonarQube
+        env:
+          SONAR_ADMIN_PASSWORD: ${{ secrets.SONAR_ADMIN_PASSWORD }}
+        run: bash scripts/sonarqube/configure.sh
+
+      - name: QG-05 Testes para a cobertura importada
+        run: npm run test:coverage -- --ci
+
+      - name: QG-05 Análise SonarQube e Quality Gate
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ github.sha }}
+
+      - name: Exportar o relatório SonarQube
+        if: always()
+        run: |
+          if [[ -n "${SONAR_TOKEN:-}" ]]; then
+            bash scripts/sonarqube/export-report.sh && cat sonarqube-report/resumo.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Publicar o relatório SonarQube
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonarqube-report
+          path: sonarqube-report
+          if-no-files-found: ignore
