@@ -20,11 +20,11 @@
 
 ## Configuração por ambiente
 
-| Variável               | Para quê                                                                              |
-| ---------------------- | ------------------------------------------------------------------------------------- |
-| `VITE_API_BASE_URL`    | Endereço da API. Vazio em desenvolvimento: os pedidos são relativos (`/api/...`).      |
-| `VITE_PROXY_TARGET`    | Destino do proxy do Vite em `npm run dev` (por omissão `http://localhost:5180`).       |
-| `VITE_API_TIMEOUT_MS`  | Tempo limite de cada pedido, inferior a 10 segundos.                                  |
+| Variável              | Para quê                                                                          |
+| --------------------- | --------------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL`   | Endereço da API. Vazio em desenvolvimento: os pedidos são relativos (`/api/...`). |
+| `VITE_PROXY_TARGET`   | Destino do proxy do Vite em `npm run dev` (por omissão `http://localhost:5180`).  |
+| `VITE_API_TIMEOUT_MS` | Tempo limite de cada pedido, inferior a 10 segundos.                              |
 
 `.env.development` serve o desenvolvimento local e `.env.production.local` (a partir de `.env.example`, fora do Git)
 o build de produção. Na pipeline, `VITE_API_BASE_URL` vem das variáveis do repositório. Não há segredos nestes
