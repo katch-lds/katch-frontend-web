@@ -1,0 +1,20 @@
+/* Tipo de letra único da aplicação: sans-serif do sistema, também nos controlos de formulário, que por omissão não
+   herdam a fonte do texto. */
+:root {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}

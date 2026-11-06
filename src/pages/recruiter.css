@@ -1,7 +1,6 @@
 /* Ecrãs W21 a W23 do protótipo v02, sem deslocamento horizontal entre 1280 e 1920 píxeis (RNF012). */
 .recruiter-page {
   padding: 24px 32px;
-  font-family: system-ui, sans-serif;
   color: #1f2937;
 }
 
@@ -187,5 +186,4 @@
 .composer textarea {
   flex: 1;
   resize: none;
-  font: inherit;
 }
