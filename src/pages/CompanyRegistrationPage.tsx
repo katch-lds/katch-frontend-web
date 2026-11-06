@@ -50,7 +50,7 @@ export default function CompanyRegistrationPage() {
       }
     }
     await refreshCompanyStatus();
-    navigate(paths.companyStatus);
+    await navigate(paths.companyStatus);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

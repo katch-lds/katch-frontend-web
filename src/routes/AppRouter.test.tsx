@@ -172,7 +172,9 @@ describe('RequireCompanyStatus', () => {
     renderApp('/matches', signedInStore('RECRUITER'));
     (await screen.findByRole('button', { name: 'Tentar de novo' })).click();
 
-    await screen.findByRole('navigation', { name: 'Navegação do Recrutador' });
+    expect(
+      await screen.findByRole('navigation', { name: 'Navegação do Recrutador' }),
+    ).toBeInTheDocument();
   });
 });
 
