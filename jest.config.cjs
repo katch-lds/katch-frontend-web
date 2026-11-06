@@ -7,6 +7,8 @@ module.exports = {
   moduleNameMapper: {
     // import.meta.env só existe no Vite; nos testes usa-se uma configuração fixa.
     '^(\\.{1,2}/)*config/env$': '<rootDir>/test/envMock.ts',
+    // As folhas de estilo são tratadas pelo Vite; nos testes não têm efeito.
+    '\\.css$': '<rootDir>/test/styleMock.ts',
   },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',

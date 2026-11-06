@@ -38,6 +38,16 @@ describe('ApiError', () => {
     expect(error.isConnectionFailure()).toBe(false);
   });
 
+  it('mantém um ApiError e converte qualquer outra falha na mensagem genérica', () => {
+    const conflict = new ApiError(409, 'Conversa encerrada.', 'ERR-36');
+
+    const unexpected = ApiError.from(new SyntaxError('Unexpected token'));
+
+    expect(ApiError.from(conflict)).toBe(conflict);
+    expect(unexpected.message).toBe('Ocorreu um erro inesperado. Tente de novo.');
+    expect(unexpected.isConnectionFailure()).toBe(false);
+  });
+
   it('identifica a falha de ligação', () => {
     expect(ApiError.connectionFailure().isConnectionFailure()).toBe(true);
   });
