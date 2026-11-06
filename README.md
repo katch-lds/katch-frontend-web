@@ -20,10 +20,20 @@
 
 ## Configuração por ambiente
 
-O endereço da API e o tempo limite dos pedidos vêm de `VITE_API_BASE_URL` e `VITE_API_TIMEOUT_MS`:
-`.env.development` para o desenvolvimento local e `.env.production.local` (a partir de `.env.example`, fora do Git)
-para o build de produção. Na pipeline, `VITE_API_BASE_URL` vem das variáveis do repositório. Não há segredos nestes
+| Variável               | Para quê                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL`    | Endereço da API. Vazio em desenvolvimento: os pedidos são relativos (`/api/...`).      |
+| `VITE_PROXY_TARGET`    | Destino do proxy do Vite em `npm run dev` (por omissão `http://localhost:5180`).       |
+| `VITE_API_TIMEOUT_MS`  | Tempo limite de cada pedido, inferior a 10 segundos.                                  |
+
+`.env.development` serve o desenvolvimento local e `.env.production.local` (a partir de `.env.example`, fora do Git)
+o build de produção. Na pipeline, `VITE_API_BASE_URL` vem das variáveis do repositório. Não há segredos nestes
 ficheiros.
+
+**CORS.** O backend não tem CORS configurado e o login envia o cabeçalho `X-Client-App`, pelo que o browser bloqueia
+os pedidos diretos de `localhost:5173` à API. Em desenvolvimento, o Vite reencaminha `/api` para `VITE_PROXY_TARGET`
+(`server.proxy` em `vite.config.ts`). O proxy só existe em `npm run dev`: um build de produção servido noutro domínio
+exige CORS no backend ou um reverse proxy. Para testes manuais, usar o backend local e não o ambiente público.
 
 ## Estrutura
 
