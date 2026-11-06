@@ -12,6 +12,8 @@ export interface HttpApiClientOptions {
   session: SessionStore;
   monitor: ConnectionMonitor;
   fetchFn?: FetchFn;
+  /** Chamado com cada resposta de erro da API (I069: ERR-01 e ERR-07 tratados pela sessão). */
+  onError?: (error: ApiError) => void;
 }
 
 /** Cliente da API v02 sobre fetch: JSON, credencial Bearer, X-Client-App: web e tempo limite (secção 4.1). */
@@ -28,12 +30,15 @@ export class HttpApiClient implements IApiClient {
 
   private readonly fetchFn: FetchFn;
 
+  private readonly onError?: (error: ApiError) => void;
+
   constructor(options: HttpApiClientOptions) {
     this.baseUrl = trimTrailingSlashes(options.baseUrl);
     this.timeoutMs = options.timeoutMs;
     this.session = options.session;
     this.monitor = options.monitor;
     this.fetchFn = options.fetchFn ?? ((input, init) => fetch(input, init));
+    this.onError = options.onError;
   }
 
   async get<T>(path: string): Promise<T> {
@@ -92,7 +97,9 @@ export class HttpApiClient implements IApiClient {
     }
     this.monitor.reportSuccess();
     if (!response.ok) {
-      throw await toApiError(response);
+      const error = await toApiError(response);
+      this.onError?.(error);
+      throw error;
     }
     return response;
   }
