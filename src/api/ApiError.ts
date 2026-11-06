@@ -30,6 +30,14 @@ export class ApiError extends Error {
     );
   }
 
+  /**
+   * Garante um ApiError para qualquer falha apanhada. O resto (por exemplo, um corpo de sucesso que não é JSON) é
+   * tratado como resposta inesperada, com a mensagem genérica, e não como falha de ligação.
+   */
+  static from(error: unknown): ApiError {
+    return error instanceof ApiError ? error : ApiError.fromResponse(500, null);
+  }
+
   /** Converte o corpo de uma resposta de erro; sem ApiErrorDto, fica a mensagem genérica e code a null. */
   static fromResponse(httpStatus: number, body: unknown): ApiError {
     if (isApiErrorDto(body)) {
