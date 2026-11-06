@@ -1,4 +1,4 @@
-// Serviços simulados partilhados pelos testes de I069 (jest.mock('../services', () => jest.requireActual(...))).
+// Serviços simulados partilhados pelos testes de I069: jest.mock('../services', () => jest.requireActual(...)).
 export const authService = {
   createRecruiterAccount: jest.fn(),
   login: jest.fn(),
@@ -13,3 +13,12 @@ export const conversationService = {
   send: jest.fn(),
   close: jest.fn(),
 };
+
+/** Repõe os simuladores com respostas por omissão que não atrapalham: sem conversas, sem matches, uma localidade. */
+export function resetServiceMocks(): void {
+  jest.resetAllMocks();
+  authService.logout.mockResolvedValue(undefined);
+  conversationService.list.mockResolvedValue([]);
+  matchService.list.mockResolvedValue([]);
+  referenceListService.listLocations.mockResolvedValue([{ id: 'loc-1', name: 'Braga (Braga)' }]);
+}

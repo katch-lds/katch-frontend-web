@@ -38,7 +38,12 @@ exige CORS no backend ou um reverse proxy. Para testes manuais, usar o backend l
 ## Estrutura
 
 As pastas de `src/` seguem as camadas do modelo de classes do frontend web v02 (secção 2.1): `pages`, `components`,
-`routes`, `hooks`, `services`, `api` (cliente da API v02), `polling`, `session` e `types`.
+`routes` (rotas e proteções), `layouts` (moldura do Recrutador), `hooks`, `services`, `api` (cliente da API v02),
+`polling`, `session` (sessão e `SessionProvider`), `validation` (regras dos formulários) e `types`.
+
+Rotas: `/entrar`, `/criar-conta`, `/empresa/registo`, `/empresa/estado`, `/matches` e `/conversas` (Recrutador),
+`/admin/entrar` (supervisão) e `/acesso-negado`. `/vagas`, `/empresa` e `/admin/indicadores` são páginas provisórias.
+A sessão fica em memória e no `sessionStorage` do separador (nunca no `localStorage`).
 
 ## Pipeline CI
 

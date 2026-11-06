@@ -16,6 +16,11 @@ export function onApiError(listener: ApiErrorListener): () => void {
   };
 }
 
+/** Entrega o erro a quem subscreveu (usado pelo cliente da API e pelos testes). */
+export function notifyApiError(error: ApiError): void {
+  errorListeners.forEach((listener) => listener(error));
+}
+
 /** Instâncias únicas usadas pela aplicação; os testes criam as suas. */
 export const sessionStore = new SessionStore();
 export const connectionMonitor = new ConnectionMonitor();
@@ -24,5 +29,5 @@ export const apiClient = new HttpApiClient({
   timeoutMs: appConfig.apiTimeoutMs,
   session: sessionStore,
   monitor: connectionMonitor,
-  onError: (error) => errorListeners.forEach((listener) => listener(error)),
+  onError: notifyApiError,
 });

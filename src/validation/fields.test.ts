@@ -34,7 +34,7 @@ describe('emailError', () => {
   it('exige o campo, o formato e o limite de 255 caracteres', () => {
     expect(emailError('  ')).toBe('O e-mail é obrigatório.');
     expect(emailError('ana')).toBe('O e-mail não tem um formato válido.');
-    expect(emailError(`${'a'.repeat(250)}@b.pt`)).toBe(
+    expect(emailError(`${'a'.repeat(251)}@b.pt`)).toBe(
       'O e-mail pode ter no máximo 255 caracteres.',
     );
     expect(emailError('ana@exemplo.pt')).toBeNull();
