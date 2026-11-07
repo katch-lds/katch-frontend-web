@@ -30,6 +30,22 @@ describe('AuthService', () => {
     expect(api.post).toHaveBeenCalledWith('/api/auth/recruiters', request);
   });
 
+  it('altera a palavra-passe com PUT /api/auth/password, só com a atual e a nova', async () => {
+    const api = {
+      put: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<IApiClient>;
+
+    await new AuthService(api).changePassword({
+      currentPassword: 'katch2025',
+      newPassword: 'katch2026',
+    });
+
+    expect(api.put).toHaveBeenCalledWith('/api/auth/password', {
+      currentPassword: 'katch2025',
+      newPassword: 'katch2026',
+    });
+  });
+
   it('termina a sessão com POST /api/auth/logout, sem corpo', async () => {
     const api = fakeApi();
     api.post.mockResolvedValue(undefined);
