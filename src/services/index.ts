@@ -1,7 +1,9 @@
 import { apiClient } from '../api';
 import { AuthService } from './AuthService';
+import { CandidateEvaluationService } from './CandidateEvaluationService';
 import { CompanyService } from './CompanyService';
 import { ConversationService } from './ConversationService';
+import { JobService } from './JobService';
 import { MatchService } from './MatchService';
 import { ReferenceListService } from './ReferenceListService';
 
@@ -11,3 +13,5 @@ export const conversationService = new ConversationService(apiClient);
 export const authService = new AuthService(apiClient);
 export const companyService = new CompanyService(apiClient);
 export const referenceListService = new ReferenceListService(apiClient);
+export const jobService = new JobService(apiClient);
+export const candidateEvaluationService = new CandidateEvaluationService(apiClient);

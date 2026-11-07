@@ -11,6 +11,7 @@ export const paths = {
   companyStatus: '/empresa/estado',
   company: '/empresa',
   jobs: '/vagas',
+  candidates: '/candidatos',
   matches: '/matches',
   conversations: '/conversas',
   adminIndicators: '/admin/indicadores',

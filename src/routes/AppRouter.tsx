@@ -11,6 +11,7 @@ import CreateRecruiterAccountPage from '../pages/CreateRecruiterAccountPage';
 import LoginPage from '../pages/LoginPage';
 import MatchesPage from '../pages/MatchesPage';
 import PlaceholderPage from '../pages/PlaceholderPage';
+import WaitingCandidatesPage from '../pages/WaitingCandidatesPage';
 import { paths } from './paths';
 import { PublicOnly } from './PublicOnly';
 import { ANY_COMPANY_ACCESS, RequireCompanyStatus } from './RequireCompanyStatus';
@@ -22,7 +23,7 @@ import { SessionHome } from './SessionHome';
 // autorização é sempre do servidor.
 
 /**
- * Rotas da aplicação. Os destinos `/vagas`, `/empresa` e `/admin/indicadores` são páginas provisórias, a substituir
+ * Rotas da aplicação. Os destinos `/vagas`, `/candidatos/:matchId`, `/empresa` e `/admin/indicadores` são páginas provisórias, a substituir
  * pela Issue do ecrã respetivo.
  */
 export function AppRouter() {
@@ -56,6 +57,11 @@ export function AppRouter() {
               </Route>
               <Route element={<RequireCompanyStatus allow={['APPROVED']} />}>
                 <Route path={paths.jobs} element={<PlaceholderPage title="Vagas" />} />
+                <Route path={paths.candidates} element={<WaitingCandidatesPage />} />
+                <Route
+                  path={`${paths.candidates}/:matchId`}
+                  element={<PlaceholderPage title="Perfil do candidato" />}
+                />
                 <Route path={paths.matches} element={<MatchesPage />} />
                 <Route path={paths.company} element={<PlaceholderPage title="Empresa" />} />
               </Route>

@@ -134,3 +134,37 @@ export interface CompanyRegistrationDto {
   responsibleName: string;
   submittedAt: string;
 }
+
+// I071 — vagas da Empresa e candidatos em espera (API v02, secções 6.5.1, 6.6.1 e 8).
+export type ContractType = 'PERMANENT' | 'FIXED_TERM' | 'INTERNSHIP' | 'SERVICE_PROVISION';
+
+export type WorkMode = 'ON_SITE' | 'HYBRID' | 'REMOTE';
+
+export interface JobDto {
+  jobId: string;
+  title: string;
+  description: string;
+  minSalary: number;
+  maxSalary: number;
+  locationId: string;
+  locationName: string;
+  contractType: ContractType;
+  workMode: WorkMode;
+  skills: ReferenceItemDto[];
+  benefits: ReferenceItemDto[];
+  isUrgent: boolean;
+  expiresAt: string | null;
+  status: JobStatus;
+  publishedAt: string | null;
+  photoUrls: string[];
+  waitingCandidates: number;
+}
+
+export interface WaitingCandidateDto {
+  matchId: string;
+  candidateId: string;
+  fullName: string;
+  desiredRole: string | null;
+  locationName: string;
+  interestAt: string;
+}
