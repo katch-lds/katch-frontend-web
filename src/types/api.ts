@@ -183,3 +183,25 @@ export interface WaitingCandidateDto {
   locationName: string;
   interestAt: string;
 }
+
+// I072 — perfil completo do candidato (API v02, secções 6.6.2 a 6.6.5 e 8).
+export type Availability = 'IMMEDIATE' | 'FIFTEEN_DAYS' | 'ONE_MONTH' | 'TO_BE_AGREED';
+
+export interface SkillTagDto {
+  name: string;
+  matchesJob: boolean;
+}
+
+export interface CandidateFullProfileDto {
+  matchId: string;
+  fullName: string;
+  photoUrl: string | null;
+  desiredRole: string | null;
+  locationName: string;
+  availability: Availability | null;
+  experienceSummary: string | null;
+  links: string[];
+  skills: SkillTagDto[];
+  hasCv: boolean;
+  profileOpenedAt: string;
+}

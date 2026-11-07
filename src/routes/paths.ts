@@ -27,6 +27,24 @@ export function editJobPath(jobId: string): string {
   return `/vagas/${encodeURIComponent(jobId)}/editar`;
 }
 
+/** I072 — perfil do candidato (W17) e match confirmado (W19). */
+export function candidateProfilePath(matchId: string): string {
+  return `${paths.candidates}/${encodeURIComponent(matchId)}`;
+}
+
+export function matchConfirmedPath(matchId: string): string {
+  return `${candidateProfilePath(matchId)}/match`;
+}
+
+/** Lista de candidatos em espera, com a vaga escolhida quando se sabe qual é. */
+export function waitingCandidatesPath(jobId?: string): string {
+  return jobId ? `${paths.candidates}?vaga=${encodeURIComponent(jobId)}` : paths.candidates;
+}
+
+export function conversationPath(matchId: string): string {
+  return `${paths.conversations}?match=${encodeURIComponent(matchId)}`;
+}
+
 /** Início de sessão da área a que o caminho pedido pertence. */
 export function loginPathFor(pathname: string): string {
   return pathname === '/admin' || pathname.startsWith('/admin/') ? paths.adminLogin : paths.login;

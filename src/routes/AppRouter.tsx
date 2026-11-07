@@ -3,6 +3,7 @@ import AdminShell from '../layouts/AdminShell';
 import RecruiterShell from '../layouts/RecruiterShell';
 import AccessDeniedPage from '../pages/AccessDeniedPage';
 import AccountPage from '../pages/AccountPage';
+import CandidateProfilePage from '../pages/CandidateProfilePage';
 import ChangePasswordPage from '../pages/ChangePasswordPage';
 import CompanyRegistrationPage from '../pages/CompanyRegistrationPage';
 import CompanyRequestStatusPage from '../pages/CompanyRequestStatusPage';
@@ -12,6 +13,7 @@ import JobFormPage from '../pages/JobFormPage';
 import JobListPage from '../pages/JobListPage';
 import LoginPage from '../pages/LoginPage';
 import MatchesPage from '../pages/MatchesPage';
+import MatchConfirmedPage from '../pages/MatchConfirmedPage';
 import PlaceholderPage from '../pages/PlaceholderPage';
 import WaitingCandidatesPage from '../pages/WaitingCandidatesPage';
 import { paths } from './paths';
@@ -62,9 +64,10 @@ export function AppRouter() {
                 <Route path={paths.newJob} element={<JobFormPage />} />
                 <Route path={paths.editJob} element={<JobFormPage />} />
                 <Route path={paths.candidates} element={<WaitingCandidatesPage />} />
+                <Route path={`${paths.candidates}/:matchId`} element={<CandidateProfilePage />} />
                 <Route
-                  path={`${paths.candidates}/:matchId`}
-                  element={<PlaceholderPage title="Perfil do candidato" />}
+                  path={`${paths.candidates}/:matchId/match`}
+                  element={<MatchConfirmedPage />}
                 />
                 <Route path={paths.matches} element={<MatchesPage />} />
                 <Route path={paths.company} element={<PlaceholderPage title="Empresa" />} />

@@ -1,4 +1,5 @@
 import type {
+  CandidateFullProfileDto,
   CompanyRegistrationDto,
   CompanyRegistrationRequest,
   CompanyStatusDto,
@@ -147,6 +148,28 @@ export function waitingCandidate(
     desiredRole: 'Programadora backend',
     locationName: 'Guimarães (Braga)',
     interestAt: '2026-10-09T15:12:40Z',
+    ...overrides,
+  };
+}
+
+export function candidateProfile(
+  overrides: Partial<CandidateFullProfileDto> = {},
+): CandidateFullProfileDto {
+  return {
+    matchId: 'match-1',
+    fullName: 'Ana Ferreira',
+    photoUrl: null,
+    desiredRole: 'Programadora backend',
+    locationName: 'Guimarães (Braga)',
+    availability: 'ONE_MONTH',
+    experienceSummary: 'Três anos de experiência em APIs.',
+    links: ['https://github.com/ana'],
+    skills: [
+      { name: 'C#', matchesJob: true },
+      { name: 'SQL', matchesJob: false },
+    ],
+    hasCv: false,
+    profileOpenedAt: '2026-11-07T10:32:00Z',
     ...overrides,
   };
 }

@@ -1,0 +1,79 @@
+/* Ecrãs W17 a W19 do protótipo v02: perfil do candidato e match confirmado. */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.profile-data {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.profile-data dt {
+  font-weight: 600;
+}
+
+.profile-data dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.skill-list,
+.link-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.link-list {
+  flex-direction: column;
+}
+
+.link-list li {
+  overflow-wrap: anywhere;
+}
+
+.skill-match {
+  border-color: #1f2937;
+  background: #1f2937;
+  color: #fff;
+  font-weight: 600;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.decision-actions {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+
+.button-link {
+  padding: 6px 12px;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  background: #fff;
+  color: #1f2937;
+  text-decoration: none;
+}
+
+.button-link.primary,
+.decision-actions .primary {
+  background: #1f2937;
+  color: #fff;
+}
