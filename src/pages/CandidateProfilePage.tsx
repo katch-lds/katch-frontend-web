@@ -172,7 +172,7 @@ function CandidateProfile({ matchId }: Readonly<{ matchId: string }>) {
     if (kind === 'accept') {
       const match = await state.accept();
       if (match !== null) {
-        navigate(matchConfirmedPath(matchId), {
+        await navigate(matchConfirmedPath(matchId), {
           state: { match, photoUrl: profile?.photoUrl ?? null },
         });
         return;
