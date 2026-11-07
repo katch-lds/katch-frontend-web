@@ -13,6 +13,7 @@ export const paths = {
   jobs: '/vagas',
   newJob: '/vagas/nova',
   editJob: '/vagas/:jobId/editar',
+  candidates: '/candidatos',
   matches: '/matches',
   conversations: '/conversas',
   adminIndicators: '/admin/indicadores',
