@@ -1,4 +1,9 @@
-import type { CompanyRegistrationRequest, Industry, LoginRequest } from '../types/api';
+import type {
+  CompanyRegistrationDto,
+  CompanyRegistrationRequest,
+  Industry,
+  LoginRequest,
+} from '../types/api';
 import { industryLabels } from '../types/labels';
 import {
   collectErrors,
@@ -79,4 +84,38 @@ export function toCompanyRequest(values: CompanyForm): CompanyRegistrationReques
     contactPhone: values.contactPhone.trim(),
     responsibleName: values.responsibleName.trim(),
   };
+}
+
+/** Dados de registo da Empresa como valores do formulário, para corrigir e submeter de novo (W06). */
+export function companyFormFrom(registration: CompanyRegistrationDto): CompanyForm {
+  return {
+    companyName: registration.companyName,
+    taxId: registration.taxId,
+    industry: registration.industry,
+    address: registration.address,
+    locationId: registration.locationId,
+    contactEmail: registration.contactEmail,
+    contactPhone: registration.contactPhone,
+    responsibleName: registration.responsibleName,
+  };
+}
+
+/** A confirmação da nova palavra-passe é só do cliente: nunca vai para a API. */
+export function validateChangePassword(values: {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}): FieldErrors {
+  let confirmation: string | null = null;
+  if (values.confirmPassword.length === 0) {
+    confirmation = 'Confirme a nova palavra-passe.';
+  } else if (values.confirmPassword !== values.newPassword) {
+    confirmation = 'A confirmação não coincide com a nova palavra-passe.';
+  }
+  return collectErrors({
+    currentPassword:
+      values.currentPassword.length === 0 ? 'A palavra-passe atual é obrigatória.' : null,
+    newPassword: passwordPolicyError(values.newPassword),
+    confirmPassword: confirmation,
+  });
 }

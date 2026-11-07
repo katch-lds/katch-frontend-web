@@ -114,3 +114,23 @@ export interface ReferenceItemDto {
   id: string;
   name: string;
 }
+
+// I069 (parte 2) — alteração da palavra-passe e dados de registo da Empresa (API v02, secções 6.1 e 6.4).
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface CompanyRegistrationDto {
+  companyId: string;
+  companyName: string;
+  taxId: string;
+  industry: Industry;
+  address: string;
+  locationId: string;
+  locationName: string;
+  contactEmail: string;
+  contactPhone: string;
+  responsibleName: string;
+  submittedAt: string;
+}

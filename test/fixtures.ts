@@ -1,4 +1,5 @@
 import type {
+  CompanyRegistrationDto,
   CompanyRegistrationRequest,
   CompanyStatusDto,
   ConversationSummaryDto,
@@ -95,6 +96,18 @@ export function companyRegistration(
     contactEmail: 'geral@cafecentral.pt',
     contactPhone: '253123456',
     responsibleName: 'Rui Costa',
+    ...overrides,
+  };
+}
+
+export function companyRegistrationDto(
+  overrides: Partial<CompanyRegistrationDto> = {},
+): CompanyRegistrationDto {
+  return {
+    ...companyRegistration(),
+    companyId: 'company-1',
+    locationName: 'Braga (Braga)',
+    submittedAt: '2026-11-05T10:00:00+00:00',
     ...overrides,
   };
 }
