@@ -30,6 +30,7 @@ export const jobService = {
   addPhoto: jest.fn(),
 };
 export const matchService = { list: jest.fn() };
+export const candidateEvaluationService = { listWaiting: jest.fn() };
 export const conversationService = {
   list: jest.fn(),
   open: jest.fn(),
@@ -48,6 +49,7 @@ export function resetServiceMocks(): void {
   companyService.getRegistration.mockResolvedValue(companyRegistrationDto());
   conversationService.list.mockResolvedValue([]);
   matchService.list.mockResolvedValue([]);
+  candidateEvaluationService.listWaiting.mockResolvedValue([]);
   referenceListService.listLocations.mockResolvedValue([{ id: 'loc-1', name: 'Braga (Braga)' }]);
   referenceListService.listSkills.mockResolvedValue([{ id: 'skill-1', name: 'Atendimento' }]);
   referenceListService.listBenefits.mockResolvedValue([

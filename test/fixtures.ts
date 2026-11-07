@@ -8,6 +8,7 @@ import type {
   MatchDto,
   MessageDto,
   UserType,
+  WaitingCandidateDto,
 } from '../src/types/api';
 
 // Dados fictícios dos testes (RI, secção 8.6): Recrutador «recruiter-1» e Candidata «candidate-1».
@@ -132,6 +133,20 @@ export function companyRegistrationDto(
     companyId: 'company-1',
     locationName: 'Braga (Braga)',
     submittedAt: '2026-11-05T10:00:00+00:00',
+    ...overrides,
+  };
+}
+
+export function waitingCandidate(
+  overrides: Partial<WaitingCandidateDto> = {},
+): WaitingCandidateDto {
+  return {
+    matchId: 'match-1',
+    candidateId: CANDIDATE_ID,
+    fullName: 'Ana Ferreira',
+    desiredRole: 'Programadora backend',
+    locationName: 'Guimarães (Braga)',
+    interestAt: '2026-10-09T15:12:40Z',
     ...overrides,
   };
 }
