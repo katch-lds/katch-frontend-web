@@ -3,10 +3,12 @@ import type {
   CompanyRegistrationRequest,
   CompanyStatusDto,
   ConversationSummaryDto,
+  JobDto,
   LoginResponse,
   MatchDto,
   MessageDto,
   UserType,
+  WaitingCandidateDto,
 } from '../src/types/api';
 
 // Dados fictícios dos testes (RI, secção 8.6): Recrutador «recruiter-1» e Candidata «candidate-1».
@@ -108,6 +110,43 @@ export function companyRegistrationDto(
     companyId: 'company-1',
     locationName: 'Braga (Braga)',
     submittedAt: '2026-11-05T10:00:00+00:00',
+    ...overrides,
+  };
+}
+
+export function job(overrides: Partial<JobDto> = {}): JobDto {
+  return {
+    jobId: 'job-1',
+    title: 'Empregado de mesa',
+    description: 'Atendimento de clientes no salão.',
+    minSalary: 900,
+    maxSalary: 1100,
+    locationId: 'loc-1',
+    locationName: 'Braga (Braga)',
+    contractType: 'PERMANENT',
+    workMode: 'ON_SITE',
+    skills: [{ id: 'skill-1', name: 'Atendimento' }],
+    benefits: [],
+    isUrgent: false,
+    expiresAt: null,
+    status: 'PUBLISHED',
+    publishedAt: '2026-10-09T15:00:00Z',
+    photoUrls: [],
+    waitingCandidates: 2,
+    ...overrides,
+  };
+}
+
+export function waitingCandidate(
+  overrides: Partial<WaitingCandidateDto> = {},
+): WaitingCandidateDto {
+  return {
+    matchId: 'match-1',
+    candidateId: CANDIDATE_ID,
+    fullName: 'Ana Ferreira',
+    desiredRole: 'Programadora backend',
+    locationName: 'Guimarães (Braga)',
+    interestAt: '2026-10-09T15:12:40Z',
     ...overrides,
   };
 }

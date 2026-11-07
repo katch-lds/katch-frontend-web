@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { companyStatus, loginResponse } from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
-import { companyService, resetServiceMocks } from '../../test/servicesMock';
+import { companyService, jobService, resetServiceMocks } from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
 import { SessionStore } from '../session/SessionStore';
 import type { CompanyStatus } from '../types/api';
@@ -21,6 +21,8 @@ describe('RequireSession', () => {
   it.each([
     ['/matches', '/entrar'],
     ['/conversas', '/entrar'],
+    ['/candidatos', '/entrar'],
+    ['/candidatos/match-1', '/entrar'],
     ['/vagas', '/entrar'],
     ['/empresa/estado', '/entrar'],
     ['/acesso-negado', '/entrar'],
@@ -62,6 +64,7 @@ describe('RequireUserType — Administrador nas rotas do Recrutador', () => {
   it.each([
     '/vagas',
     '/matches',
+    '/candidatos',
     '/conversas',
     '/empresa',
     '/empresa/registo',
@@ -151,6 +154,38 @@ describe('RequireCompanyStatus', () => {
     renderApp('/matches', signedInStore('RECRUITER'));
 
     expect(await screen.findByRole('heading', { name: 'Matches da Empresa' })).toBeInTheDocument();
+  });
+
+  it.each(['PENDING', 'REJECTED', 'SUSPENDED'] as const)(
+    '/candidatos com a Empresa %s vai para /empresa/estado, sem pedir nada ao servidor',
+    async (status) => {
+      withCompany(status);
+
+      renderApp('/candidatos', signedInStore('RECRUITER'));
+
+      await screen.findByRole('heading', { name: 'Estado do pedido da Empresa' });
+      expect(location()).toBe('/empresa/estado');
+      expect(jobService.list).not.toHaveBeenCalled();
+    },
+  );
+
+  it('/candidatos com a Empresa aprovada abre dentro da moldura', async () => {
+    withCompany('APPROVED');
+
+    renderApp('/candidatos', signedInStore('RECRUITER'));
+
+    expect(
+      await screen.findByRole('heading', { name: 'Candidatos em espera' }),
+    ).toBeInTheDocument();
+  });
+
+  it('/candidatos/:matchId mostra a página provisória do perfil', async () => {
+    withCompany('APPROVED');
+
+    renderApp('/candidatos/match-1', signedInStore('RECRUITER'));
+
+    expect(await screen.findByRole('heading', { name: 'Perfil do candidato' })).toBeInTheDocument();
+    expect(location()).toBe('/candidatos/match-1');
   });
 
   it.each([null, 'PENDING', 'APPROVED', 'REJECTED', 'SUSPENDED'] as const)(
