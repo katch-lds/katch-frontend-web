@@ -59,25 +59,33 @@ describe('RequireSession', () => {
 });
 
 describe('RequireUserType — Administrador nas rotas do Recrutador', () => {
-  it.each(['/vagas', '/matches', '/conversas', '/empresa', '/empresa/registo', '/empresa/estado'])(
-    'Administrador em %s vai para /acesso-negado',
-    (path) => {
-      renderApp(path, signedInStore('ADMIN'));
+  it.each([
+    '/vagas',
+    '/matches',
+    '/conversas',
+    '/empresa',
+    '/empresa/registo',
+    '/empresa/estado',
+    '/conta',
+  ])('Administrador em %s vai para /admin/indicadores (regra 3 da secção 7.2)', (path) => {
+    renderApp(path, signedInStore('ADMIN'));
 
+    expect(location()).toBe('/admin/indicadores');
+    expect(screen.getByRole('heading', { name: 'Indicadores' })).toBeInTheDocument();
+    expect(companyService.getStatus).not.toHaveBeenCalled();
+  });
+
+  it.each(['/admin/indicadores', '/admin/conta'])(
+    'Recrutador em %s vai para /acesso-negado',
+    async (path) => {
+      withCompany('APPROVED');
+
+      renderApp(path, signedInStore('RECRUITER'));
+
+      await screen.findByRole('heading', { name: 'Acesso negado' });
       expect(location()).toBe('/acesso-negado');
-      expect(screen.getByRole('heading', { name: 'Acesso negado' })).toBeInTheDocument();
-      expect(companyService.getStatus).not.toHaveBeenCalled();
     },
   );
-
-  it('Recrutador em /admin/indicadores vai para /acesso-negado', async () => {
-    withCompany('APPROVED');
-
-    renderApp('/admin/indicadores', signedInStore('RECRUITER'));
-
-    await screen.findByRole('heading', { name: 'Acesso negado' });
-    expect(location()).toBe('/acesso-negado');
-  });
 
   it('Administrador abre /admin/indicadores', () => {
     renderApp('/admin/indicadores', signedInStore('ADMIN'));
@@ -116,15 +124,44 @@ describe('RequireCompanyStatus', () => {
     expect(matchService.list).not.toHaveBeenCalled();
   });
 
-  it.each(['/conversas', '/matches'])(
-    'Empresa suspensa continua a poder abrir %s dentro da moldura',
-    async (path) => {
-      withCompany('SUSPENDED');
+  it('Empresa suspensa continua a poder abrir /conversas dentro da moldura', async () => {
+    withCompany('SUSPENDED');
 
-      renderApp(path, signedInStore('RECRUITER'));
+    renderApp('/conversas', signedInStore('RECRUITER'));
 
-      await screen.findByRole('navigation', { name: 'Navegação do Recrutador' });
-      expect(location()).toBe(path);
+    expect(await screen.findByRole('heading', { name: 'Conversas' })).toBeInTheDocument();
+    expect(location()).toBe('/conversas');
+  });
+
+  it.each(['PENDING', 'REJECTED', 'SUSPENDED'] as const)(
+    '/matches com a Empresa %s vai para /empresa/estado (a lista exige Empresa aprovada)',
+    async (status) => {
+      withCompany(status);
+
+      renderApp('/matches', signedInStore('RECRUITER'));
+
+      await screen.findByRole('heading', { name: 'Estado do pedido da Empresa' });
+      expect(location()).toBe('/empresa/estado');
+    },
+  );
+
+  it('/matches com a Empresa aprovada abre dentro da moldura', async () => {
+    withCompany('APPROVED');
+
+    renderApp('/matches', signedInStore('RECRUITER'));
+
+    expect(await screen.findByRole('heading', { name: 'Matches da Empresa' })).toBeInTheDocument();
+  });
+
+  it.each([null, 'PENDING', 'APPROVED', 'REJECTED', 'SUSPENDED'] as const)(
+    '/conta abre com a Empresa em qualquer estado (%s)',
+    async (status) => {
+      withCompany(status);
+
+      renderApp('/conta', signedInStore('RECRUITER'));
+
+      expect(await screen.findByRole('heading', { name: 'Conta' })).toBeInTheDocument();
+      expect(location()).toBe('/conta');
     },
   );
 

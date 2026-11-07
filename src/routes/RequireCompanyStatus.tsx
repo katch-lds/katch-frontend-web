@@ -9,6 +9,15 @@ import { homePath } from './paths';
 /** `NONE` = o Recrutador ainda não registou a Empresa. */
 export type CompanyAccess = CompanyStatus | 'NONE';
 
+/** Qualquer estado da Empresa, incluindo sem Empresa registada: só espera que o estado esteja lido. */
+export const ANY_COMPANY_ACCESS: CompanyAccess[] = [
+  'NONE',
+  'PENDING',
+  'APPROVED',
+  'REJECTED',
+  'SUSPENDED',
+];
+
 /** Só deixa passar com um destes estados da Empresa; os outros vão para a página inicial do Recrutador. */
 export function RequireCompanyStatus({ allow }: Readonly<{ allow: CompanyAccess[] }>) {
   const { session, companyStatus, companyLoaded } = useSession();

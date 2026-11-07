@@ -57,3 +57,49 @@
 .shell-content {
   min-width: 0;
 }
+
+.shell-locked {
+  padding: 8px 10px;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.shell-topbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 32px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu > button,
+.user-menu-panel button {
+  padding: 6px 12px;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.user-menu-panel {
+  position: absolute;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 240px;
+  margin-top: 4px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.user-menu-email {
+  margin: 0;
+  color: #6b7280;
+}

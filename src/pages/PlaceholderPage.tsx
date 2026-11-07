@@ -5,6 +5,7 @@ export default function PlaceholderPage({ title }: Readonly<{ title: string }>) 
   return (
     <section className="recruiter-page">
       <h1>{title}</h1>
+      <p>Esta página será disponibilizada numa próxima versão.</p>
     </section>
   );
 }

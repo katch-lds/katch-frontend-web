@@ -14,6 +14,8 @@ export const paths = {
   matches: '/matches',
   conversations: '/conversas',
   adminIndicators: '/admin/indicadores',
+  account: '/conta',
+  adminAccount: '/admin/conta',
   accessDenied: '/acesso-negado',
 } as const;
 
