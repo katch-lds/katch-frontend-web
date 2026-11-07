@@ -3,6 +3,7 @@ import type {
   CompanyRegistrationRequest,
   CompanyStatusDto,
   ConversationSummaryDto,
+  JobDto,
   LoginResponse,
   MatchDto,
   MessageDto,
@@ -96,6 +97,29 @@ export function companyRegistration(
     contactEmail: 'geral@cafecentral.pt',
     contactPhone: '253123456',
     responsibleName: 'Rui Costa',
+    ...overrides,
+  };
+}
+
+export function job(overrides: Partial<JobDto> = {}): JobDto {
+  return {
+    jobId: 'job-1',
+    title: 'Empregado de mesa',
+    description: 'Serviço de mesa e apoio ao balcão.',
+    minSalary: 900,
+    maxSalary: 1100,
+    locationId: 'loc-1',
+    locationName: 'Braga (Braga)',
+    contractType: 'PERMANENT',
+    workMode: 'ON_SITE',
+    skills: [{ id: 'skill-1', name: 'Atendimento' }],
+    benefits: [{ id: 'benefit-1', name: 'Refeição no local' }],
+    isUrgent: false,
+    expiresAt: '2026-11-30T23:59:59Z',
+    status: 'PUBLISHED',
+    publishedAt: '2026-11-05T10:00:00Z',
+    photoUrls: [],
+    waitingCandidates: 0,
     ...overrides,
   };
 }
