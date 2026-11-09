@@ -1,10 +1,20 @@
-import { companyRegistration, companyRegistrationDto, companyStatus } from '../../test/fixtures';
+import {
+  companyPageDto,
+  companyRegistration,
+  companyRegistrationDto,
+  companyStatus,
+} from '../../test/fixtures';
 import { ApiError } from '../api/ApiError';
 import type { IApiClient } from '../api/IApiClient';
 import { CompanyService } from './CompanyService';
 
 function fakeApi() {
-  return { get: jest.fn(), post: jest.fn() } as unknown as jest.Mocked<IApiClient>;
+  return {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    upload: jest.fn(),
+  } as unknown as jest.Mocked<IApiClient>;
 }
 
 describe('CompanyService', () => {
@@ -68,6 +78,57 @@ describe('CompanyService', () => {
       companyRegistration(),
     );
     expect(result).toEqual(companyStatus());
+  });
+
+  it('altera os dados de registo com PUT /api/recruiter/company e o corpo completo', async () => {
+    const api = fakeApi();
+    api.put.mockResolvedValue(companyStatus({ status: 'APPROVED' }));
+
+    const result = await new CompanyService(api).updateRegistration(companyRegistration());
+
+    expect(api.put).toHaveBeenCalledWith('/api/recruiter/company', companyRegistration());
+    expect(result.status).toBe('APPROVED');
+  });
+
+  it('lê a página com GET /api/recruiter/company/page', async () => {
+    const api = fakeApi();
+    api.get.mockResolvedValue(companyPageDto());
+
+    const result = await new CompanyService(api).getPage();
+
+    expect(api.get).toHaveBeenCalledWith('/api/recruiter/company/page');
+    expect(result).toEqual(companyPageDto());
+  });
+
+  it('grava a página com PUT /api/recruiter/company/page', async () => {
+    const api = fakeApi();
+    api.put.mockResolvedValue(companyPageDto());
+    const request = { description: 'Café no centro.', website: null };
+
+    await new CompanyService(api).updatePage(request);
+
+    expect(api.put).toHaveBeenCalledWith('/api/recruiter/company/page', request);
+  });
+
+  it('carrega o logótipo com PUT multipart em /api/recruiter/company/logo', async () => {
+    const api = fakeApi();
+    api.upload.mockResolvedValue('/api/files/COMPANY_LOGO/a.png');
+    const file = new File(['x'], 'logo.png', { type: 'image/png' });
+
+    const location = await new CompanyService(api).uploadLogo(file);
+
+    expect(api.upload).toHaveBeenCalledWith('PUT', '/api/recruiter/company/logo', file);
+    expect(location).toBe('/api/files/COMPANY_LOGO/a.png');
+  });
+
+  it('acrescenta uma fotografia com POST multipart em /api/recruiter/company/photos', async () => {
+    const api = fakeApi();
+    api.upload.mockResolvedValue(null);
+    const file = new File(['x'], 'sala.jpg', { type: 'image/jpeg' });
+
+    await new CompanyService(api).addGalleryPhoto(file);
+
+    expect(api.upload).toHaveBeenCalledWith('POST', '/api/recruiter/company/photos', file);
   });
 
   it.each([

@@ -1,4 +1,4 @@
-import { companyRegistrationDto } from './fixtures';
+import { companyPageDto, companyRegistrationDto } from './fixtures';
 
 // Serviços simulados partilhados pelos testes de I069: jest.mock('../services', () => jest.requireActual(...)).
 export const authService = {
@@ -12,6 +12,11 @@ export const companyService = {
   getStatus: jest.fn(),
   getRegistration: jest.fn(),
   resubmit: jest.fn(),
+  updateRegistration: jest.fn(),
+  getPage: jest.fn(),
+  updatePage: jest.fn(),
+  uploadLogo: jest.fn(),
+  addGalleryPhoto: jest.fn(),
 };
 export const referenceListService = {
   listLocations: jest.fn(),
@@ -46,6 +51,7 @@ export function resetServiceMocks(): void {
   authService.logout.mockResolvedValue(undefined);
   authService.changePassword.mockResolvedValue(undefined);
   companyService.getRegistration.mockResolvedValue(companyRegistrationDto());
+  companyService.getPage.mockResolvedValue(companyPageDto());
   conversationService.list.mockResolvedValue([]);
   matchService.list.mockResolvedValue([]);
   referenceListService.listLocations.mockResolvedValue([{ id: 'loc-1', name: 'Braga (Braga)' }]);

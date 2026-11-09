@@ -22,6 +22,7 @@ describe('RecruiterShell', () => {
     const nav = await screen.findByRole('navigation', { name: 'Navegação do Recrutador' });
 
     expect(within(nav).getByRole('link', { name: 'Vagas' })).toHaveAttribute('href', '/vagas');
+    expect(within(nav).getByRole('link', { name: 'Empresa' })).toHaveAttribute('href', '/empresa');
     expect(within(nav).getByRole('link', { name: 'Matches' })).toHaveAttribute('href', '/matches');
     expect(within(nav).getByRole('link', { name: /^Conversas/ })).toHaveAttribute(
       'href',
@@ -80,16 +81,17 @@ describe('RecruiterShell — variante bloqueada (P1 e P2)', () => {
   const isLink = (name: string) => within(nav()).queryByRole('link', { name }) !== null;
 
   it.each([
-    ['PENDING', { vagas: false, estado: true, matches: false, conversas: false }],
-    ['REJECTED', { vagas: false, estado: true, matches: false, conversas: false }],
-    ['SUSPENDED', { vagas: false, estado: true, matches: false, conversas: true }],
-    ['APPROVED', { vagas: true, estado: false, matches: true, conversas: true }],
+    ['PENDING', { vagas: false, empresa: false, estado: true, matches: false, conversas: false }],
+    ['REJECTED', { vagas: false, empresa: false, estado: true, matches: false, conversas: false }],
+    ['SUSPENDED', { vagas: false, empresa: false, estado: true, matches: false, conversas: true }],
+    ['APPROVED', { vagas: true, empresa: true, estado: false, matches: true, conversas: true }],
   ] as const)('Empresa %s: itens disponíveis e bloqueados', async (status, expected) => {
     companyService.getStatus.mockResolvedValue(companyStatus({ status }));
     renderApp('/conta', signedInStore('RECRUITER'));
     await screen.findByRole('heading', { name: 'Conta' });
 
     expect(isLink('Vagas')).toBe(expected.vagas);
+    expect(isLink('Empresa')).toBe(expected.empresa);
     expect(isLink('Estado do pedido')).toBe(expected.estado);
     expect(isLink('Matches')).toBe(expected.matches);
     expect(isLink('Conversas')).toBe(expected.conversas);
@@ -115,6 +117,7 @@ describe('RecruiterShell — variante bloqueada (P1 e P2)', () => {
       'href',
       '/empresa/registo',
     );
+    expect(isLink('Empresa')).toBe(false);
     expect(isLink('Conta')).toBe(true);
     expect(isLink('Matches')).toBe(false);
     expect(isLink('Conversas')).toBe(false);

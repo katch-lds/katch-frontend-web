@@ -202,6 +202,37 @@ describe('RequireCompanyStatus', () => {
     expect(location()).toBe(path);
   });
 
+  // I121 — a página da Empresa só abre com a Empresa aprovada; a autorização é sempre do servidor (ERR-07).
+  it('com a Empresa aprovada, /empresa abre o ecrã da Empresa', async () => {
+    withCompany('APPROVED');
+
+    renderApp('/empresa', signedInStore('RECRUITER'));
+
+    expect(await screen.findByRole('heading', { name: 'Empresa' })).toBeInTheDocument();
+    expect(location()).toBe('/empresa');
+    expect(companyService.getPage).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['PENDING', 'REJECTED', 'SUSPENDED'] as const)(
+    'Empresa %s não abre /empresa: vai para /empresa/estado e não pede a página',
+    async (status) => {
+      withCompany(status);
+
+      renderApp('/empresa', signedInStore('RECRUITER'));
+
+      await screen.findByRole('heading', { name: 'Estado do pedido da Empresa' });
+      expect(location()).toBe('/empresa/estado');
+      expect(companyService.getPage).not.toHaveBeenCalled();
+    },
+  );
+
+  it('sem sessão, /empresa vai para o início de sessão', () => {
+    renderApp('/empresa');
+
+    expect(location()).toBe('/entrar');
+    expect(companyService.getPage).not.toHaveBeenCalled();
+  });
+
   it('sem Empresa registada, qualquer rota do Recrutador vai para /empresa/registo', async () => {
     withCompany(null);
 
