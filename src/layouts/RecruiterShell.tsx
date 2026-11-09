@@ -20,6 +20,7 @@ function Sidebar({ status }: Readonly<{ status: CompanyStatus | null }>) {
     <nav className="shell-sidebar" aria-label="Navegação do Recrutador">
       <p className="shell-brand">Katch</p>
       {approved && <NavItem to={paths.jobs} label="Vagas" />}
+      {approved && <NavItem to={paths.company} label="Empresa" />}
       {!approved && status !== null && (
         <NavItem to={paths.companyStatus} label="Estado do pedido" />
       )}

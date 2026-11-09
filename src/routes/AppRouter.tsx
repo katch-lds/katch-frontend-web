@@ -4,6 +4,7 @@ import RecruiterShell from '../layouts/RecruiterShell';
 import AccessDeniedPage from '../pages/AccessDeniedPage';
 import AccountPage from '../pages/AccountPage';
 import ChangePasswordPage from '../pages/ChangePasswordPage';
+import CompanyProfilePage from '../pages/CompanyProfilePage';
 import CompanyRegistrationPage from '../pages/CompanyRegistrationPage';
 import CompanyRequestStatusPage from '../pages/CompanyRequestStatusPage';
 import ConversationsPage from '../pages/ConversationsPage';
@@ -24,7 +25,7 @@ import { SessionHome } from './SessionHome';
 // autorização é sempre do servidor.
 
 /**
- * Rotas da aplicação. Os destinos `/empresa` e `/admin/indicadores` são páginas provisórias, a substituir pela Issue
+ * Rotas da aplicação. O destino `/admin/indicadores` é uma página provisória, a substituir pela Issue
  * do ecrã respetivo; as vagas são da I070.
  */
 export function AppRouter() {
@@ -61,7 +62,7 @@ export function AppRouter() {
                 <Route path={paths.newJob} element={<JobFormPage />} />
                 <Route path={paths.editJob} element={<JobFormPage />} />
                 <Route path={paths.matches} element={<MatchesPage />} />
-                <Route path={paths.company} element={<PlaceholderPage title="Empresa" />} />
+                <Route path={paths.company} element={<CompanyProfilePage />} />
               </Route>
             </Route>
           </Route>
