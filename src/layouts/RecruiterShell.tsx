@@ -20,6 +20,7 @@ function Sidebar({ status }: Readonly<{ status: CompanyStatus | null }>) {
     <nav className="shell-sidebar" aria-label="Navegação do Recrutador">
       <p className="shell-brand">Katch</p>
       {approved && <NavItem to={paths.jobs} label="Vagas" />}
+      {approved && <NavItem to={paths.candidates} label="Candidatos" />}
       {!approved && status !== null && (
         <NavItem to={paths.companyStatus} label="Estado do pedido" />
       )}
@@ -38,8 +39,8 @@ function Sidebar({ status }: Readonly<{ status: CompanyStatus | null }>) {
 }
 
 /**
- * Barra lateral e conteúdo do Recrutador. Com a Empresa não aprovada a barra fica na variante bloqueada: o
- * Matches fica bloqueado e as Conversas só abrem com a Empresa aprovada ou suspensa (P1 e P2); a Conta está sempre
+ * Barra lateral e conteúdo do Recrutador. Com a Empresa não aprovada a barra fica na variante bloqueada: Vagas e
+ * Candidatos dão lugar a «Estado do pedido», o Matches fica bloqueado e as Conversas só abrem com a Empresa aprovada ou suspensa (P1 e P2); a Conta está sempre
  * acessível. O `ConversationsProvider` só monta nesses dois estados: a lista lê-se ao montar e, com a Empresa
  * pendente ou recusada, o servidor recusaria (ERR-07).
  */

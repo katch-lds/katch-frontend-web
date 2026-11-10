@@ -173,3 +173,13 @@ export interface CompanyRegistrationDto {
   responsibleName: string;
   submittedAt: string;
 }
+
+// I071 — candidatos em espera (API v02, secção 6.6.1).
+export interface WaitingCandidateDto {
+  matchId: string;
+  candidateId: string;
+  fullName: string;
+  desiredRole: string | null;
+  locationName: string;
+  interestAt: string;
+}

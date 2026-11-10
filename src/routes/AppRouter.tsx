@@ -13,6 +13,7 @@ import JobListPage from '../pages/JobListPage';
 import LoginPage from '../pages/LoginPage';
 import MatchesPage from '../pages/MatchesPage';
 import PlaceholderPage from '../pages/PlaceholderPage';
+import WaitingCandidatesPage from '../pages/WaitingCandidatesPage';
 import { paths } from './paths';
 import { PublicOnly } from './PublicOnly';
 import { ANY_COMPANY_ACCESS, RequireCompanyStatus } from './RequireCompanyStatus';
@@ -60,6 +61,11 @@ export function AppRouter() {
                 <Route path={paths.jobs} element={<JobListPage />} />
                 <Route path={paths.newJob} element={<JobFormPage />} />
                 <Route path={paths.editJob} element={<JobFormPage />} />
+                <Route path={paths.candidates} element={<WaitingCandidatesPage />} />
+                <Route
+                  path={`${paths.candidates}/:matchId`}
+                  element={<PlaceholderPage title="Perfil do candidato" />}
+                />
                 <Route path={paths.matches} element={<MatchesPage />} />
                 <Route path={paths.company} element={<PlaceholderPage title="Empresa" />} />
               </Route>
