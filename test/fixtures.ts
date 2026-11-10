@@ -1,5 +1,6 @@
 import type {
   CandidateFullProfileDto,
+  CompanyPageDto,
   CompanyRegistrationDto,
   CompanyRegistrationRequest,
   CompanyStatusDto,
@@ -134,6 +135,18 @@ export function companyRegistrationDto(
     companyId: 'company-1',
     locationName: 'Braga (Braga)',
     submittedAt: '2026-11-05T10:00:00+00:00',
+    ...overrides,
+  };
+}
+
+export function companyPageDto(overrides: Partial<CompanyPageDto> = {}): CompanyPageDto {
+  return {
+    companyId: 'company-1',
+    companyName: 'Café Central, Lda.',
+    description: 'Café e restaurante no centro de Braga.',
+    website: 'https://www.cafecentral.pt',
+    logoUrl: null,
+    photoUrls: [],
     ...overrides,
   };
 }

@@ -16,6 +16,8 @@ const industryOptions = Object.entries(industryLabels).map(([value, label]) => (
 interface CompanyDataFormProps {
   initialValues: CompanyForm;
   submitLabel: string;
+  /** I121 — NIF só de leitura, para a Empresa aprovada (W08, RF049). */
+  taxIdLocked?: boolean;
   /** Envia o pedido; um ApiError lançado aqui aparece no formulário (erro por campo no ERR-10). */
   onSubmit: (request: CompanyRegistrationRequest) => Promise<void>;
 }
@@ -24,6 +26,7 @@ interface CompanyDataFormProps {
 export function CompanyDataForm({
   initialValues,
   submitLabel,
+  taxIdLocked = false,
   onSubmit,
 }: Readonly<CompanyDataFormProps>) {
   const form = useFormSubmission();
@@ -59,7 +62,9 @@ export function CompanyDataForm({
         value={values.taxId}
         onChange={set('taxId')}
         error={form.errors.taxId}
+        readOnly={taxIdLocked}
       />
+      {taxIdLocked && <p className="note">O NIF não pode ser alterado depois da aprovação.</p>}
       <SelectField
         id="industry"
         label="Área de atividade"

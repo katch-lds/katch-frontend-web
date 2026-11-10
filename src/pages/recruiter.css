@@ -192,3 +192,26 @@
   flex: 1;
   resize: none;
 }
+
+/* I121 — separadores da página da Empresa (W07 e W08). */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.recruiter-page .tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+}
+
+.recruiter-page .tabs button[aria-selected='true'] {
+  border-bottom-color: #1f2937;
+  font-weight: 600;
+}
+
+.company-profile [hidden] {
+  display: none;
+}

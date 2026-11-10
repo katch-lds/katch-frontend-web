@@ -26,6 +26,7 @@ describe('RecruiterShell', () => {
       'href',
       '/candidatos',
     );
+    expect(within(nav).getByRole('link', { name: 'Empresa' })).toHaveAttribute('href', '/empresa');
     expect(within(nav).getByRole('link', { name: 'Matches' })).toHaveAttribute('href', '/matches');
     expect(within(nav).getByRole('link', { name: /^Conversas/ })).toHaveAttribute(
       'href',
@@ -86,17 +87,48 @@ describe('RecruiterShell — variante bloqueada (P1 e P2)', () => {
   it.each([
     [
       'PENDING',
-      { vagas: false, candidatos: false, estado: true, matches: false, conversas: false },
+      {
+        vagas: false,
+        candidatos: false,
+        empresa: false,
+        estado: true,
+        matches: false,
+        conversas: false,
+      },
     ],
     [
       'REJECTED',
-      { vagas: false, candidatos: false, estado: true, matches: false, conversas: false },
+      {
+        vagas: false,
+        candidatos: false,
+        empresa: false,
+        estado: true,
+        matches: false,
+        conversas: false,
+      },
     ],
     [
       'SUSPENDED',
-      { vagas: false, candidatos: false, estado: true, matches: false, conversas: true },
+      {
+        vagas: false,
+        candidatos: false,
+        empresa: false,
+        estado: true,
+        matches: false,
+        conversas: true,
+      },
     ],
-    ['APPROVED', { vagas: true, candidatos: true, estado: false, matches: true, conversas: true }],
+    [
+      'APPROVED',
+      {
+        vagas: true,
+        candidatos: true,
+        empresa: true,
+        estado: false,
+        matches: true,
+        conversas: true,
+      },
+    ],
   ] as const)('Empresa %s: itens disponíveis e bloqueados', async (status, expected) => {
     companyService.getStatus.mockResolvedValue(companyStatus({ status }));
     renderApp('/conta', signedInStore('RECRUITER'));
@@ -104,6 +136,7 @@ describe('RecruiterShell — variante bloqueada (P1 e P2)', () => {
 
     expect(isLink('Vagas')).toBe(expected.vagas);
     expect(isLink('Candidatos')).toBe(expected.candidatos);
+    expect(isLink('Empresa')).toBe(expected.empresa);
     expect(isLink('Estado do pedido')).toBe(expected.estado);
     expect(isLink('Matches')).toBe(expected.matches);
     expect(isLink('Conversas')).toBe(expected.conversas);
@@ -129,6 +162,7 @@ describe('RecruiterShell — variante bloqueada (P1 e P2)', () => {
       'href',
       '/empresa/registo',
     );
+    expect(isLink('Empresa')).toBe(false);
     expect(isLink('Conta')).toBe(true);
     expect(isLink('Matches')).toBe(false);
     expect(isLink('Candidatos')).toBe(false);

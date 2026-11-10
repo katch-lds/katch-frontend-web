@@ -12,6 +12,8 @@ interface TextFieldProps {
   autoComplete?: string;
   inputMode?: 'text' | 'numeric' | 'decimal' | 'tel';
   placeholder?: string;
+  /** I121 — campo só de leitura (NIF da Empresa aprovada). */
+  readOnly?: boolean;
 }
 
 export function TextField({
@@ -24,6 +26,7 @@ export function TextField({
   autoComplete,
   inputMode,
   placeholder,
+  readOnly,
 }: Readonly<TextFieldProps>) {
   return (
     <FormField id={id} label={label} error={error}>
@@ -35,6 +38,7 @@ export function TextField({
           autoComplete={autoComplete}
           inputMode={inputMode}
           placeholder={placeholder}
+          readOnly={readOnly}
           onChange={(event) => onChange(event.target.value)}
         />
       )}

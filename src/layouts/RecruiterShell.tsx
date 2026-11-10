@@ -21,6 +21,7 @@ function Sidebar({ status }: Readonly<{ status: CompanyStatus | null }>) {
       <p className="shell-brand">Katch</p>
       {approved && <NavItem to={paths.jobs} label="Vagas" />}
       {approved && <NavItem to={paths.candidates} label="Candidatos" />}
+      {approved && <NavItem to={paths.company} label="Empresa" />}
       {!approved && status !== null && (
         <NavItem to={paths.companyStatus} label="Estado do pedido" />
       )}

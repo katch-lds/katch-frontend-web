@@ -174,6 +174,22 @@ export interface CompanyRegistrationDto {
   submittedAt: string;
 }
 
+// I121 — página de apresentação da Empresa (API v02, secções 6.4.5 e 6.4.9).
+export interface CompanyPageDto {
+  companyId: string;
+  companyName: string;
+  description: string | null;
+  website: string | null;
+  logoUrl: string | null;
+  photoUrls: string[];
+}
+
+/** `null` limpa o campo. */
+export interface CompanyPageRequest {
+  description: string | null;
+  website: string | null;
+}
+
 // I071 — candidatos em espera (API v02, secção 6.6.1).
 export interface WaitingCandidateDto {
   matchId: string;
