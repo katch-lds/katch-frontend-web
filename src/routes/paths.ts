@@ -11,8 +11,6 @@ export const paths = {
   companyStatus: '/empresa/estado',
   company: '/empresa',
   jobs: '/vagas',
-  newJob: '/vagas/nova',
-  editJob: '/vagas/:jobId/editar',
   matches: '/matches',
   conversations: '/conversas',
   adminIndicators: '/admin/indicadores',
@@ -20,11 +18,6 @@ export const paths = {
   adminAccount: '/admin/conta',
   accessDenied: '/acesso-negado',
 } as const;
-
-/** I070 — alteração de uma vaga (W11). */
-export function editJobPath(jobId: string): string {
-  return `/vagas/${encodeURIComponent(jobId)}/editar`;
-}
 
 /** Início de sessão da área a que o caminho pedido pertence. */
 export function loginPathFor(pathname: string): string {

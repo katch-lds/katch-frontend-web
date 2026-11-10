@@ -13,22 +13,7 @@ export const companyService = {
   getRegistration: jest.fn(),
   resubmit: jest.fn(),
 };
-export const referenceListService = {
-  listLocations: jest.fn(),
-  listSkills: jest.fn(),
-  listBenefits: jest.fn(),
-};
-export const jobService = {
-  list: jest.fn(),
-  create: jest.fn(),
-  update: jest.fn(),
-  publish: jest.fn(),
-  suspend: jest.fn(),
-  republish: jest.fn(),
-  close: jest.fn(),
-  delete: jest.fn(),
-  addPhoto: jest.fn(),
-};
+export const referenceListService = { listLocations: jest.fn() };
 export const matchService = { list: jest.fn() };
 export const conversationService = {
   list: jest.fn(),
@@ -37,10 +22,7 @@ export const conversationService = {
   close: jest.fn(),
 };
 
-/**
- * Repõe os simuladores com respostas por omissão que não atrapalham: sem conversas, sem matches, sem vagas, uma
- * localidade, uma competência e um benefício.
- */
+/** Repõe os simuladores com respostas por omissão que não atrapalham: sem conversas, sem matches, uma localidade. */
 export function resetServiceMocks(): void {
   jest.resetAllMocks();
   authService.logout.mockResolvedValue(undefined);
@@ -49,9 +31,4 @@ export function resetServiceMocks(): void {
   conversationService.list.mockResolvedValue([]);
   matchService.list.mockResolvedValue([]);
   referenceListService.listLocations.mockResolvedValue([{ id: 'loc-1', name: 'Braga (Braga)' }]);
-  referenceListService.listSkills.mockResolvedValue([{ id: 'skill-1', name: 'Atendimento' }]);
-  referenceListService.listBenefits.mockResolvedValue([
-    { id: 'benefit-1', name: 'Refeição no local' },
-  ]);
-  jobService.list.mockResolvedValue([]);
 }

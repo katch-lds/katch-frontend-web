@@ -10,8 +10,7 @@ interface TextFieldProps {
   error?: string;
   type?: 'text' | 'email' | 'password';
   autoComplete?: string;
-  inputMode?: 'text' | 'numeric' | 'decimal' | 'tel';
-  placeholder?: string;
+  inputMode?: 'text' | 'numeric' | 'tel';
 }
 
 export function TextField({
@@ -23,7 +22,6 @@ export function TextField({
   type = 'text',
   autoComplete,
   inputMode,
-  placeholder,
 }: Readonly<TextFieldProps>) {
   return (
     <FormField id={id} label={label} error={error}>
@@ -34,7 +32,6 @@ export function TextField({
           value={value}
           autoComplete={autoComplete}
           inputMode={inputMode}
-          placeholder={placeholder}
           onChange={(event) => onChange(event.target.value)}
         />
       )}

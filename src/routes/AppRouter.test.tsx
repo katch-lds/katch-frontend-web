@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { companyStatus, loginResponse } from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
-import { companyService, jobService, resetServiceMocks } from '../../test/servicesMock';
+import { companyService, resetServiceMocks } from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
 import { SessionStore } from '../session/SessionStore';
 import type { CompanyStatus } from '../types/api';
@@ -172,34 +172,6 @@ describe('RequireCompanyStatus', () => {
 
     await screen.findByRole('heading', { name: 'Estado do pedido da Empresa' });
     expect(location()).toBe('/empresa/estado');
-  });
-
-  // I070 — o ecrã das vagas só abre com a Empresa aprovada; a autorização é sempre do servidor (ERR-07).
-  it.each([
-    ['PENDING', '/vagas/nova'],
-    ['REJECTED', '/vagas'],
-    ['SUSPENDED', '/vagas/nova'],
-    ['SUSPENDED', '/vagas/job-1/editar'],
-  ] as const)('Empresa %s não abre %s: vai para /empresa/estado', async (status, path) => {
-    withCompany(status);
-
-    renderApp(path, signedInStore('RECRUITER'));
-
-    await screen.findByRole('heading', { name: 'Estado do pedido da Empresa' });
-    expect(location()).toBe('/empresa/estado');
-    expect(jobService.list).not.toHaveBeenCalled();
-  });
-
-  it.each([
-    ['/vagas', 'Vagas'],
-    ['/vagas/nova', 'Criar vaga'],
-  ])('com a Empresa aprovada, %s abre o ecrã das vagas', async (path, heading) => {
-    withCompany('APPROVED');
-
-    renderApp(path, signedInStore('RECRUITER'));
-
-    expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
-    expect(location()).toBe(path);
   });
 
   it('sem Empresa registada, qualquer rota do Recrutador vai para /empresa/registo', async () => {

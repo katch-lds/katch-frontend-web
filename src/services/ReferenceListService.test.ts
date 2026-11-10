@@ -12,16 +12,4 @@ describe('ReferenceListService', () => {
     expect(api.get).toHaveBeenCalledWith('/api/reference-lists/locations');
     expect(result).toBe(locations);
   });
-
-  it.each([
-    ['listSkills', '/api/reference-lists/skills'],
-    ['listBenefits', '/api/reference-lists/benefits'],
-  ] as const)('%s usa GET %s', async (operation, path) => {
-    const api = { get: jest.fn() } as unknown as jest.Mocked<IApiClient>;
-    api.get.mockResolvedValue([]);
-
-    await new ReferenceListService(api)[operation]();
-
-    expect(api.get).toHaveBeenCalledWith(path);
-  });
 });
