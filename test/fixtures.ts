@@ -1,4 +1,5 @@
 import type {
+  CandidateFullProfileDto,
   CompanyPageDto,
   CompanyRegistrationDto,
   CompanyRegistrationRequest,
@@ -9,6 +10,7 @@ import type {
   MatchDto,
   MessageDto,
   UserType,
+  WaitingCandidateDto,
 } from '../src/types/api';
 
 // Dados fictícios dos testes (RI, secção 8.6): Recrutador «recruiter-1» e Candidata «candidate-1».
@@ -145,6 +147,42 @@ export function companyPageDto(overrides: Partial<CompanyPageDto> = {}): Company
     website: 'https://www.cafecentral.pt',
     logoUrl: null,
     photoUrls: [],
+    ...overrides,
+  };
+}
+
+export function waitingCandidate(
+  overrides: Partial<WaitingCandidateDto> = {},
+): WaitingCandidateDto {
+  return {
+    matchId: 'match-1',
+    candidateId: CANDIDATE_ID,
+    fullName: 'Ana Ferreira',
+    desiredRole: 'Programadora backend',
+    locationName: 'Guimarães (Braga)',
+    interestAt: '2026-10-09T15:12:40Z',
+    ...overrides,
+  };
+}
+
+export function candidateProfile(
+  overrides: Partial<CandidateFullProfileDto> = {},
+): CandidateFullProfileDto {
+  return {
+    matchId: 'match-1',
+    fullName: 'Ana Ferreira',
+    photoUrl: null,
+    desiredRole: 'Programadora backend',
+    locationName: 'Guimarães (Braga)',
+    availability: 'ONE_MONTH',
+    experienceSummary: 'Três anos de experiência em APIs.',
+    links: ['https://github.com/ana'],
+    skills: [
+      { name: 'C#', matchesJob: true },
+      { name: 'SQL', matchesJob: false },
+    ],
+    hasCv: false,
+    profileOpenedAt: '2026-11-07T10:32:00Z',
     ...overrides,
   };
 }

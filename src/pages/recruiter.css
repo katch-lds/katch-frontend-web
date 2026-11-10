@@ -50,6 +50,11 @@
   color: #6b7280;
 }
 
+.conversation-list.empty-state {
+  margin: 0;
+  padding: 12px;
+}
+
 .alert,
 .field-error {
   color: #b91c1c;

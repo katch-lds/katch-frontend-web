@@ -16,3 +16,11 @@ export function formatDateTime(iso: string): string {
 export function formatDate(iso: string): string {
   return dateFormat.format(new Date(iso));
 }
+
+/** I072 — «hoje às 10:32» se o instante for de hoje (fuso do navegador); senão «em 09/11/2026 às 10:32». */
+export function formatDayAndTime(iso: string, now: Date = new Date()): string {
+  const instant = new Date(iso);
+  const sameDay = instant.toDateString() === now.toDateString();
+  const time = timeFormat.format(instant);
+  return sameDay ? `hoje às ${time}` : `em ${dateFormat.format(instant)} às ${time}`;
+}

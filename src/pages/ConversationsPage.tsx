@@ -1,9 +1,11 @@
 import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useConversations } from '../hooks/useConversations';
 import type { ConversationSummaryDto, MessageDto } from '../types/api';
 import { conversationCloseReasonLabels } from '../types/labels';
 import { formatDateTime } from '../utils/date';
+import '../components/dialog.css';
 import './recruiter.css';
 
 /** Dimensão máxima de uma mensagem (P03). */
@@ -50,7 +52,7 @@ export default function ConversationsPage() {
           {matchId === null ? (
             <p className="conversation-placeholder">Escolha uma conversa da lista.</p>
           ) : (
-            <ConversationPanel />
+            <ConversationPanel key={matchId} />
           )}
         </div>
       )}
@@ -109,7 +111,13 @@ function ConversationPanel() {
     send,
     close,
   } = useConversations();
+  const [confirmingClose, setConfirmingClose] = useState(false);
   const readOnly = openConversation?.status === 'CLOSED';
+
+  const confirmClose = async () => {
+    await close();
+    setConfirmingClose(false);
+  };
 
   return (
     <div className="conversation-panel">
@@ -120,7 +128,7 @@ function ConversationPanel() {
         </div>
         <button
           type="button"
-          onClick={() => void close()}
+          onClick={() => setConfirmingClose(true)}
           disabled={openConversation === null || readOnly || busy}
         >
           Encerrar conversa
@@ -137,6 +145,21 @@ function ConversationPanel() {
         </p>
       )}
       <MessageThread messages={messages} userId={userId} loading={messagesLoading} />
+      {confirmingClose && (
+        <ConfirmDialog
+          title={`Encerrar a conversa com ${openConversation?.counterpartName}?`}
+          confirmLabel="Encerrar conversa"
+          busy={busy}
+          onConfirm={() => void confirmClose()}
+          onCancel={() => setConfirmingClose(false)}
+        >
+          <ul>
+            <li>A conversa passa a só de consulta para si e para o Candidato.</li>
+            <li>O histórico continua visível, mas ninguém pode enviar novas mensagens.</li>
+            <li>Esta ação não pode ser anulada.</li>
+          </ul>
+        </ConfirmDialog>
+      )}
       <Composer
         readOnly={readOnly}
         busy={busy}

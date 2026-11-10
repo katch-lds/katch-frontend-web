@@ -1,0 +1,34 @@
+/* Estilos do ConfirmDialog (W12 a W15, W18, W20 e a confirmação de «Encerrar conversa»). */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 30%);
+}
+
+.dialog {
+  width: min(480px, 90vw);
+  padding: 20px 24px;
+  border-radius: 6px;
+  background: #fff;
+  color: #1f2937;
+}
+
+.dialog h2 {
+  margin: 0 0 8px;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dialog button {
+  padding: 6px 12px;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}

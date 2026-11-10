@@ -3,6 +3,7 @@ import AdminShell from '../layouts/AdminShell';
 import RecruiterShell from '../layouts/RecruiterShell';
 import AccessDeniedPage from '../pages/AccessDeniedPage';
 import AccountPage from '../pages/AccountPage';
+import CandidateProfilePage from '../pages/CandidateProfilePage';
 import ChangePasswordPage from '../pages/ChangePasswordPage';
 import CompanyProfilePage from '../pages/CompanyProfilePage';
 import CompanyRegistrationPage from '../pages/CompanyRegistrationPage';
@@ -13,7 +14,9 @@ import JobFormPage from '../pages/JobFormPage';
 import JobListPage from '../pages/JobListPage';
 import LoginPage from '../pages/LoginPage';
 import MatchesPage from '../pages/MatchesPage';
+import MatchConfirmedPage from '../pages/MatchConfirmedPage';
 import PlaceholderPage from '../pages/PlaceholderPage';
+import WaitingCandidatesPage from '../pages/WaitingCandidatesPage';
 import { paths } from './paths';
 import { PublicOnly } from './PublicOnly';
 import { ANY_COMPANY_ACCESS, RequireCompanyStatus } from './RequireCompanyStatus';
@@ -61,6 +64,12 @@ export function AppRouter() {
                 <Route path={paths.jobs} element={<JobListPage />} />
                 <Route path={paths.newJob} element={<JobFormPage />} />
                 <Route path={paths.editJob} element={<JobFormPage />} />
+                <Route path={paths.candidates} element={<WaitingCandidatesPage />} />
+                <Route path={`${paths.candidates}/:matchId`} element={<CandidateProfilePage />} />
+                <Route
+                  path={`${paths.candidates}/:matchId/match`}
+                  element={<MatchConfirmedPage />}
+                />
                 <Route path={paths.matches} element={<MatchesPage />} />
                 <Route path={paths.company} element={<CompanyProfilePage />} />
               </Route>
