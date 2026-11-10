@@ -14,6 +14,45 @@ export interface ApiErrorDto {
 
 export type JobStatus = 'UNPUBLISHED' | 'PUBLISHED' | 'SUSPENDED' | 'CLOSED';
 
+// I070 — vagas da Empresa (documentação da API v02, 6.5 e secção 4.1).
+export type ContractType = 'PERMANENT' | 'FIXED_TERM' | 'INTERNSHIP' | 'SERVICE_PROVISION';
+
+export type WorkMode = 'ON_SITE' | 'HYBRID' | 'REMOTE';
+
+export interface JobRequest {
+  title: string;
+  description: string;
+  minSalary: number;
+  maxSalary: number;
+  locationId: string;
+  contractType: ContractType;
+  workMode: WorkMode;
+  skillIds: string[];
+  benefitIds: string[];
+  isUrgent: boolean;
+  expiresAt: string | null;
+}
+
+export interface JobDto {
+  jobId: string;
+  title: string;
+  description: string;
+  minSalary: number;
+  maxSalary: number;
+  locationId: string;
+  locationName: string;
+  contractType: ContractType;
+  workMode: WorkMode;
+  skills: ReferenceItemDto[];
+  benefits: ReferenceItemDto[];
+  isUrgent: boolean;
+  expiresAt: string | null;
+  status: JobStatus;
+  publishedAt: string | null;
+  photoUrls: string[];
+  waitingCandidates: number;
+}
+
 export type ConversationStatus = 'OPEN' | 'CLOSED';
 
 export type ConversationCloseReason =

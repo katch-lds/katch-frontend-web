@@ -11,3 +11,8 @@ export function formatDateTime(iso: string): string {
   const instant = new Date(iso);
   return `${dateFormat.format(instant)} ${timeFormat.format(instant)}`;
 }
+
+/** I070 — só a data local de um instante da API, no formato «30/11/2026». */
+export function formatDate(iso: string): string {
+  return dateFormat.format(new Date(iso));
+}
