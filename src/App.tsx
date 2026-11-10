@@ -1,12 +1,14 @@
-import { appConfig } from './config/env';
+import { BrowserRouter } from 'react-router';
+import { AppRouter } from './routes/AppRouter';
+import { SessionProvider } from './session/SessionProvider';
 
-/** Estrutura inicial da área de gestão web (I120). As rotas e as páginas chegam com as Issues dos ecrãs de m4. */
+/** Raiz da área de gestão web: sessão e rotas (I069). */
 export default function App() {
   return (
-    <main>
-      <h1>Katch — Área de gestão</h1>
-      <p>Recrutador e Administrador.</p>
-      <p data-testid="api-base-url">API: {appConfig.apiBaseUrl || 'não configurada'}</p>
-    </main>
+    <BrowserRouter>
+      <SessionProvider>
+        <AppRouter />
+      </SessionProvider>
+    </BrowserRouter>
   );
 }

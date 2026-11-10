@@ -1,4 +1,13 @@
-import type { ConversationSummaryDto, MatchDto, MessageDto } from '../src/types/api';
+import type {
+  CompanyRegistrationDto,
+  CompanyRegistrationRequest,
+  CompanyStatusDto,
+  ConversationSummaryDto,
+  LoginResponse,
+  MatchDto,
+  MessageDto,
+  UserType,
+} from '../src/types/api';
 
 // Dados fictícios dos testes (RI, secção 8.6): Recrutador «recruiter-1» e Candidata «candidate-1».
 export const RECRUITER_ID = 'recruiter-1';
@@ -48,6 +57,57 @@ export function message(
     content: `Mensagem ${id}`,
     sentAt,
     readAt: null,
+    ...overrides,
+  };
+}
+
+export function loginResponse(
+  userType: UserType = 'RECRUITER',
+  overrides: Partial<LoginResponse> = {},
+): LoginResponse {
+  return {
+    token: 'token-de-teste',
+    expiresAt: '2999-01-01T08:00:00+00:00',
+    userType,
+    userId: userType === 'RECRUITER' ? RECRUITER_ID : 'admin-1',
+    ...overrides,
+  };
+}
+
+export function companyStatus(overrides: Partial<CompanyStatusDto> = {}): CompanyStatusDto {
+  return {
+    companyId: 'company-1',
+    status: 'PENDING',
+    rejectionReason: null,
+    submittedAt: '2026-11-05T10:00:00+00:00',
+    ...overrides,
+  };
+}
+
+export function companyRegistration(
+  overrides: Partial<CompanyRegistrationRequest> = {},
+): CompanyRegistrationRequest {
+  return {
+    companyName: 'Café Central, Lda.',
+    taxId: '123456789',
+    industry: 'HOSPITALITY',
+    address: 'Rua das Flores 10',
+    locationId: 'loc-1',
+    contactEmail: 'geral@cafecentral.pt',
+    contactPhone: '253123456',
+    responsibleName: 'Rui Costa',
+    ...overrides,
+  };
+}
+
+export function companyRegistrationDto(
+  overrides: Partial<CompanyRegistrationDto> = {},
+): CompanyRegistrationDto {
+  return {
+    ...companyRegistration(),
+    companyId: 'company-1',
+    locationName: 'Braga (Braga)',
+    submittedAt: '2026-11-05T10:00:00+00:00',
     ...overrides,
   };
 }

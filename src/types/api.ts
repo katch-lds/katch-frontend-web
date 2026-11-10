@@ -55,3 +55,82 @@ export interface MessageDto {
 export interface SendMessageRequest {
   content: string;
 }
+
+// I069 — autenticação, Empresa e listas de referência (API v02, secções 4.1, 6.1, 6.2 e 6.9).
+export type UserType = 'CANDIDATE' | 'RECRUITER' | 'ADMIN';
+
+export type CompanyStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED';
+
+export type Industry =
+  | 'TECHNOLOGY'
+  | 'HEALTHCARE'
+  | 'RETAIL'
+  | 'HOSPITALITY'
+  | 'CONSTRUCTION'
+  | 'MANUFACTURING'
+  | 'EDUCATION'
+  | 'FINANCE'
+  | 'LOGISTICS'
+  | 'SERVICES'
+  | 'OTHER';
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  expiresAt: string;
+  userType: UserType;
+  userId: string;
+}
+
+export interface CreateRecruiterAccountRequest {
+  email: string;
+  password: string;
+  acceptTerms: boolean;
+}
+
+export interface CompanyRegistrationRequest {
+  companyName: string;
+  taxId: string;
+  industry: Industry;
+  address: string;
+  locationId: string;
+  contactEmail: string;
+  contactPhone: string;
+  responsibleName: string;
+}
+
+export interface CompanyStatusDto {
+  companyId: string;
+  status: CompanyStatus;
+  rejectionReason: string | null;
+  submittedAt: string;
+}
+
+export interface ReferenceItemDto {
+  id: string;
+  name: string;
+}
+
+// I069 (parte 2) — alteração da palavra-passe e dados de registo da Empresa (API v02, secções 6.1 e 6.4).
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface CompanyRegistrationDto {
+  companyId: string;
+  companyName: string;
+  taxId: string;
+  industry: Industry;
+  address: string;
+  locationId: string;
+  locationName: string;
+  contactEmail: string;
+  contactPhone: string;
+  responsibleName: string;
+  submittedAt: string;
+}

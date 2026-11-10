@@ -17,8 +17,8 @@ function jsonResponse(
   });
 }
 
-function setup(fetchFn: jest.Mock) {
-  const session = new SessionStore();
+function setup(fetchFn: jest.Mock, onError?: (error: ApiError) => void) {
+  const session = new SessionStore(null);
   const monitor = new ConnectionMonitor();
   const client = new HttpApiClient({
     baseUrl: 'http://api.test/',
@@ -26,6 +26,7 @@ function setup(fetchFn: jest.Mock) {
     session,
     monitor,
     fetchFn: fetchFn as unknown as typeof fetch,
+    onError,
   });
   return { client, session, monitor };
 }
@@ -34,7 +35,10 @@ describe('HttpApiClient', () => {
   it('envia o cabeçalho X-Client-App e a credencial Bearer e devolve o JSON', async () => {
     const fetchFn = jest.fn().mockResolvedValue(jsonResponse(200, { status: 'APPROVED' }));
     const { client, session } = setup(fetchFn);
-    session.setToken('abc');
+    session.start(
+      { token: 'abc', userId: 'u1', userType: 'RECRUITER', expiresAt: '2999-01-01T00:00:00Z' },
+      'a@b.pt',
+    );
 
     const result = await client.get<{ status: string }>('/api/recruiter/company/status');
 
@@ -134,5 +138,17 @@ describe('HttpApiClient', () => {
     const blob = await client.getFile('/api/recruiter/interests/1/cv');
 
     expect(await blob.text()).toBe('pdf');
+  });
+
+  it('entrega ao onError cada resposta de erro da API, sem esconder o erro lançado', async () => {
+    const body = { code: 'ERR-01', message: 'Sessão expirada.', fields: [], blockedUntil: null };
+    const fetchFn = jest.fn().mockResolvedValue(jsonResponse(401, body));
+    const onError = jest.fn();
+    const { client } = setup(fetchFn, onError);
+
+    await expect(client.get('/api/matches')).rejects.toMatchObject({ httpStatus: 401 });
+
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(onError.mock.calls[0][0]).toMatchObject({ httpStatus: 401, code: 'ERR-01' });
   });
 });
