@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useLocation } from 'react-router';
 import { ApiError } from '../api/ApiError';
 import { PollingLoop } from '../polling/PollingLoop';
 import { conversationService } from '../services';
@@ -40,8 +41,9 @@ interface ConversationsProviderProps {
 }
 
 /**
- * Montado na moldura do Recrutador: lê a lista uma vez ao montar (contador da barra lateral, DF-14) e, enquanto a
- * página de conversas o pede, repete de 3 em 3 segundos a lista e a conversa escolhida (RF073, P17).
+ * Montado na moldura do Recrutador: lê a lista ao montar e de cada vez que o Recrutador muda de página (contador da
+ * barra lateral, DF-14) e, enquanto a página de conversas o pede, repete de 3 em 3 segundos a lista e a conversa
+ * escolhida (RF073, P17).
  */
 export function ConversationsProvider({ userId, children }: Readonly<ConversationsProviderProps>) {
   const [conversations, setConversations] = useState<ConversationSummaryDto[] | null>(null);
@@ -59,7 +61,9 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
   const selected = useRef<string | null>(null);
   /** Muda em cada escolha: a resposta de uma consulta de outra escolha é descartada. */
   const generation = useRef(0);
-  const after = useRef<string | null>(null);
+  /** Histórico da conversa escolhida, para calcular o `after` e saber se uma consulta trouxe mensagens novas. */
+  const thread = useRef<MessageDto[]>([]);
+  const { pathname } = useLocation();
 
   const refreshList = useCallback(
     (): Promise<void> =>
@@ -79,7 +83,19 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
 
   useEffect(() => {
     void refreshList();
-  }, [refreshList]);
+  }, [refreshList, pathname]);
+
+  /** Junta as mensagens recebidas ao histórico e diz se alguma é nova. */
+  const applyMessages = useCallback((received: MessageDto[]): boolean => {
+    const known = new Set(thread.current.map((m) => m.messageId));
+    const hasNew = received.some((m) => !known.has(m.messageId));
+    const merged = mergeMessages(thread.current, received);
+    if (merged !== thread.current) {
+      thread.current = merged;
+      setMessages(merged);
+    }
+    return hasNew;
+  }, []);
 
   useEffect(
     () => () => {
@@ -108,7 +124,7 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
       selected.current = matchId;
       generation.current += 1;
       const mine = generation.current;
-      after.current = null;
+      thread.current = [];
       setOpenMatchId(matchId);
       setMessages([]);
       setMessagesError(null);
@@ -117,21 +133,20 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
       if (matchId === null) {
         return;
       }
-      let firstLoad = true;
       messagesLoop.current = new PollingLoop(async () => {
         try {
-          const received = await conversationService.open(matchId, after.current);
+          const received = await conversationService.open(
+            matchId,
+            nextAfter(thread.current, userId),
+          );
           if (generation.current !== mine) {
             return;
           }
-          if (received.length > 0) {
-            after.current = received[received.length - 1].sentAt;
-            setMessages((current) => mergeMessages(current, received));
-          }
+          const hasNew = applyMessages(received);
           setMessagesError(null);
-          if (firstLoad) {
-            firstLoad = false;
-            // A abertura marcou as mensagens como lidas (RF109): o contador atualiza-se sem esperar pela lista.
+          if (hasNew) {
+            // O servidor marcou como lidas as mensagens do Candidato (RF109): o contador atualiza-se já, sem esperar
+            // pela consulta seguinte da lista.
             void refreshList();
           }
         } catch (caught) {
@@ -146,7 +161,7 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
       });
       messagesLoop.current.start();
     },
-    [refreshList],
+    [refreshList, applyMessages, userId],
   );
 
   const runAction = useCallback(
@@ -180,10 +195,10 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
       runAction(async (matchId) => {
         const sent = await conversationService.send(matchId, { content });
         if (selected.current === matchId) {
-          setMessages((current) => mergeMessages(current, [sent]));
+          applyMessages([sent]);
         }
       }),
-    [runAction],
+    [runAction, applyMessages],
   );
 
   const close = useCallback(async () => {
@@ -235,12 +250,35 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
   return <ConversationsContext.Provider value={value}>{children}</ConversationsContext.Provider>;
 }
 
-/** Junta por `messageId`, sem duplicados, e ordena por envio (a própria mensagem pode voltar na consulta seguinte). */
+/**
+ * Junta por `messageId`, sem duplicados, e ordena por envio. Uma mensagem já conhecida é substituída se a indicação de
+ * leitura mudou (RF072); sem alterações devolve a mesma lista.
+ */
 export function mergeMessages(current: MessageDto[], received: MessageDto[]): MessageDto[] {
-  const known = new Set(current.map((m) => m.messageId));
-  const added = received.filter((m) => !known.has(m.messageId));
-  if (added.length === 0) {
+  const byId = new Map(current.map((m) => [m.messageId, m]));
+  let changed = false;
+  received.forEach((m) => {
+    const known = byId.get(m.messageId);
+    if (known === undefined || known.readAt !== m.readAt) {
+      byId.set(m.messageId, m);
+      changed = true;
+    }
+  });
+  if (!changed) {
     return current;
   }
-  return [...current, ...added].sort((a, b) => Date.parse(a.sentAt) - Date.parse(b.sentAt));
+  return [...byId.values()].sort((a, b) => Date.parse(a.sentAt) - Date.parse(b.sentAt));
+}
+
+/**
+ * Instante `after` da consulta seguinte: o da última mensagem recebida (modelo de classes, secção 6, regra 3) ou,
+ * enquanto houver mensagens do próprio Recrutador por ler, o da mensagem anterior à mais antiga delas, para a consulta
+ * as devolver com a indicação de leitura do Candidato (RF072).
+ */
+export function nextAfter(messages: MessageDto[], userId: string): string | null {
+  const unread = messages.findIndex((m) => m.senderId === userId && m.readAt === null);
+  if (unread >= 0) {
+    return unread === 0 ? null : messages[unread - 1].sentAt;
+  }
+  return messages.length === 0 ? null : messages[messages.length - 1].sentAt;
 }

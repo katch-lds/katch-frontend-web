@@ -195,7 +195,7 @@ describe('ConversationsPage — conversa', () => {
     expect(field).toHaveValue('Olá');
   });
 
-  it('encerra a conversa (RF074)', async () => {
+  it('pede confirmação, com os efeitos, e encerra a conversa só depois de confirmada (RF074; DF-11)', async () => {
     service.close.mockResolvedValue(undefined);
     await renderPage();
     service.list.mockResolvedValue([
@@ -203,13 +203,55 @@ describe('ConversationsPage — conversa', () => {
     ]);
 
     fireEvent.click(screen.getByRole('button', { name: 'Encerrar conversa' }));
+    const dialog = screen.getByRole('dialog', { name: 'Encerrar a conversa com Ana Silva?' });
+    expect(within(dialog).getByText(/Esta ação não pode ser anulada/)).toBeInTheDocument();
+    expect(service.close).not.toHaveBeenCalled();
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Encerrar conversa' }));
     await advance(0);
 
     expect(service.close).toHaveBeenCalledWith('match-1');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(
       screen.getByText(/Conversa encerrada. Apenas consulta. Encerrada por si/),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Encerrar conversa' })).toBeDisabled();
+  });
+
+  it('não encerra a conversa quando o Recrutador cancela a confirmação', async () => {
+    await renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Encerrar conversa' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
+    await advance(0);
+
+    expect(service.close).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Encerrar conversa' })).toBeEnabled();
+  });
+
+  it('mostra «Lida» na mensagem enviada quando o Candidato a lê, sem reabrir a conversa (RF072)', async () => {
+    const read = { ...fromRecruiter, readAt: '2026-11-05T09:30:00+00:00' };
+    service.open
+      .mockResolvedValueOnce([fromCandidate, fromRecruiter])
+      .mockResolvedValueOnce([read]);
+    await renderPage();
+    const own = () => screen.getByText(fromRecruiter.content).closest('li');
+    expect(own()).not.toHaveTextContent('Lida');
+
+    await advance(3000);
+
+    expect(service.open).toHaveBeenLastCalledWith('match-1', fromCandidate.sentAt);
+    expect(own()).toHaveTextContent('Lida');
+  });
+
+  it('não leva o texto escrito de uma conversa para outra', async () => {
+    await renderPage();
+    fireEvent.change(screen.getByLabelText('Mensagem'), { target: { value: 'Rascunho' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /Rui Costa/ }));
+    await advance(0);
+
+    expect(screen.getByLabelText('Mensagem')).toHaveValue('');
   });
 
   it.each([

@@ -1,14 +1,19 @@
+import type { Cancel, IPollingScheduler } from './IPollingScheduler';
+import { pollingConfig } from './config';
+import { TimeoutPollingScheduler } from './TimeoutPollingScheduler';
+
 /** Repete uma tarefa a intervalo fixo, sem sobrepor execuções, até ser parada (secção 6; 3 s nas conversas). */
 export class PollingLoop {
-  static readonly DEFAULT_INTERVAL_MS = 3000;
+  static readonly DEFAULT_INTERVAL_MS = pollingConfig.conversationsIntervalMs;
 
-  private timer: ReturnType<typeof setTimeout> | null = null;
+  private pending: Cancel | null = null;
 
   private running = false;
 
   constructor(
     private readonly task: () => Promise<void>,
     private readonly intervalMs: number = PollingLoop.DEFAULT_INTERVAL_MS,
+    private readonly scheduler: IPollingScheduler = new TimeoutPollingScheduler(),
   ) {}
 
   start(): void {
@@ -21,10 +26,8 @@ export class PollingLoop {
 
   stop(): void {
     this.running = false;
-    if (this.timer !== null) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
+    this.pending?.();
+    this.pending = null;
   }
 
   isRunning(): boolean {
@@ -32,9 +35,7 @@ export class PollingLoop {
   }
 
   private schedule(delayMs: number): void {
-    this.timer = setTimeout(() => {
-      void this.tick();
-    }, delayMs);
+    this.pending = this.scheduler.schedule(delayMs, () => this.tick());
   }
 
   private async tick(): Promise<void> {
