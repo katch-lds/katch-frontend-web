@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { type Column, DataTable } from '../components/DataTable';
+import { candidateProfilePath } from '../routes/paths';
 import { useJobs } from '../hooks/useJobs';
 import { useWaitingCandidates } from '../hooks/useWaitingCandidates';
 import type { ApiError } from '../api/ApiError';
@@ -36,7 +37,7 @@ function WaitingList({ jobId }: Readonly<{ jobId: string }>) {
       render: (c) => (
         <button
           type="button"
-          onClick={() => navigate(`/candidatos/${encodeURIComponent(c.matchId)}`)}
+          onClick={() => navigate(candidateProfilePath(c.matchId), { state: { jobId } })}
         >
           Abrir perfil
         </button>

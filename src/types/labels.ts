@@ -1,4 +1,5 @@
 import type {
+  Availability,
   CompanyStatus,
   ContractType,
   ConversationCloseReason,
@@ -54,4 +55,12 @@ export const workModeLabels: Record<WorkMode, string> = {
   ON_SITE: 'Presencial',
   HYBRID: 'Híbrido',
   REMOTE: 'Remoto',
+};
+
+// I072 — disponibilidade do candidato (RF061).
+export const availabilityLabels: Record<Availability, string> = {
+  IMMEDIATE: 'Imediata',
+  FIFTEEN_DAYS: 'Quinze dias',
+  ONE_MONTH: 'Um mês',
+  TO_BE_AGREED: 'A combinar',
 };

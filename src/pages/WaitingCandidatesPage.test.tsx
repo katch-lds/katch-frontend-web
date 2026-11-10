@@ -19,6 +19,16 @@ function CurrentLocation() {
   return <p data-testid="location">{`${location.pathname}${location.search}`}</p>;
 }
 
+function ProfileState() {
+  const location = useLocation();
+  return (
+    <>
+      <CurrentLocation />
+      <p data-testid="state">{JSON.stringify(location.state)}</p>
+    </>
+  );
+}
+
 function renderPage(entry = '/candidatos') {
   render(
     <MemoryRouter initialEntries={[entry]}>
@@ -32,7 +42,7 @@ function renderPage(entry = '/candidatos') {
             </>
           }
         />
-        <Route path="/candidatos/:matchId" element={<CurrentLocation />} />
+        <Route path="/candidatos/:matchId" element={<ProfileState />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -84,6 +94,15 @@ describe('WaitingCandidatesPage', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Abrir perfil' }));
 
     expect(screen.getByTestId('location')).toHaveTextContent('/candidatos/match-9');
+  });
+
+  it('«Abrir perfil» leva a vaga em state.jobId, para voltar à mesma lista', async () => {
+    listWaiting.mockResolvedValue([waitingCandidate({ matchId: 'match-9' })]);
+    renderPage('/candidatos?vaga=job-1');
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Abrir perfil' }));
+
+    expect(JSON.parse(screen.getByTestId('state').textContent ?? '')).toEqual({ jobId: 'job-1' });
   });
 
   it('mostra o estado vazio com a vaga escolhida e lista vazia', async () => {

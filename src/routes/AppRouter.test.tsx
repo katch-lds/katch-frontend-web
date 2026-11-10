@@ -1,7 +1,12 @@
 import { screen } from '@testing-library/react';
-import { companyStatus, loginResponse } from '../../test/fixtures';
+import { candidateProfile, companyStatus, loginResponse } from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
-import { companyService, jobService, resetServiceMocks } from '../../test/servicesMock';
+import {
+  candidateEvaluationService,
+  companyService,
+  jobService,
+  resetServiceMocks,
+} from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
 import { SessionStore } from '../session/SessionStore';
 import type { CompanyStatus } from '../types/api';
@@ -23,6 +28,7 @@ describe('RequireSession', () => {
     ['/conversas', '/entrar'],
     ['/candidatos', '/entrar'],
     ['/candidatos/match-1', '/entrar'],
+    ['/candidatos/match-1/match', '/entrar'],
     ['/vagas', '/entrar'],
     ['/empresa/estado', '/entrar'],
     ['/acesso-negado', '/entrar'],
@@ -179,14 +185,38 @@ describe('RequireCompanyStatus', () => {
     ).toBeInTheDocument();
   });
 
-  it('/candidatos/:matchId mostra a página provisória do perfil', async () => {
+  it('/candidatos/:matchId abre o perfil do candidato com a Empresa aprovada', async () => {
     withCompany('APPROVED');
+    candidateEvaluationService.openProfile.mockResolvedValue(candidateProfile());
 
     renderApp('/candidatos/match-1', signedInStore('RECRUITER'));
 
-    expect(await screen.findByRole('heading', { name: 'Perfil do candidato' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /Ana Ferreira/ })).toBeInTheDocument();
+    expect(screen.queryByText(/próxima versão/)).toBeNull();
     expect(location()).toBe('/candidatos/match-1');
   });
+
+  it('/candidatos/:matchId/match sem estado segue para os matches, sem página provisória', async () => {
+    withCompany('APPROVED');
+
+    renderApp('/candidatos/match-1/match', signedInStore('RECRUITER'));
+
+    expect(await screen.findByRole('heading', { name: 'Matches da Empresa' })).toBeInTheDocument();
+    expect(location()).toBe('/matches');
+  });
+
+  it.each(['/candidatos/match-1', '/candidatos/match-1/match'])(
+    '%s com a Empresa pendente vai para /empresa/estado, sem pedir o perfil',
+    async (path) => {
+      withCompany('PENDING');
+
+      renderApp(path, signedInStore('RECRUITER'));
+
+      await screen.findByRole('heading', { name: 'Estado do pedido da Empresa' });
+      expect(location()).toBe('/empresa/estado');
+      expect(candidateEvaluationService.openProfile).not.toHaveBeenCalled();
+    },
+  );
 
   it.each([null, 'PENDING', 'APPROVED', 'REJECTED', 'SUSPENDED'] as const)(
     '/conta abre com a Empresa em qualquer estado (%s)',
