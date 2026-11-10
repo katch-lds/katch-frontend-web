@@ -1,4 +1,5 @@
-// Espelho do ApiErrorDto e do FieldErrorDto da API v02 (documentação da API, secção 4.1).
+// Espelho dos DTOs e das enumerações da API v02 (documentação da API, secções 2.4, 4.1 e 8; modelo de classes do
+// frontend web v02, secção 3).
 export interface FieldErrorDto {
   field: string;
   reason: string;
@@ -9,4 +10,48 @@ export interface ApiErrorDto {
   message: string;
   fields: FieldErrorDto[];
   blockedUntil: string | null;
+}
+
+export type JobStatus = 'UNPUBLISHED' | 'PUBLISHED' | 'SUSPENDED' | 'CLOSED';
+
+export type ConversationStatus = 'OPEN' | 'CLOSED';
+
+export type ConversationCloseReason =
+  'CLOSED_BY_PARTY' | 'ACCOUNT_BLOCKED_OR_SUSPENDED' | 'COMPANY_SUSPENDED';
+
+export interface MatchDto {
+  matchId: string;
+  jobTitle: string;
+  jobStatus: JobStatus;
+  locationName: string;
+  companyName: string;
+  logoUrl: string | null;
+  counterpartName: string;
+  contactEmail: string;
+  contactPhone: string;
+  matchedAt: string;
+}
+
+export interface ConversationSummaryDto {
+  matchId: string;
+  counterpartName: string;
+  jobTitle: string;
+  companyName: string;
+  status: ConversationStatus;
+  closeReason: ConversationCloseReason | null;
+  closedBy: string | null;
+  lastMessageAt: string | null;
+  unreadCount: number;
+}
+
+export interface MessageDto {
+  messageId: string;
+  senderId: string;
+  content: string;
+  sentAt: string;
+  readAt: string | null;
+}
+
+export interface SendMessageRequest {
+  content: string;
 }
