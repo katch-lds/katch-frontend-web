@@ -9,9 +9,19 @@ interface NavItemProps {
   locked?: boolean;
   /** Contador ao lado do nome, quando maior que zero. */
   badge?: number;
+  /** I073 — descrição do contador para leitores de ecrã, por omissão «n mensagens por ler». */
+  badgeLabel?: (badge: number) => string;
 }
 
-export function NavItem({ to, label, locked = false, badge = 0 }: Readonly<NavItemProps>) {
+const unreadMessages = (badge: number) => `${badge} mensagens por ler`;
+
+export function NavItem({
+  to,
+  label,
+  locked = false,
+  badge = 0,
+  badgeLabel = unreadMessages,
+}: Readonly<NavItemProps>) {
   if (locked) {
     return (
       <span className="shell-locked" aria-disabled="true" title="Indisponível neste momento">
@@ -23,7 +33,7 @@ export function NavItem({ to, label, locked = false, badge = 0 }: Readonly<NavIt
     <NavLink to={to}>
       {label}
       {badge > 0 && (
-        <span className="shell-badge" aria-label={`${badge} mensagens por ler`}>
+        <span className="shell-badge" aria-label={badgeLabel(badge)}>
           {badge}
         </span>
       )}

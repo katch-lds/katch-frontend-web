@@ -91,4 +91,8 @@ export function resetServiceMocks(): void {
   jobService.list.mockResolvedValue([]);
   // I073 — a barra lateral do Administrador lê as Empresas pendentes em todas as páginas.
   adminCompanyService.listPending.mockResolvedValue([]);
+  adminCompanyService.listCompanies.mockResolvedValue([]);
+  adminCompanyService.listPublishedJobs.mockResolvedValue([]);
+  adminAccountService.listAccounts.mockResolvedValue([]);
+  adminAccountService.listCandidates.mockResolvedValue([]);
 }
