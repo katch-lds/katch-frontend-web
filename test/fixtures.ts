@@ -1,5 +1,8 @@
 import type {
+  AccountDto,
+  CandidateAdminDto,
   CandidateFullProfileDto,
+  CompanyAdminDto,
   CompanyPageDto,
   CompanyRegistrationDto,
   CompanyRegistrationRequest,
@@ -9,6 +12,9 @@ import type {
   LoginResponse,
   MatchDto,
   MessageDto,
+  PendingCompanyDto,
+  IndicatorsDto,
+  PublishedJobAdminDto,
   UserType,
   WaitingCandidateDto,
 } from '../src/types/api';
@@ -183,6 +189,76 @@ export function candidateProfile(
     ],
     hasCv: false,
     profileOpenedAt: '2026-11-07T10:32:00Z',
+    ...overrides,
+  };
+}
+
+// I073 — supervisão (dados fictícios).
+export function pendingCompany(overrides: Partial<PendingCompanyDto> = {}): PendingCompanyDto {
+  return {
+    companyId: 'company-1',
+    companyName: 'Lumen Software, Lda.',
+    taxId: '509123456',
+    submittedAt: '2026-10-05T10:00:00Z',
+    ...overrides,
+  };
+}
+
+export function companyAdmin(overrides: Partial<CompanyAdminDto> = {}): CompanyAdminDto {
+  return {
+    companyId: 'company-1',
+    companyName: 'Lumen Software, Lda.',
+    status: 'APPROVED',
+    publishedJobs: 4,
+    ...overrides,
+  };
+}
+
+export function publishedJob(
+  index = 1,
+  overrides: Partial<PublishedJobAdminDto> = {},
+): PublishedJobAdminDto {
+  return {
+    jobId: `job-${index}`,
+    title: `Programador Backend .NET ${index}`,
+    companyName: 'Lumen Software, Lda.',
+    publishedAt: '2026-10-09T15:00:00Z',
+    interestCount: 3,
+    ...overrides,
+  };
+}
+
+export function account(overrides: Partial<AccountDto> = {}): AccountDto {
+  return {
+    userId: 'user-1',
+    email: 'ana.ferreira@exemplo.pt',
+    userType: 'CANDIDATE',
+    status: 'ACTIVE',
+    ...overrides,
+  };
+}
+
+export function candidateAdmin(overrides: Partial<CandidateAdminDto> = {}): CandidateAdminDto {
+  return {
+    candidateId: 'candidate-1',
+    fullName: 'Ana Ferreira',
+    email: 'ana.ferreira@exemplo.pt',
+    locationName: 'Guimarães (Braga)',
+    registeredAt: '2026-10-09T14:30:00Z',
+    status: 'ACTIVE',
+    ...overrides,
+  };
+}
+
+export function indicators(overrides: Partial<IndicatorsDto> = {}): IndicatorsDto {
+  return {
+    activeCandidates: 24,
+    approvedCompanies: 5,
+    pendingCompanies: 2,
+    jobsFirstPublished: 51,
+    interestsExpressed: 87,
+    matchesConfirmed: 12,
+    conversationsStarted: 9,
     ...overrides,
   };
 }

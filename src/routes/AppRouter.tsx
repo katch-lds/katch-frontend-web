@@ -3,19 +3,26 @@ import AdminShell from '../layouts/AdminShell';
 import RecruiterShell from '../layouts/RecruiterShell';
 import AccessDeniedPage from '../pages/AccessDeniedPage';
 import AccountPage from '../pages/AccountPage';
+import AccountsPage from '../pages/AccountsPage';
 import CandidateProfilePage from '../pages/CandidateProfilePage';
+import CandidatesPage from '../pages/CandidatesPage';
 import ChangePasswordPage from '../pages/ChangePasswordPage';
+import CompaniesPage from '../pages/CompaniesPage';
 import CompanyProfilePage from '../pages/CompanyProfilePage';
 import CompanyRegistrationPage from '../pages/CompanyRegistrationPage';
 import CompanyRequestStatusPage from '../pages/CompanyRequestStatusPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import CreateRecruiterAccountPage from '../pages/CreateRecruiterAccountPage';
+import IndicatorsPage from '../pages/IndicatorsPage';
 import JobFormPage from '../pages/JobFormPage';
 import JobListPage from '../pages/JobListPage';
 import LoginPage from '../pages/LoginPage';
 import MatchesPage from '../pages/MatchesPage';
 import MatchConfirmedPage from '../pages/MatchConfirmedPage';
-import PlaceholderPage from '../pages/PlaceholderPage';
+import PendingCompaniesPage from '../pages/PendingCompaniesPage';
+import PendingCompanyDetailPage from '../pages/PendingCompanyDetailPage';
+import PublishedJobsPage from '../pages/PublishedJobsPage';
+import ReferenceListsPage from '../pages/ReferenceListsPage';
 import WaitingCandidatesPage from '../pages/WaitingCandidatesPage';
 import { paths } from './paths';
 import { PublicOnly } from './PublicOnly';
@@ -28,8 +35,8 @@ import { SessionHome } from './SessionHome';
 // autorização é sempre do servidor.
 
 /**
- * Rotas da aplicação. O destino `/admin/indicadores` é uma página provisória, a substituir pela Issue
- * do ecrã respetivo; as vagas são da I070.
+ * Rotas da aplicação. As páginas da supervisão (pendentes, Empresas, vagas, contas, Candidatos e listas) são da
+ * I073; o painel de indicadores (`/admin/indicadores`) é da I074.
  */
 export function AppRouter() {
   return (
@@ -79,7 +86,14 @@ export function AppRouter() {
 
         <Route element={<RequireUserType userType="ADMIN" />}>
           <Route element={<AdminShell />}>
-            <Route path={paths.adminIndicators} element={<PlaceholderPage title="Indicadores" />} />
+            <Route path={paths.adminIndicators} element={<IndicatorsPage />} />
+            <Route path={paths.adminPending} element={<PendingCompaniesPage />} />
+            <Route path={paths.adminPendingDetail} element={<PendingCompanyDetailPage />} />
+            <Route path={paths.adminCompanies} element={<CompaniesPage />} />
+            <Route path={paths.adminJobs} element={<PublishedJobsPage />} />
+            <Route path={paths.adminAccounts} element={<AccountsPage />} />
+            <Route path={paths.adminCandidates} element={<CandidatesPage />} />
+            <Route path={paths.adminLists} element={<ReferenceListsPage />} />
             <Route path={paths.adminAccount} element={<ChangePasswordPage />} />
           </Route>
         </Route>

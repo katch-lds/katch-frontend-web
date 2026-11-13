@@ -1,10 +1,12 @@
 import type {
+  AccountStatus,
   Availability,
   CompanyStatus,
   ContractType,
   ConversationCloseReason,
   Industry,
   JobStatus,
+  UserType,
   WorkMode,
 } from './api';
 
@@ -63,4 +65,24 @@ export const availabilityLabels: Record<Availability, string> = {
   FIFTEEN_DAYS: 'Quinze dias',
   ONE_MONTH: 'Um mês',
   TO_BE_AGREED: 'A combinar',
+};
+
+// I073 — contas de utilizador (RF085 a RF090).
+export const accountStatusLabels: Record<AccountStatus, string> = {
+  ACTIVE: 'Ativa',
+  BLOCKED: 'Bloqueada',
+  SUSPENDED: 'Suspensa',
+};
+
+export const userTypeLabels: Record<UserType, string> = {
+  CANDIDATE: 'Candidato',
+  RECRUITER: 'Recrutador',
+  ADMIN: 'Administrador',
+};
+
+/** Designação de qualquer estado de etiqueta (Empresa, vaga ou conta; `BadgeStatus` da secção 8.1). */
+export const badgeStatusLabels: Record<JobStatus | CompanyStatus | AccountStatus, string> = {
+  ...jobStatusLabels,
+  ...companyStatusLabels,
+  ...accountStatusLabels,
 };

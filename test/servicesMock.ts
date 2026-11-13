@@ -1,4 +1,4 @@
-import { companyPageDto, companyRegistrationDto } from './fixtures';
+import { companyPageDto, companyRegistrationDto, indicators } from './fixtures';
 
 // Serviços simulados partilhados pelos testes de I069: jest.mock('../services', () => jest.requireActual(...)).
 export const authService = {
@@ -22,7 +22,29 @@ export const referenceListService = {
   listLocations: jest.fn(),
   listSkills: jest.fn(),
   listBenefits: jest.fn(),
+  addSkill: jest.fn(),
+  renameSkill: jest.fn(),
+  addBenefit: jest.fn(),
+  renameBenefit: jest.fn(),
 };
+export const adminAccountService = {
+  listAccounts: jest.fn(),
+  listCandidates: jest.fn(),
+  block: jest.fn(),
+  suspendCandidate: jest.fn(),
+  reactivate: jest.fn(),
+};
+export const adminCompanyService = {
+  listPending: jest.fn(),
+  getSubmittedData: jest.fn(),
+  approve: jest.fn(),
+  reject: jest.fn(),
+  suspend: jest.fn(),
+  reactivate: jest.fn(),
+  listCompanies: jest.fn(),
+  listPublishedJobs: jest.fn(),
+};
+export const indicatorService = { get: jest.fn() };
 export const jobService = {
   list: jest.fn(),
   create: jest.fn(),
@@ -68,4 +90,11 @@ export function resetServiceMocks(): void {
     { id: 'benefit-1', name: 'Refeição no local' },
   ]);
   jobService.list.mockResolvedValue([]);
+  // I073 — a barra lateral do Administrador lê as Empresas pendentes em todas as páginas.
+  adminCompanyService.listPending.mockResolvedValue([]);
+  adminCompanyService.listCompanies.mockResolvedValue([]);
+  adminCompanyService.listPublishedJobs.mockResolvedValue([]);
+  adminAccountService.listAccounts.mockResolvedValue([]);
+  adminAccountService.listCandidates.mockResolvedValue([]);
+  indicatorService.get.mockResolvedValue(indicators());
 }

@@ -200,6 +200,57 @@ export interface WaitingCandidateDto {
   interestAt: string;
 }
 
+// I073 — supervisão: contas, Empresas e listas pré-definidas (API v02, secções 6.10, 6.11, 6.13 e 8.5).
+export type AccountStatus = 'ACTIVE' | 'BLOCKED' | 'SUSPENDED';
+
+export interface AccountDto {
+  userId: string;
+  email: string;
+  userType: UserType;
+  status: AccountStatus;
+}
+
+export interface CandidateAdminDto {
+  candidateId: string;
+  fullName: string;
+  email: string;
+  locationName: string;
+  registeredAt: string;
+  status: AccountStatus;
+}
+
+export interface PendingCompanyDto {
+  companyId: string;
+  companyName: string;
+  taxId: string;
+  submittedAt: string;
+}
+
+export interface CompanyAdminDto {
+  companyId: string;
+  companyName: string;
+  status: CompanyStatus;
+  publishedJobs: number;
+}
+
+export interface PublishedJobAdminDto {
+  jobId: string;
+  title: string;
+  companyName: string;
+  publishedAt: string;
+  interestCount: number;
+}
+
+/** Motivo da recusa do registo: 10 a 500 caracteres (P12). */
+export interface RejectCompanyRequest {
+  reason: string;
+}
+
+/** Corpo do acrescento e da alteração de competências e benefícios (6.13.4 a 6.13.7). */
+export interface ReferenceItemRequest {
+  name: string;
+}
+
 // I072 — perfil completo do candidato (API v02, secções 6.6.2 a 6.6.5 e 8).
 export type Availability = 'IMMEDIATE' | 'FIFTEEN_DAYS' | 'ONE_MONTH' | 'TO_BE_AGREED';
 
@@ -220,4 +271,16 @@ export interface CandidateFullProfileDto {
   skills: SkillTagDto[];
   hasCv: boolean;
   profileOpenedAt: string;
+}
+
+// I074 — indicadores do Administrador (API v02, 6.12.1): os três primeiros são o estado na data final; os outros
+// quatro contam acontecimentos no período.
+export interface IndicatorsDto {
+  activeCandidates: number;
+  approvedCompanies: number;
+  pendingCompanies: number;
+  jobsFirstPublished: number;
+  interestsExpressed: number;
+  matchesConfirmed: number;
+  conversationsStarted: number;
 }
