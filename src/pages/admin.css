@@ -143,3 +143,140 @@
   font-weight: 700;
   text-transform: uppercase;
 }
+
+/* I074 — painel de indicadores (A02): grelhas de 3 e 4 colunas que cabem entre 1280 e 1920 px (RNF012). */
+.period-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+}
+
+.period-box .form-field {
+  min-width: 0;
+}
+
+.period-box input {
+  display: block;
+  max-width: 100%;
+  padding: 6px 8px;
+  box-sizing: border-box;
+}
+
+.period-box input[aria-invalid='true'] {
+  border-color: #b91c1c;
+}
+
+.period-days {
+  margin: 0 0 0 auto;
+  color: #6b7280;
+}
+
+.field-error {
+  margin: 0 0 12px;
+  color: #b91c1c;
+}
+
+.pending-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ca8a04;
+  border-radius: 4px;
+  background: #fefce8;
+}
+
+.pending-banner p {
+  margin: 0;
+}
+
+.indicator-section {
+  margin: 24px 0 8px;
+  color: #6b7280;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.indicator-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.indicator-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.indicator-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.indicator-card {
+  min-width: 0;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+.indicator-card p {
+  margin: 0;
+}
+
+.indicator-label {
+  color: #374151;
+}
+
+.indicator-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.indicator-note {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.funnel-box {
+  margin-top: 24px;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+}
+
+.funnel-box h2 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.funnel-row {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.funnel-track {
+  height: 14px;
+  border-radius: 7px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+.funnel-bar {
+  height: 100%;
+  background: #2563eb;
+}
+
+.funnel-value {
+  text-align: right;
+  font-weight: 600;
+}

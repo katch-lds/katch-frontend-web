@@ -13,6 +13,7 @@ import CompanyRegistrationPage from '../pages/CompanyRegistrationPage';
 import CompanyRequestStatusPage from '../pages/CompanyRequestStatusPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import CreateRecruiterAccountPage from '../pages/CreateRecruiterAccountPage';
+import IndicatorsPage from '../pages/IndicatorsPage';
 import JobFormPage from '../pages/JobFormPage';
 import JobListPage from '../pages/JobListPage';
 import LoginPage from '../pages/LoginPage';
@@ -20,7 +21,6 @@ import MatchesPage from '../pages/MatchesPage';
 import MatchConfirmedPage from '../pages/MatchConfirmedPage';
 import PendingCompaniesPage from '../pages/PendingCompaniesPage';
 import PendingCompanyDetailPage from '../pages/PendingCompanyDetailPage';
-import PlaceholderPage from '../pages/PlaceholderPage';
 import PublishedJobsPage from '../pages/PublishedJobsPage';
 import ReferenceListsPage from '../pages/ReferenceListsPage';
 import WaitingCandidatesPage from '../pages/WaitingCandidatesPage';
@@ -35,8 +35,8 @@ import { SessionHome } from './SessionHome';
 // autorização é sempre do servidor.
 
 /**
- * Rotas da aplicação. O destino `/admin/indicadores` é uma página provisória, a substituir pela I074; as
- * páginas da supervisão (pendentes, Empresas, vagas, contas, Candidatos e listas) são da I073.
+ * Rotas da aplicação. As páginas da supervisão (pendentes, Empresas, vagas, contas, Candidatos e listas) são da
+ * I073; o painel de indicadores (`/admin/indicadores`) é da I074.
  */
 export function AppRouter() {
   return (
@@ -86,7 +86,7 @@ export function AppRouter() {
 
         <Route element={<RequireUserType userType="ADMIN" />}>
           <Route element={<AdminShell />}>
-            <Route path={paths.adminIndicators} element={<PlaceholderPage title="Indicadores" />} />
+            <Route path={paths.adminIndicators} element={<IndicatorsPage />} />
             <Route path={paths.adminPending} element={<PendingCompaniesPage />} />
             <Route path={paths.adminPendingDetail} element={<PendingCompanyDetailPage />} />
             <Route path={paths.adminCompanies} element={<CompaniesPage />} />
