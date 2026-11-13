@@ -64,17 +64,6 @@ export default function IndicatorsPage() {
         conversas.
       </p>
 
-      {pendingCount > 0 && (
-        <div className="pending-banner">
-          <p>
-            Há {pendingCount} {pendingCount === 1 ? 'Empresa' : 'Empresas'} a aguardar aprovação.
-          </p>
-          <button type="button" onClick={() => navigate(paths.adminPending)}>
-            Ver pendentes
-          </button>
-        </div>
-      )}
-
       <form className="period-box" onSubmit={submit} noValidate>
         <div className="form-field">
           <label htmlFor={fromId}>Data inicial</label>
@@ -139,8 +128,16 @@ export default function IndicatorsPage() {
             Atividade no período ({displayDate(indicators.from)} a {displayDate(indicators.to)})
           </h2>
           <div className="indicator-grid indicator-grid-4">
-            <Card label="Vagas publicadas pela 1.ª vez" value={data.jobsFirstPublished} />
-            <Card label="Interesses manifestados" value={data.interestsExpressed} />
+            <Card
+              label="Vagas publicadas pela 1.ª vez"
+              value={data.jobsFirstPublished}
+              note="no período"
+            />
+            <Card
+              label="Interesses manifestados"
+              value={data.interestsExpressed}
+              note="no período"
+            />
             <Card label="Matches confirmados" value={data.matchesConfirmed} note="no período" />
             <Card
               label="Conversas iniciadas"
@@ -167,6 +164,17 @@ export default function IndicatorsPage() {
             ))}
           </div>
         </>
+      )}
+
+      {pendingCount > 0 && (
+        <div className="pending-banner">
+          <p>
+            Há {pendingCount} {pendingCount === 1 ? 'Empresa' : 'Empresas'} a aguardar aprovação.
+          </p>
+          <button type="button" onClick={() => navigate(paths.adminPending)}>
+            Ver pendentes
+          </button>
+        </div>
       )}
     </section>
   );

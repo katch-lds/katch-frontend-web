@@ -59,6 +59,8 @@ describe('IndicatorsPage (A02)', () => {
     expect(within(card('Empresas aprovadas')).getByText('5')).toBeInTheDocument();
     expect(within(card('Empresas pendentes')).getByText('2')).toBeInTheDocument();
     expect(within(card('Vagas publicadas pela 1.ª vez')).getByText('51')).toBeInTheDocument();
+    expect(within(card('Vagas publicadas pela 1.ª vez')).getByText('no período')).toBeVisible();
+    expect(within(card('Interesses manifestados')).getByText('no período')).toBeVisible();
     expect(within(card('Interesses manifestados')).getByText('87')).toBeInTheDocument();
     expect(within(card('Matches confirmados')).getByText('12')).toBeInTheDocument();
     expect(within(card('Matches confirmados')).getByText('no período')).toBeVisible();
@@ -246,6 +248,16 @@ describe('IndicatorsPage (A02)', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Ver pendentes' }));
 
     expect(location()).toBe('/admin/pendentes');
+  });
+
+  it('a faixa das pendentes fica no fim da página, depois de «Do interesse à conversa»', async () => {
+    adminCompanyService.listPending.mockResolvedValue([pendingCompany()]);
+    open();
+
+    const funnel = await screen.findByText('Do interesse à conversa');
+    const banner = await screen.findByText('Há 1 Empresa a aguardar aprovação.');
+
+    expect(funnel.compareDocumentPosition(banner) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('com uma pendente diz «1 Empresa»', async () => {
