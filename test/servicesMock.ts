@@ -1,4 +1,4 @@
-import { companyPageDto, companyRegistrationDto } from './fixtures';
+import { companyPageDto, companyRegistrationDto, indicators } from './fixtures';
 
 // Serviços simulados partilhados pelos testes de I069: jest.mock('../services', () => jest.requireActual(...)).
 export const authService = {
@@ -44,6 +44,7 @@ export const adminCompanyService = {
   listCompanies: jest.fn(),
   listPublishedJobs: jest.fn(),
 };
+export const indicatorService = { get: jest.fn() };
 export const jobService = {
   list: jest.fn(),
   create: jest.fn(),
@@ -95,4 +96,5 @@ export function resetServiceMocks(): void {
   adminCompanyService.listPublishedJobs.mockResolvedValue([]);
   adminAccountService.listAccounts.mockResolvedValue([]);
   adminAccountService.listCandidates.mockResolvedValue([]);
+  indicatorService.get.mockResolvedValue(indicators());
 }
