@@ -10,6 +10,7 @@ import {
   adminCompanyService,
   candidateEvaluationService,
   companyService,
+  indicatorService,
   jobService,
   resetServiceMocks,
 } from '../../test/servicesMock';
@@ -93,7 +94,7 @@ describe('RequireUserType — Administrador nas rotas do Recrutador', () => {
     renderApp(path, signedInStore('ADMIN'));
 
     expect(location()).toBe('/admin/indicadores');
-    expect(screen.getByRole('heading', { name: 'Indicadores' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Painel de indicadores' })).toBeInTheDocument();
     expect(companyService.getStatus).not.toHaveBeenCalled();
   });
 
@@ -114,6 +115,7 @@ describe('RequireUserType — Administrador nas rotas do Recrutador', () => {
 
     await screen.findByRole('heading', { name: 'Acesso negado' });
     expect(location()).toBe('/acesso-negado');
+    expect(indicatorService.get).not.toHaveBeenCalled();
   });
 
   it.each([
@@ -140,10 +142,12 @@ describe('RequireUserType — Administrador nas rotas do Recrutador', () => {
     expect(adminCompanyService.getSubmittedData).toHaveBeenCalledWith('company-1');
   });
 
-  it('Administrador abre /admin/indicadores', () => {
+  it('Administrador abre /admin/indicadores e vê os indicadores', async () => {
     renderApp('/admin/indicadores', signedInStore('ADMIN'));
 
-    expect(screen.getByRole('heading', { name: 'Indicadores' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Painel de indicadores' })).toBeInTheDocument();
+    await screen.findByText('Do interesse à conversa');
+    expect(indicatorService.get).toHaveBeenCalledTimes(1);
   });
 
   it('a página de acesso negado volta ao início do perfil', async () => {
@@ -151,7 +155,7 @@ describe('RequireUserType — Administrador nas rotas do Recrutador', () => {
 
     screen.getByRole('link', { name: 'Voltar ao início' }).click();
 
-    await screen.findByRole('heading', { name: 'Indicadores' });
+    await screen.findByRole('heading', { name: 'Painel de indicadores' });
     expect(location()).toBe('/admin/indicadores');
   });
 });

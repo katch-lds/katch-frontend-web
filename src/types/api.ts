@@ -272,3 +272,15 @@ export interface CandidateFullProfileDto {
   hasCv: boolean;
   profileOpenedAt: string;
 }
+
+// I074 — indicadores do Administrador (API v02, 6.12.1): os três primeiros são o estado na data final; os outros
+// quatro contam acontecimentos no período.
+export interface IndicatorsDto {
+  activeCandidates: number;
+  approvedCompanies: number;
+  pendingCompanies: number;
+  jobsFirstPublished: number;
+  interestsExpressed: number;
+  matchesConfirmed: number;
+  conversationsStarted: number;
+}

@@ -120,7 +120,7 @@ describe('LoginPage — encaminhamento por perfil e por estado da Empresa', () =
 
       signInWith('admin@exemplo.pt');
 
-      await screen.findByRole('heading', { name: 'Indicadores' });
+      await screen.findByRole('heading', { name: 'Painel de indicadores' });
       expect(location()).toBe('/admin/indicadores');
       expect(companyService.getStatus).not.toHaveBeenCalled();
     },
@@ -193,7 +193,7 @@ describe('LoginPage — erros do servidor', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Tentar de novo' }));
 
-    await screen.findByRole('heading', { name: 'Indicadores' });
+    await screen.findByRole('heading', { name: 'Painel de indicadores' });
     expect(authService.login).toHaveBeenCalledTimes(2);
   });
 

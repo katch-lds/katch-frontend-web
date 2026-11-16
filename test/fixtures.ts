@@ -13,6 +13,7 @@ import type {
   MatchDto,
   MessageDto,
   PendingCompanyDto,
+  IndicatorsDto,
   PublishedJobAdminDto,
   UserType,
   WaitingCandidateDto,
@@ -245,6 +246,19 @@ export function candidateAdmin(overrides: Partial<CandidateAdminDto> = {}): Cand
     locationName: 'Guimarães (Braga)',
     registeredAt: '2026-10-09T14:30:00Z',
     status: 'ACTIVE',
+    ...overrides,
+  };
+}
+
+export function indicators(overrides: Partial<IndicatorsDto> = {}): IndicatorsDto {
+  return {
+    activeCandidates: 24,
+    approvedCompanies: 5,
+    pendingCompanies: 2,
+    jobsFirstPublished: 51,
+    interestsExpressed: 87,
+    matchesConfirmed: 12,
+    conversationsStarted: 9,
     ...overrides,
   };
 }
