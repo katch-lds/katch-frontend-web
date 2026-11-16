@@ -1,4 +1,6 @@
 import { apiClient } from '../api';
+import { AdminAccountService } from './AdminAccountService';
+import { AdminCompanyService } from './AdminCompanyService';
 import { AuthService } from './AuthService';
 import { CandidateEvaluationService } from './CandidateEvaluationService';
 import { CompanyService } from './CompanyService';
@@ -15,3 +17,5 @@ export const companyService = new CompanyService(apiClient);
 export const referenceListService = new ReferenceListService(apiClient);
 export const jobService = new JobService(apiClient);
 export const candidateEvaluationService = new CandidateEvaluationService(apiClient);
+export const adminAccountService = new AdminAccountService(apiClient);
+export const adminCompanyService = new AdminCompanyService(apiClient);

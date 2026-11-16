@@ -1,9 +1,13 @@
-import type { JobStatus } from '../types/api';
-import { jobStatusLabels } from '../types/labels';
+import type { AccountStatus, CompanyStatus, JobStatus } from '../types/api';
+import { badgeStatusLabels } from '../types/labels';
 
-/** Estado em etiqueta, com a designação do mapa de apresentação (secção 8.1). */
-export function StatusBadge({ status }: Readonly<{ status: JobStatus }>) {
+/** Estado da Empresa, da vaga ou da conta (`BadgeStatus`), com a designação do mapa de apresentação (secção 8.1). */
+export function StatusBadge({
+  status,
+}: Readonly<{ status: JobStatus | CompanyStatus | AccountStatus }>) {
   return (
-    <span className={`status-badge status-${status.toLowerCase()}`}>{jobStatusLabels[status]}</span>
+    <span className={`status-badge status-${status.toLowerCase()}`}>
+      {badgeStatusLabels[status]}
+    </span>
   );
 }

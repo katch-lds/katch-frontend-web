@@ -17,6 +17,14 @@ export const paths = {
   matches: '/matches',
   conversations: '/conversas',
   adminIndicators: '/admin/indicadores',
+  // I073 — área do Administrador (modelo de classes do frontend web v02, secção 7.2).
+  adminPending: '/admin/pendentes',
+  adminPendingDetail: '/admin/pendentes/:companyId',
+  adminCompanies: '/admin/empresas',
+  adminJobs: '/admin/vagas',
+  adminAccounts: '/admin/contas',
+  adminCandidates: '/admin/candidatos',
+  adminLists: '/admin/listas',
   account: '/conta',
   adminAccount: '/admin/conta',
   accessDenied: '/acesso-negado',
@@ -43,6 +51,11 @@ export function waitingCandidatesPath(jobId?: string): string {
 
 export function conversationPath(matchId: string): string {
   return `${paths.conversations}?match=${encodeURIComponent(matchId)}`;
+}
+
+/** I073 — dados submetidos de uma Empresa pendente (A04). */
+export function adminPendingPath(companyId: string): string {
+  return `${paths.adminPending}/${encodeURIComponent(companyId)}`;
 }
 
 /** Início de sessão da área a que o caminho pedido pertence. */

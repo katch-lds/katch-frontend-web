@@ -1,7 +1,13 @@
 import { screen } from '@testing-library/react';
-import { candidateProfile, companyStatus, loginResponse } from '../../test/fixtures';
+import {
+  candidateProfile,
+  companyRegistrationDto,
+  companyStatus,
+  loginResponse,
+} from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
 import {
+  adminCompanyService,
   candidateEvaluationService,
   companyService,
   jobService,
@@ -33,6 +39,13 @@ describe('RequireSession', () => {
     ['/empresa/estado', '/entrar'],
     ['/acesso-negado', '/entrar'],
     ['/admin/indicadores', '/admin/entrar'],
+    ['/admin/pendentes', '/admin/entrar'],
+    ['/admin/pendentes/company-1', '/admin/entrar'],
+    ['/admin/empresas', '/admin/entrar'],
+    ['/admin/vagas', '/admin/entrar'],
+    ['/admin/contas', '/admin/entrar'],
+    ['/admin/candidatos', '/admin/entrar'],
+    ['/admin/listas', '/admin/entrar'],
   ])('sem sessão, %s vai para %s', (path, login) => {
     renderApp(path);
 
@@ -84,17 +97,48 @@ describe('RequireUserType — Administrador nas rotas do Recrutador', () => {
     expect(companyService.getStatus).not.toHaveBeenCalled();
   });
 
-  it.each(['/admin/indicadores', '/admin/conta'])(
-    'Recrutador em %s vai para /acesso-negado',
-    async (path) => {
-      withCompany('APPROVED');
+  it.each([
+    '/admin/indicadores',
+    '/admin/conta',
+    '/admin/pendentes',
+    '/admin/pendentes/company-1',
+    '/admin/empresas',
+    '/admin/vagas',
+    '/admin/contas',
+    '/admin/candidatos',
+    '/admin/listas',
+  ])('Recrutador em %s vai para /acesso-negado (RF104)', async (path) => {
+    withCompany('APPROVED');
 
-      renderApp(path, signedInStore('RECRUITER'));
+    renderApp(path, signedInStore('RECRUITER'));
 
-      await screen.findByRole('heading', { name: 'Acesso negado' });
-      expect(location()).toBe('/acesso-negado');
-    },
-  );
+    await screen.findByRole('heading', { name: 'Acesso negado' });
+    expect(location()).toBe('/acesso-negado');
+  });
+
+  it.each([
+    ['/admin/pendentes', 'Empresas pendentes de aprovação'],
+    ['/admin/empresas', 'Empresas'],
+    ['/admin/vagas', 'Vagas publicadas'],
+    ['/admin/contas', 'Contas de utilizador'],
+    ['/admin/candidatos', 'Candidatos'],
+    ['/admin/listas', 'Listas pré-definidas'],
+  ])('Administrador abre %s dentro da moldura da supervisão', async (path, heading) => {
+    renderApp(path, signedInStore('ADMIN'));
+
+    expect(await screen.findByRole('heading', { level: 1, name: heading })).toBeInTheDocument();
+    expect(location()).toBe(path);
+    expect(screen.getByRole('navigation', { name: 'Navegação da supervisão' })).toBeInTheDocument();
+  });
+
+  it('Administrador abre o detalhe de uma Empresa pendente', async () => {
+    adminCompanyService.getSubmittedData.mockResolvedValue(companyRegistrationDto());
+
+    renderApp('/admin/pendentes/company-1', signedInStore('ADMIN'));
+
+    expect(await screen.findByRole('heading', { name: 'Registo da Empresa' })).toBeInTheDocument();
+    expect(adminCompanyService.getSubmittedData).toHaveBeenCalledWith('company-1');
+  });
 
   it('Administrador abre /admin/indicadores', () => {
     renderApp('/admin/indicadores', signedInStore('ADMIN'));

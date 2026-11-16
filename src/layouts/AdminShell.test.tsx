@@ -1,6 +1,7 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { pendingCompany } from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
-import { authService, resetServiceMocks } from '../../test/servicesMock';
+import { adminCompanyService, authService, resetServiceMocks } from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
 
 jest.mock('../services', () => jest.requireActual('../../test/servicesMock'));
@@ -10,20 +11,53 @@ beforeEach(() => resetServiceMocks());
 const openMenu = () => fireEvent.click(screen.getByRole('button', { name: 'Administrador Katch' }));
 
 describe('AdminShell e UserMenu', () => {
-  it('mostra a barra lateral só com «Indicadores» e o menu fechado', () => {
+  it('mostra a barra lateral por secções, sem conversas nem notificações, e o menu fechado', () => {
     renderApp('/admin/indicadores', signedInStore('ADMIN'));
 
     const nav = screen.getByRole('navigation', { name: 'Navegação da supervisão' });
-    expect(within(nav).getAllByRole('link')).toHaveLength(1);
-    expect(within(nav).getByRole('link', { name: 'Indicadores' })).toHaveAttribute(
-      'href',
-      '/admin/indicadores',
+    const links = within(nav)
+      .getAllByRole('link')
+      .map((link) => [link.textContent, link.getAttribute('href')]);
+    expect(links).toEqual([
+      ['Indicadores', '/admin/indicadores'],
+      ['Pendentes de aprovação', '/admin/pendentes'],
+      ['Todas as Empresas', '/admin/empresas'],
+      ['Vagas publicadas', '/admin/vagas'],
+      ['Contas de utilizador', '/admin/contas'],
+      ['Candidatos', '/admin/candidatos'],
+      ['Listas pré-definidas', '/admin/listas'],
+    ]);
+    ['Empresas', 'Utilizadores', 'Configuração'].forEach((section) =>
+      expect(within(nav).getByText(section)).toBeInTheDocument(),
     );
+    expect(within(nav).queryByText(/conversas|notificações/i)).not.toBeInTheDocument();
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Administrador Katch' })).toHaveAttribute(
       'aria-expanded',
       'false',
     );
+  });
+
+  it('o contador de «Pendentes de aprovação» mostra o número de Empresas pendentes (RF091)', async () => {
+    adminCompanyService.listPending.mockResolvedValue([
+      pendingCompany(),
+      pendingCompany({ companyId: 'company-2', companyName: 'Padaria Sol, Lda.' }),
+    ]);
+    renderApp('/admin/indicadores', signedInStore('ADMIN'));
+
+    const badge = await screen.findByLabelText('2 Empresas pendentes');
+
+    expect(badge).toHaveTextContent('2');
+    expect(badge.closest('a')).toHaveAttribute('href', '/admin/pendentes');
+  });
+
+  it('sem Empresas pendentes, ou se a leitura falhar, não há contador', async () => {
+    adminCompanyService.listPending.mockRejectedValue(ApiError.connectionFailure());
+    renderApp('/admin/indicadores', signedInStore('ADMIN'));
+
+    await waitFor(() => expect(adminCompanyService.listPending).toHaveBeenCalled());
+
+    expect(screen.queryByLabelText(/Empresas? pendentes?/)).not.toBeInTheDocument();
   });
 
   it('abre o menu com o correio da sessão e fecha ao clicar de novo', () => {
