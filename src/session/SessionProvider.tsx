@@ -136,7 +136,7 @@ export function SessionProvider({
 
   const signOut = useCallback(() => {
     // O pedido sai já com a credencial; o fim de sessão no cliente não espera pela resposta nem depende dela.
-    Promise.resolve(authService.logout()).catch(() => undefined);
+    authService.logout().catch(() => undefined);
     store.clear();
   }, [store]);
 

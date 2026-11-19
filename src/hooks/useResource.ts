@@ -48,9 +48,16 @@ export function useResource<T>(load: () => Promise<T>): IResourceState<T> {
   useEffect(() => {
     let current = true;
     load().then(
-      (data) => current && setSnapshot({ data, loading: false, error: null }),
-      (error: unknown) =>
-        current && setSnapshot({ data: null, loading: false, error: ApiError.from(error) }),
+      (data) => {
+        if (current) {
+          setSnapshot({ data, loading: false, error: null });
+        }
+      },
+      (error: unknown) => {
+        if (current) {
+          setSnapshot({ data: null, loading: false, error: ApiError.from(error) });
+        }
+      },
     );
     return () => {
       current = false;

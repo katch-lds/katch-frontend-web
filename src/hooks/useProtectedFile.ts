@@ -31,7 +31,11 @@ export function useProtectedFile(url: string | null): string | null {
           setLoaded({ url, objectUrl: created });
         }
       },
-      () => current && setLoaded({ url, objectUrl: null }),
+      () => {
+        if (current) {
+          setLoaded({ url, objectUrl: null });
+        }
+      },
     );
     return () => {
       current = false;

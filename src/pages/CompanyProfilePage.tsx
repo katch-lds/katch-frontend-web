@@ -9,12 +9,12 @@ import './auth.css';
 import './jobs.css';
 import './recruiter.css';
 
-const TABS = [
+type TabId = 'page' | 'data';
+
+const TABS: { id: TabId; label: string }[] = [
   { id: 'page', label: 'Página da Empresa' },
   { id: 'data', label: 'Dados da Empresa' },
-] as const;
-
-type TabId = (typeof TABS)[number]['id'];
+];
 
 /**
  * W07 e W08 — página de apresentação (descrição, sítio, logótipo e galeria) e dados de registo da Empresa aprovada,
