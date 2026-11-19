@@ -1,7 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-
-/** Linhas por página das listas do Administrador (A06 e A07). */
-const ADMIN_PAGE_SIZE = 12;
+import { ADMIN_PAGE_SIZE } from '../config/app';
 
 export interface Pagination<T> {
   /** Página atual, a partir de 1. */

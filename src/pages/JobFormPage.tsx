@@ -9,6 +9,7 @@ import { ProtectedImage } from '../components/ProtectedImage';
 import { optionsOf, SelectField } from '../components/SelectField';
 import { SubmitButton } from '../components/SubmitButton';
 import { TextField } from '../components/TextField';
+import { JOB_PHOTO_MAX_MB, MAX_JOB_PHOTOS } from '../config/app';
 import { useFormSubmission } from '../hooks/useFormSubmission';
 import { type JobFormData, useJobFormData } from '../hooks/useJobFormData';
 import { editJobPath, navigationState, paths } from '../routes/paths';
@@ -19,10 +20,8 @@ import { localDate } from '../utils/date';
 import { IMAGE_TYPES } from '../validation/files';
 import {
   EMPTY_JOB_FORM,
-  JOB_PHOTO_MAX_MB,
   type JobForm,
   listFieldError,
-  MAX_JOB_PHOTOS,
   photoError,
   toJobForm,
   toJobRequest,

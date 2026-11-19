@@ -1,3 +1,4 @@
+import { JOB_PHOTO_MAX_MB } from '../config/app';
 import type { ContractType, JobDto, JobRequest, WorkMode } from '../types/api';
 import { contractTypeLabels, workModeLabels } from '../types/labels';
 import { localDate } from '../utils/date';
@@ -10,8 +11,6 @@ import { validateImageFile } from './files';
 const MAX_TITLE_LENGTH = 150;
 const MAX_DESCRIPTION_LENGTH = 5000;
 const MAX_SALARY = 99_999_999.99;
-export const MAX_JOB_PHOTOS = 5;
-export const JOB_PHOTO_MAX_MB = 5;
 
 /** O formulário guarda o texto escrito; os números e a data só são convertidos no pedido. */
 export interface JobForm {

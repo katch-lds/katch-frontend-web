@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useFileUpload } from '../hooks/useFileUpload';
-import { GALLERY_MAX_MB, GALLERY_MAX_PHOTOS } from '../validation/company';
+import { GALLERY_MAX_MB, GALLERY_MAX_PHOTOS } from '../config/app';
 import { ImageUploadButton } from './ImageUploadButton';
 import { ProtectedImage } from './ProtectedImage';
 

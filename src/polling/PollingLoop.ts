@@ -1,10 +1,10 @@
+import { POLLING_INTERVAL_MS } from '../config/app';
 import type { Cancel, IPollingScheduler } from './IPollingScheduler';
-import { pollingConfig } from './config';
 import { TimeoutPollingScheduler } from './TimeoutPollingScheduler';
 
 /** Repete uma tarefa a intervalo fixo, sem sobrepor execuções, até ser parada (secção 6; 3 s nas conversas). */
 export class PollingLoop {
-  static readonly DEFAULT_INTERVAL_MS = pollingConfig.conversationsIntervalMs;
+  static readonly DEFAULT_INTERVAL_MS = POLLING_INTERVAL_MS;
 
   private pending: Cancel | null = null;
 

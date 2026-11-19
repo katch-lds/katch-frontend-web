@@ -1,4 +1,4 @@
-import { GALLERY_MAX_MB, LOGO_MAX_MB } from './company';
+import { GALLERY_MAX_MB, LOGO_MAX_MB } from '../config/app';
 import { BYTES_PER_MB, validateImageFile } from './files';
 
 function image(type: string, size: number): File {

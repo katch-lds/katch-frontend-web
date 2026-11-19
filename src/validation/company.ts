@@ -1,13 +1,9 @@
 import type { CompanyPageDto, CompanyPageRequest } from '../types/api';
 import { collectErrors, type FieldErrors } from './fields';
 
-// Validação da página de apresentação da Empresa (RF046) e limites do logótipo e da galeria (RF047, RF048). O
-// servidor volta a validar tudo.
+// Validação da página de apresentação da Empresa (RF046). O servidor volta a validar tudo.
 
 export const MAX_PAGE_DESCRIPTION_LENGTH = 1000;
-export const LOGO_MAX_MB = 2;
-export const GALLERY_MAX_MB = 5;
-export const GALLERY_MAX_PHOTOS = 6;
 
 /** O formulário guarda o texto escrito; o texto vazio só vira `null` no pedido. */
 export interface CompanyPageForm {

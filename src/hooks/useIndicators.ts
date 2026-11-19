@@ -1,12 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
+import { DEFAULT_PERIOD_DAYS } from '../config/app';
 import { indicatorService } from '../services';
 import type { IndicatorsDto } from '../types/api';
 import { addDays, localDate, periodDays } from '../utils/date';
 import { periodError as validatePeriod } from '../validation/admin';
 import { type IResourceState, useResource } from './useResource';
-
-/** Período por omissão (não definido na documentação): os últimos 30 dias, de hoje − 29 dias a hoje. */
-const DEFAULT_PERIOD_DAYS = 30;
 
 export interface Indicators extends IResourceState<IndicatorsDto> {
   from: string;
