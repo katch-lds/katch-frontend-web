@@ -35,6 +35,13 @@ describe('validateCompany', () => {
     expect(validateCompany(companyRegistration())).toEqual({});
   });
 
+  it('concorda a mensagem com o género do campo', () => {
+    const errors = validateCompany(EMPTY_COMPANY_FORM);
+
+    expect(errors.address).toBe('A morada é obrigatória.');
+    expect(errors.companyName).toBe('O nome da Empresa é obrigatório.');
+  });
+
   it('assinala os oito campos vazios', () => {
     expect(Object.keys(validateCompany(EMPTY_COMPANY_FORM)).sort()).toEqual([
       'address',

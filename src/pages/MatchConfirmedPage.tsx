@@ -30,7 +30,7 @@ export default function MatchConfirmedPage() {
           <dd>{match.jobTitle}</dd>
           <dt>Localidade</dt>
           <dd>{match.locationName}</dd>
-          <dt>Email</dt>
+          <dt>E-mail</dt>
           <dd>
             <a href={`mailto:${match.contactEmail}`}>{match.contactEmail}</a>
           </dd>
