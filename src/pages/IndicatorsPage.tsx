@@ -150,7 +150,11 @@ export default function IndicatorsPage() {
                 <div className="funnel-track">
                   <div
                     className="funnel-bar"
-                    data-testid="funnel-bar"
+                    role="progressbar"
+                    aria-label={bar.label}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={barWidth(bar.value, data.interestsExpressed)}
                     style={{ width: `${barWidth(bar.value, data.interestsExpressed)}%` }}
                   />
                 </div>

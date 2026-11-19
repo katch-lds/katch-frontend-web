@@ -1,4 +1,5 @@
-import { type ReactNode, useEffect, useId, useRef } from 'react';
+import { type ReactNode, useId, useRef } from 'react';
+import { useModalFocus } from '../hooks/useModalFocus';
 import './dialog.css';
 
 // Confirmação antes de uma ação, com os efeitos, e rejeição com ação alternativa (W15; DF-11).
@@ -24,10 +25,7 @@ export function ConfirmDialog({
 }: Readonly<ConfirmDialogProps>) {
   const titleId = useId();
   const confirmRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    confirmRef.current?.focus();
-  }, []);
+  const onKeyDown = useModalFocus(confirmRef, onCancel, !busy);
 
   return (
     <div className="dialog-backdrop">
@@ -36,11 +34,7 @@ export function ConfirmDialog({
         aria-modal="true"
         aria-labelledby={titleId}
         className="dialog"
-        onKeyDown={(event) => {
-          if (event.key === 'Escape' && !busy) {
-            onCancel();
-          }
-        }}
+        onKeyDown={onKeyDown}
       >
         <h2 id={titleId}>{title}</h2>
         <div>{children}</div>

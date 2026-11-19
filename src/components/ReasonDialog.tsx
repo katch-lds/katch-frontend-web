@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { useFormSubmission } from '../hooks/useFormSubmission';
+import { useModalFocus } from '../hooks/useModalFocus';
 import { MAX_REASON_LENGTH, MIN_REASON_LENGTH, rejectionReasonError } from '../validation/admin';
 import { FormBanner } from './FormBanner';
 import { FormField } from './FormField';
@@ -28,10 +29,7 @@ export function ReasonDialog({
   const [reason, setReason] = useState('');
   const { busy, errors, banner, submit } = useFormSubmission();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    textareaRef.current?.focus();
-  }, []);
+  const onKeyDown = useModalFocus(textareaRef, onCancel, !busy);
 
   const length = reason.trim().length;
   return (
@@ -42,11 +40,7 @@ export function ReasonDialog({
         aria-labelledby={titleId}
         className="dialog"
         noValidate
-        onKeyDown={(event) => {
-          if (event.key === 'Escape' && !busy) {
-            onCancel();
-          }
-        }}
+        onKeyDown={onKeyDown}
         onSubmit={(event) => {
           const error = rejectionReasonError(reason);
           void submit(event, error ? { reason: error } : {}, () => onConfirm(reason.trim()));

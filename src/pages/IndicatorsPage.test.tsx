@@ -13,8 +13,7 @@ const defaultFrom = addDays(today, -29);
 const display = (date: string) => date.split('-').reverse().join('/');
 const location = () => screen.getByTestId('location').textContent;
 const open = () => renderApp('/admin/indicadores', signedInStore('ADMIN'));
-const barWidths = () =>
-  screen.getAllByTestId('funnel-bar').map((bar) => (bar as HTMLElement).style.width);
+const barWidths = () => screen.getAllByRole('progressbar').map((bar) => bar.style.width);
 
 function applyPeriod(from: string, to: string) {
   fireEvent.change(screen.getByLabelText('Data inicial'), { target: { value: from } });

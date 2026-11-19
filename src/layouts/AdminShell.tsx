@@ -51,7 +51,9 @@ export default function AdminShell() {
             onSignOut={signOut}
           />
         </header>
-        <Outlet />
+        <main>
+          <Outlet />
+        </main>
       </div>
     </div>
   );

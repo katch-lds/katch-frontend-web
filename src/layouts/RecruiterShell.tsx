@@ -51,9 +51,9 @@ export default function RecruiterShell() {
   const content = (
     <div className="shell">
       <Sidebar status={status} />
-      <div className="shell-content">
+      <main className="shell-content">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
   if (status !== 'APPROVED' && status !== 'SUSPENDED') {
