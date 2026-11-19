@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { ApiError } from '../api/ApiError';
 import { adminCompanyService } from '../services';
 import type { CompanyRegistrationDto, PendingCompanyDto, RejectCompanyRequest } from '../types/api';
-import { type IResourceState, useResource } from './useResource';
+import { type IResourceState, reloadAfter, useResource } from './useResource';
 
 const listPending = () => adminCompanyService.listPending();
 
@@ -51,21 +51,16 @@ export function usePendingCompanies(companyId: string | null = null): PendingCom
     };
   }, [reload]);
 
-  const approve = useCallback(async (id: string) => {
-    try {
-      await adminCompanyService.approve(id);
-    } finally {
-      reloadAll();
-    }
-  }, []);
+  const approve = useCallback(
+    (id: string) => reloadAfter(() => adminCompanyService.approve(id), reloadAll),
+    [],
+  );
 
-  const reject = useCallback(async (id: string, request: RejectCompanyRequest) => {
-    try {
-      await adminCompanyService.reject(id, request);
-    } finally {
-      reloadAll();
-    }
-  }, []);
+  const reject = useCallback(
+    (id: string, request: RejectCompanyRequest) =>
+      reloadAfter(() => adminCompanyService.reject(id, request), reloadAll),
+    [],
+  );
 
   return {
     ...list,

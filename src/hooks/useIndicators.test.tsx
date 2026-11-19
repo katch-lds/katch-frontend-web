@@ -2,14 +2,13 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { indicators } from '../../test/fixtures';
 import { indicatorService, resetServiceMocks } from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
-import { addDays } from '../validation/admin';
-import { todayLocal } from '../validation/jobs';
+import { addDays, localDate } from '../utils/date';
 import { useIndicators } from './useIndicators';
 
 jest.mock('../services', () => jest.requireActual('../../test/servicesMock'));
 
 const { get } = indicatorService;
-const today = todayLocal();
+const today = localDate();
 const defaultFrom = addDays(today, -29);
 
 beforeEach(() => resetServiceMocks());

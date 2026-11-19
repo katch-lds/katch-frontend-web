@@ -1,4 +1,5 @@
 import type { ChangeEvent } from 'react';
+import { IMAGE_TYPES } from '../validation/files';
 
 // Escolha de uma imagem: botão, estado de envio e erro junto do campo.
 
@@ -36,7 +37,7 @@ export function ImageUploadButton({
         {label}
         <input
           type="file"
-          accept="image/jpeg,image/png"
+          accept={IMAGE_TYPES.join(',')}
           disabled={disabled || busy}
           aria-invalid={error ? true : undefined}
           onChange={handleChange}

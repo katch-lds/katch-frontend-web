@@ -1,4 +1,5 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import { companyStatus, conversation } from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
 import {
@@ -7,6 +8,8 @@ import {
   conversationService,
   resetServiceMocks,
 } from '../../test/servicesMock';
+import { SessionContext, type SessionState } from '../session/SessionProvider';
+import RecruiterShell from './RecruiterShell';
 
 jest.mock('../services', () => jest.requireActual('../../test/servicesMock'));
 
@@ -65,6 +68,28 @@ describe('RecruiterShell', () => {
 
     await screen.findByRole('navigation', { name: 'Navegação do Recrutador' });
     expect(conversationService.list).toHaveBeenCalledTimes(1);
+  });
+
+  it('sem sessão não desenha nada (a proteção de rota leva ao início de sessão)', () => {
+    const noSession: SessionState = {
+      session: null,
+      companyStatus: null,
+      companyLoaded: false,
+      companyError: null,
+      signIn: jest.fn(),
+      signUp: jest.fn(),
+      signOut: jest.fn(),
+      refreshCompanyStatus: jest.fn(),
+    };
+    const { container } = render(
+      <MemoryRouter>
+        <SessionContext.Provider value={noSession}>
+          <RecruiterShell />
+        </SessionContext.Provider>
+      </MemoryRouter>,
+    );
+
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('«Terminar sessão» termina a sessão e leva ao início de sessão do Recrutador', async () => {

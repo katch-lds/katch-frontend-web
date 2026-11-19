@@ -16,6 +16,24 @@ interface Snapshot<T> {
 }
 
 /**
+ * Corre a ação e lê o recurso de novo, mesmo que a ação falhe: o servidor é a fonte de verdade.
+ *
+ * @param action Pedido que altera o recurso.
+ * @param reload Lê o recurso de novo.
+ * @returns A promessa da ação; uma falha é propagada depois de pedida a nova leitura.
+ */
+export async function reloadAfter(
+  action: () => Promise<unknown>,
+  reload: () => void,
+): Promise<void> {
+  try {
+    await action();
+  } finally {
+    reload();
+  }
+}
+
+/**
  * Recurso de um ecrã pedido à API.
  *
  * Pede o recurso ao montar e em cada `reload`; a resposta de um pedido ultrapassado é descartada.

@@ -3,13 +3,12 @@ import { indicators, pendingCompany } from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
 import { adminCompanyService, indicatorService, resetServiceMocks } from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
-import { addDays } from '../validation/admin';
-import { todayLocal } from '../validation/jobs';
+import { addDays, localDate } from '../utils/date';
 
 jest.mock('../services', () => jest.requireActual('../../test/servicesMock'));
 
 const { get } = indicatorService;
-const today = todayLocal();
+const today = localDate();
 const defaultFrom = addDays(today, -29);
 const display = (date: string) => date.split('-').reverse().join('/');
 const location = () => screen.getByTestId('location').textContent;

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { adminAccountService } from '../services';
 import type { CandidateAdminDto } from '../types/api';
-import { type IResourceState, useResource } from './useResource';
+import { type IResourceState, reloadAfter, useResource } from './useResource';
 
 const listCandidates = () => adminAccountService.listCandidates();
 
@@ -25,24 +25,13 @@ export function useCandidatesAdmin(): CandidatesAdmin {
   const activeCount = (data ?? []).filter((candidate) => candidate.status === 'ACTIVE').length;
 
   const suspend = useCallback(
-    async (candidateId: string) => {
-      try {
-        await adminAccountService.suspendCandidate(candidateId);
-      } finally {
-        reload();
-      }
-    },
+    (candidateId: string) =>
+      reloadAfter(() => adminAccountService.suspendCandidate(candidateId), reload),
     [reload],
   );
 
   const reactivate = useCallback(
-    async (candidateId: string) => {
-      try {
-        await adminAccountService.reactivate(candidateId);
-      } finally {
-        reload();
-      }
-    },
+    (candidateId: string) => reloadAfter(() => adminAccountService.reactivate(candidateId), reload),
     [reload],
   );
 

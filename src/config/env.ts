@@ -6,10 +6,8 @@
  *
  * @returns `appConfig`, com o endereço base da API e o tempo limite de cada pedido.
  */
-import { trimTrailingSlashes } from '../utils/url';
-
 export interface AppConfig {
-  /** Endereço base da API REST, sem a barra final (por exemplo, http://localhost:5180). */
+  /** Endereço base da API REST (por exemplo, http://localhost:5180); o cliente da API retira as barras finais. */
   apiBaseUrl: string;
   /** Tempo limite de cada pedido, inferior a 10 segundos (RNF018). */
   apiTimeoutMs: number;
@@ -23,6 +21,6 @@ function readTimeout(value: string | undefined): number {
 }
 
 export const appConfig: AppConfig = {
-  apiBaseUrl: trimTrailingSlashes(import.meta.env.VITE_API_BASE_URL ?? ''),
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL ?? '',
   apiTimeoutMs: readTimeout(import.meta.env.VITE_API_TIMEOUT_MS),
 };

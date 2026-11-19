@@ -1,12 +1,10 @@
 import type { CompanyPageDto, CompanyPageRequest } from '../types/api';
 import { collectErrors, type FieldErrors } from './fields';
-import { PHOTO_TYPES } from './jobs';
 
-// Validação da página de apresentação da Empresa e dos ficheiros de imagem (RF046 a RF048). O servidor volta a
-// validar tudo, incluindo o conteúdo dos ficheiros (RNF016).
+// Validação da página de apresentação da Empresa (RF046) e limites do logótipo e da galeria (RF047, RF048). O
+// servidor volta a validar tudo.
 
 export const MAX_PAGE_DESCRIPTION_LENGTH = 1000;
-export const BYTES_PER_MB = 1024 * 1024;
 export const LOGO_MAX_MB = 2;
 export const GALLERY_MAX_MB = 5;
 export const GALLERY_MAX_PHOTOS = 6;
@@ -55,12 +53,4 @@ export function toCompanyPageRequest(values: CompanyPageForm): CompanyPageReques
     description: values.description.trim() || null,
     website: values.website.trim() || null,
   };
-}
-
-/** Formato e dimensão de uma imagem antes do carregamento (secção 5, regra 8); o limite é inclusivo. */
-export function validateImageFile(file: File, maxMb: number): string | null {
-  if (!PHOTO_TYPES.includes(file.type)) {
-    return 'O ficheiro tem de estar no formato JPEG ou PNG.';
-  }
-  return file.size > maxMb * BYTES_PER_MB ? `O ficheiro pode ter no máximo ${maxMb} MB.` : null;
 }

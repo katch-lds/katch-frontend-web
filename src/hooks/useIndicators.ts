@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { indicatorService } from '../services';
 import type { IndicatorsDto } from '../types/api';
-import { addDays, periodDays, periodError as validatePeriod } from '../validation/admin';
-import { todayLocal } from '../validation/jobs';
+import { addDays, localDate, periodDays } from '../utils/date';
+import { periodError as validatePeriod } from '../validation/admin';
 import { type IResourceState, useResource } from './useResource';
 
 /** Período por omissão (não definido na documentação): os últimos 30 dias, de hoje − 29 dias a hoje. */
@@ -24,7 +24,7 @@ interface Period {
 }
 
 function defaultPeriod(): Period {
-  const to = todayLocal();
+  const to = localDate();
   return { from: addDays(to, 1 - DEFAULT_PERIOD_DAYS), to };
 }
 
@@ -45,7 +45,7 @@ export function useIndicators(): Indicators {
 
   const applyPeriod = useCallback(
     (from: string, to: string) => {
-      const error = validatePeriod(from, to, todayLocal());
+      const error = validatePeriod(from, to, localDate());
       setLocalError(error);
       if (error !== null) {
         return;

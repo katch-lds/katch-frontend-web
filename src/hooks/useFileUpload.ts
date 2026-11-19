@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { ApiError } from '../api/ApiError';
-import { validateImageFile } from '../validation/company';
+import { validateImageFile } from '../validation/files';
 
 export interface FileUpload {
   busy: boolean;

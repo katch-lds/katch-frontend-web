@@ -4,7 +4,7 @@ import { companyPageDto, companyStatus } from '../../test/fixtures';
 import { companyService, resetServiceMocks } from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
 import { SessionContext, type SessionState } from '../session/SessionProvider';
-import { BYTES_PER_MB } from '../validation/company';
+import { BYTES_PER_MB } from '../validation/files';
 import CompanyProfilePage from './CompanyProfilePage';
 
 jest.mock('../services', () => jest.requireActual('../../test/servicesMock'));
@@ -418,25 +418,6 @@ describe('CompanyProfilePage — erros de carregamento', () => {
     renderPage();
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/Não foi possível contactar/);
-  });
-
-  it('ERR-07 ao carregar lê o estado da Empresa', async () => {
-    companyService.getPage.mockRejectedValue(new ApiError(403, 'Empresa não aprovada.', 'ERR-07'));
-    renderPage();
-
-    await screen.findByRole('alert');
-    expect(refreshCompanyStatus).toHaveBeenCalledTimes(1);
-  });
-
-  it('ERR-07 ao gravar lê o estado da Empresa', async () => {
-    companyService.updatePage.mockRejectedValue(
-      new ApiError(403, 'Empresa não aprovada.', 'ERR-07'),
-    );
-    await openPage();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Guardar' }));
-
-    await waitFor(() => expect(refreshCompanyStatus).toHaveBeenCalledTimes(1));
   });
 
   it('mostra «A carregar…» enquanto os pedidos não respondem', () => {

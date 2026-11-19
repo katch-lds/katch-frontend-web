@@ -8,7 +8,6 @@ import {
   photoError,
   toJobForm,
   toJobRequest,
-  todayLocal,
   validateJob,
 } from './jobs';
 
@@ -117,10 +116,6 @@ describe('conversões', () => {
       expiresAt: '2026-11-30',
     });
     expect(toJobForm(job({ expiresAt: null })).expiresAt).toBe('');
-  });
-
-  it('todayLocal usa a data local', () => {
-    expect(todayLocal(NOW)).toBe('2026-11-06');
   });
 });
 

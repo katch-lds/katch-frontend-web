@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { adminAccountService } from '../services';
 import type { AccountDto, AccountStatus, UserType } from '../types/api';
 import { type Pagination, usePagination } from './usePagination';
-import { type IResourceState, useResource } from './useResource';
+import { type IResourceState, reloadAfter, useResource } from './useResource';
 
 const listAccounts = () => adminAccountService.listAccounts();
 
@@ -63,24 +63,12 @@ export function useAccounts(): Accounts {
   );
 
   const block = useCallback(
-    async (userId: string) => {
-      try {
-        await adminAccountService.block(userId);
-      } finally {
-        reload();
-      }
-    },
+    (userId: string) => reloadAfter(() => adminAccountService.block(userId), reload),
     [reload],
   );
 
   const reactivate = useCallback(
-    async (userId: string) => {
-      try {
-        await adminAccountService.reactivate(userId);
-      } finally {
-        reload();
-      }
-    },
+    (userId: string) => reloadAfter(() => adminAccountService.reactivate(userId), reload),
     [reload],
   );
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { adminCompanyService } from '../services';
 import type { CompanyAdminDto, CompanyStatus } from '../types/api';
-import { type IResourceState, useResource } from './useResource';
+import { type IResourceState, reloadAfter, useResource } from './useResource';
 
 const listCompanies = () => adminCompanyService.listCompanies();
 
@@ -33,24 +33,12 @@ export function useCompaniesAdmin(): CompaniesAdmin {
   );
 
   const suspend = useCallback(
-    async (companyId: string) => {
-      try {
-        await adminCompanyService.suspend(companyId);
-      } finally {
-        reload();
-      }
-    },
+    (companyId: string) => reloadAfter(() => adminCompanyService.suspend(companyId), reload),
     [reload],
   );
 
   const reactivate = useCallback(
-    async (companyId: string) => {
-      try {
-        await adminCompanyService.reactivate(companyId);
-      } finally {
-        reload();
-      }
-    },
+    (companyId: string) => reloadAfter(() => adminCompanyService.reactivate(companyId), reload),
     [reload],
   );
 

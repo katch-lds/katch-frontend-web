@@ -26,11 +26,19 @@ export function isDigits(value: string, length: number): boolean {
   return value.length === length && /^\d+$/.test(value);
 }
 
-/** Obrigatório e até `max` caracteres; devolve a mensagem de erro ou null. */
-export function requiredText(value: string, label: string, max: number): string | null {
+/**
+ * Obrigatório e até `max` caracteres, depois de aparar; devolve a mensagem de erro ou null. `required` concorda
+ * com o género do rótulo («obrigatório» ou «obrigatória»).
+ */
+export function requiredText(
+  value: string,
+  label: string,
+  max: number,
+  required = 'obrigatório',
+): string | null {
   const text = value.trim();
   if (text.length === 0) {
-    return `${label} é obrigatório.`;
+    return `${label} é ${required}.`;
   }
   return text.length > max ? `${label} pode ter no máximo ${max} caracteres.` : null;
 }

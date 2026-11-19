@@ -14,15 +14,17 @@ import { editJobPath, paths } from '../routes/paths';
 import { jobService } from '../services';
 import type { ContractType, WorkMode } from '../types/api';
 import { contractTypeLabels, workModeLabels } from '../types/labels';
+import { localDate } from '../utils/date';
+import { IMAGE_TYPES } from '../validation/files';
 import {
   EMPTY_JOB_FORM,
+  JOB_PHOTO_MAX_MB,
   type JobForm,
   listFieldError,
   MAX_JOB_PHOTOS,
   photoError,
   toJobForm,
   toJobRequest,
-  todayLocal,
   validateJob,
 } from '../validation/jobs';
 import './jobs.css';
@@ -298,7 +300,7 @@ function JobFormBody({
                 <input
                   {...control}
                   type="date"
-                  min={todayLocal()}
+                  min={localDate()}
                   value={values.expiresAt}
                   onChange={(event) => set('expiresAt')(event.target.value)}
                 />
@@ -308,8 +310,8 @@ function JobFormBody({
             <div className="photos-box">
               <h2>Fotografias</h2>
               <p className="note">
-                Até {MAX_JOB_PHOTOS} fotografias · JPEG ou PNG até 5 MB cada ({photoCount}/
-                {MAX_JOB_PHOTOS})
+                Até {MAX_JOB_PHOTOS} fotografias · JPEG ou PNG até {JOB_PHOTO_MAX_MB} MB cada (
+                {photoCount}/{MAX_JOB_PHOTOS})
               </p>
               <ul className="photo-grid">
                 {savedPhotos.map((url, index) => (
@@ -342,7 +344,7 @@ function JobFormBody({
                 Adicionar fotografia
                 <input
                   type="file"
-                  accept="image/jpeg,image/png"
+                  accept={IMAGE_TYPES.join(',')}
                   multiple
                   disabled={photoCount >= MAX_JOB_PHOTOS || form.busy}
                   onChange={choosePhotos}
