@@ -5,6 +5,11 @@ export interface SelectOption {
   label: string;
 }
 
+/** Opções de uma lista de escolha, pela ordem do mapa de designações. */
+export function optionsOf(labels: Readonly<Record<string, string>>): SelectOption[] {
+  return Object.entries(labels).map(([value, label]) => ({ value, label }));
+}
+
 interface SelectFieldProps {
   id: string;
   label: string;

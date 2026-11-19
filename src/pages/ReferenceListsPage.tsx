@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ActionFeedback } from '../components/ActionFeedback';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { ReferenceListSection } from '../components/ReferenceListSection';
 import { useReferenceLists } from '../hooks/useReferenceLists';
@@ -20,11 +21,7 @@ export default function ReferenceListsPage() {
   return (
     <section className="recruiter-page admin-page">
       <h1>Listas pré-definidas</h1>
-      {notice && (
-        <p role="status" className="notice">
-          {notice}
-        </p>
-      )}
+      <ActionFeedback notice={notice} />
       {lists.loading && !lists.data && <p>A carregar as listas…</p>}
       {lists.error && <ErrorAlert error={lists.error} onRetry={lists.reload} />}
       {lists.data && (

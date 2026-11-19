@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import type { ApiError } from '../api/ApiError';
 import { CompanyDataForm } from '../components/CompanyDataForm';
 import { CompanyDetails } from '../components/CompanyDetails';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { useCompany } from '../hooks/useCompany';
 import { useSession } from '../hooks/useSession';
 import { companyService } from '../services';
@@ -66,16 +68,12 @@ export default function CompanyRequestStatusPage() {
         </p>
       )}
       <p>A Empresa não pode publicar vagas nem aceder a candidatos.</p>
-      {companyError && (
-        <div role="alert" className="form-banner">
-          <p>{companyError.message}</p>
-        </div>
-      )}
+      {companyError && <ErrorAlert error={companyError} className="form-banner" />}
       <Registration
         status={status}
         registration={company.data}
         loading={company.loading}
-        failure={company.error?.message ?? null}
+        failure={company.error}
         onRetry={company.reload}
         onResubmit={resubmit}
       />
@@ -92,7 +90,7 @@ interface RegistrationProps {
   status: string;
   registration: CompanyRegistrationDto | null;
   loading: boolean;
-  failure: string | null;
+  failure: ApiError | null;
   onRetry: () => void;
   onResubmit: (request: CompanyRegistrationRequest) => Promise<void>;
 }
@@ -107,14 +105,7 @@ function Registration({
   onResubmit,
 }: Readonly<RegistrationProps>) {
   if (failure !== null) {
-    return (
-      <div role="alert" className="form-banner">
-        <p>{failure}</p>
-        <button type="button" onClick={onRetry}>
-          Tentar de novo
-        </button>
-      </div>
-    );
+    return <ErrorAlert error={failure} onRetry={onRetry} className="form-banner" />;
   }
   if (registration === null) {
     return loading ? <p>A carregar os dados da Empresa…</p> : null;

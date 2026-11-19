@@ -1,8 +1,10 @@
 import { useId } from 'react';
 import { useNavigate } from 'react-router';
+import { ActionFeedback } from '../components/ActionFeedback';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { type Column, DataTable } from '../components/DataTable';
 import { ErrorAlert } from '../components/ErrorAlert';
+import { optionsOf, SelectField } from '../components/SelectField';
 import { StatusBadge } from '../components/StatusBadge';
 import { useActionConfirmation } from '../hooks/useActionConfirmation';
 import { useCompaniesAdmin } from '../hooks/useCompaniesAdmin';
@@ -34,7 +36,7 @@ const actionTexts: Record<CompanyAction, { title: string; effects: string; done:
   },
 };
 
-const statusFilters: CompanyStatus[] = ['PENDING', 'APPROVED', 'REJECTED', 'SUSPENDED'];
+const statusOptions = optionsOf(companyStatusLabels);
 
 /**
  * A05 — todas as Empresas, com filtro por estado e a ação que a API admite em cada estado: «Decidir» (pendente),
@@ -43,6 +45,7 @@ const statusFilters: CompanyStatus[] = ['PENDING', 'APPROVED', 'REJECTED', 'SUSP
 export default function CompaniesPage() {
   const companies = useCompaniesAdmin();
   const action = useActionConfirmation<PendingAction>();
+  const { pending } = action;
   const navigate = useNavigate();
   const filterId = useId();
 
@@ -89,34 +92,22 @@ export default function CompaniesPage() {
   return (
     <section className="recruiter-page admin-page">
       <h1>Empresas</h1>
-      {action.notice && (
-        <p role="status" className="notice">
-          {action.notice}
-        </p>
-      )}
-      {action.failure && <ErrorAlert error={action.failure} onRetry={companies.reload} />}
+      <ActionFeedback notice={action.notice} failure={action.failure} onRetry={companies.reload} />
       {companies.loading && !companies.data && <p>A carregar as Empresas…</p>}
       {companies.error && <ErrorAlert error={companies.error} onRetry={companies.reload} />}
       {companies.data && (
         <>
           <div className="toolbar">
-            <div className="form-field">
-              <label htmlFor={filterId}>Estado</label>
-              <select
-                id={filterId}
-                value={companies.statusFilter ?? ''}
-                onChange={(event) =>
-                  companies.filterByStatus((event.target.value || null) as CompanyStatus | null)
-                }
-              >
-                <option value="">Todos os estados</option>
-                {statusFilters.map((status) => (
-                  <option key={status} value={status}>
-                    {companyStatusLabels[status]}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <SelectField
+              id={filterId}
+              label="Estado"
+              value={companies.statusFilter ?? ''}
+              options={statusOptions}
+              placeholder="Todos os estados"
+              onChange={(value) =>
+                companies.filterByStatus((value || null) as CompanyStatus | null)
+              }
+            />
           </div>
           <DataTable
             columns={columns}
@@ -126,17 +117,16 @@ export default function CompaniesPage() {
           />
         </>
       )}
-      {action.pending && (
+      {pending && (
         <ConfirmDialog
-          title={actionTexts[action.pending.action].title}
-          confirmLabel={action.pending.action === 'suspend' ? 'Suspender' : 'Reativar'}
+          title={actionTexts[pending.action].title}
+          confirmLabel={pending.action === 'suspend' ? 'Suspender' : 'Reativar'}
           busy={action.busy}
-          onConfirm={() => void run(action.pending as PendingAction)}
+          onConfirm={() => void run(pending)}
           onCancel={action.cancel}
         >
           <p>
-            Empresa «{action.pending.company.companyName}».{' '}
-            {actionTexts[action.pending.action].effects}
+            Empresa «{pending.company.companyName}». {actionTexts[pending.action].effects}
           </p>
         </ConfirmDialog>
       )}

@@ -166,7 +166,7 @@ export default function IndicatorsPage() {
           <p>
             Há {pendingCount} {pendingCount === 1 ? 'Empresa' : 'Empresas'} a aguardar aprovação.
           </p>
-          <button type="button" onClick={() => navigate(paths.adminPending)}>
+          <button type="button" onClick={() => void navigate(paths.adminPending)}>
             Ver pendentes
           </button>
         </div>

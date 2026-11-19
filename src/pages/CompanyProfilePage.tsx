@@ -3,6 +3,7 @@ import { CompanyDataPanel } from '../components/CompanyDataPanel';
 import { CompanyGalleryPanel } from '../components/CompanyGalleryPanel';
 import { CompanyLogoPanel } from '../components/CompanyLogoPanel';
 import { CompanyPageForm } from '../components/CompanyPageForm';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { useCompanyPage } from '../hooks/useCompanyPage';
 import './auth.css';
 import './jobs.css';
@@ -31,14 +32,7 @@ export default function CompanyProfilePage() {
 
   let content;
   if (company.error !== null) {
-    content = (
-      <div role="alert" className="form-banner">
-        <p>{company.error.message}</p>
-        <button type="button" onClick={company.reload}>
-          Tentar de novo
-        </button>
-      </div>
-    );
+    content = <ErrorAlert error={company.error} onRetry={company.reload} className="form-banner" />;
   } else if (company.page === null || company.loading) {
     content = <p>A carregar os dados da Empresa…</p>;
   } else {

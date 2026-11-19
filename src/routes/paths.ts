@@ -12,6 +12,8 @@ export const paths = {
   newJob: '/vagas/nova',
   editJob: '/vagas/:jobId/editar',
   candidates: '/candidatos',
+  candidateProfile: '/candidatos/:matchId',
+  candidateMatch: '/candidatos/:matchId/match',
   matches: '/matches',
   conversations: '/conversas',
   adminIndicators: '/admin/indicadores',
@@ -54,6 +56,11 @@ export function conversationPath(matchId: string): string {
 /** Dados submetidos de uma Empresa pendente (A04). */
 export function adminPendingPath(companyId: string): string {
   return `${paths.adminPending}/${encodeURIComponent(companyId)}`;
+}
+
+/** Estado passado com a navegação (`navigate(caminho, { state })`), que o React Router não tipa. */
+export function navigationState<T>(location: { state: unknown }): Partial<T> {
+  return (location.state ?? {}) as Partial<T>;
 }
 
 /** Início de sessão da área a que o caminho pedido pertence. */

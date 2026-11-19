@@ -2,15 +2,16 @@ import { type ChangeEvent, type FormEvent, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { ApiError } from '../api/ApiError';
 import { ChoiceList } from '../components/ChoiceList';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { FormBanner } from '../components/FormBanner';
 import { FormField } from '../components/FormField';
 import { ProtectedImage } from '../components/ProtectedImage';
-import { SelectField } from '../components/SelectField';
+import { optionsOf, SelectField } from '../components/SelectField';
 import { SubmitButton } from '../components/SubmitButton';
 import { TextField } from '../components/TextField';
 import { useFormSubmission } from '../hooks/useFormSubmission';
 import { type JobFormData, useJobFormData } from '../hooks/useJobFormData';
-import { editJobPath, paths } from '../routes/paths';
+import { editJobPath, navigationState, paths } from '../routes/paths';
 import { jobService } from '../services';
 import type { ContractType, WorkMode } from '../types/api';
 import { contractTypeLabels, workModeLabels } from '../types/labels';
@@ -30,11 +31,8 @@ import {
 import './jobs.css';
 import './recruiter.css';
 
-const contractOptions = Object.entries(contractTypeLabels).map(([value, label]) => ({
-  value,
-  label,
-}));
-const workModeOptions = Object.entries(workModeLabels).map(([value, label]) => ({ value, label }));
+const contractOptions = optionsOf(contractTypeLabels);
+const workModeOptions = optionsOf(workModeLabels);
 
 /** Estado passado pela navegação depois de uma criação com fotografias recusadas. */
 interface FormLocationState {
@@ -60,15 +58,11 @@ export default function JobFormPage() {
     return (
       <section className="recruiter-page">
         <h1>{title}</h1>
-        <div role="alert" className="alert">
-          <p>{error.message}</p>
-          <button type="button" onClick={reload}>
-            Tentar de novo
-          </button>
-          <button type="button" onClick={() => navigate(paths.jobs)}>
+        <ErrorAlert error={error} onRetry={reload}>
+          <button type="button" onClick={() => void navigate(paths.jobs)}>
             Voltar às vagas
           </button>
-        </div>
+        </ErrorAlert>
       </section>
     );
   }
@@ -88,7 +82,7 @@ export default function JobFormPage() {
         <p role="alert" className="alert">
           A vaga «{data.job.title}» está encerrada e não pode ser alterada.
         </p>
-        <button type="button" onClick={() => navigate(paths.jobs)}>
+        <button type="button" onClick={() => void navigate(paths.jobs)}>
           Voltar às vagas
         </button>
       </section>
@@ -99,7 +93,7 @@ export default function JobFormPage() {
       key={jobId ?? 'nova'}
       jobId={jobId}
       data={data}
-      initialPhotoErrors={(location.state as FormLocationState | null)?.photoErrors ?? []}
+      initialPhotoErrors={navigationState<FormLocationState>(location).photoErrors ?? []}
       onPhotosChanged={reload}
     />
   );
@@ -360,7 +354,7 @@ function JobFormBody({
         </div>
         <div className="form-actions">
           <SubmitButton busy={form.busy}>Guardar</SubmitButton>
-          <button type="button" disabled={form.busy} onClick={() => navigate(paths.jobs)}>
+          <button type="button" disabled={form.busy} onClick={() => void navigate(paths.jobs)}>
             Cancelar
           </button>
         </div>

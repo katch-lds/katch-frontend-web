@@ -24,7 +24,7 @@ export default function PendingCompanyDetailPage() {
   const [dialog, setDialog] = useState<Dialog>(null);
   const [busy, setBusy] = useState(false);
   // A04e: a Empresa já foi decidida (409 ERR-30); a mensagem é a do servidor.
-  const [alreadyDecided, setAlreadyDecided] = useState<string | null>(null);
+  const [alreadyDecided, setAlreadyDecided] = useState<ApiError | null>(null);
   const [failure, setFailure] = useState<ApiError | null>(null);
 
   const goToList = (notice: string) => void navigate(paths.adminPending, { state: { notice } });
@@ -35,7 +35,7 @@ export default function PendingCompanyDetailPage() {
       return false;
     }
     setDialog(null);
-    setAlreadyDecided((caught as ApiError).message);
+    setAlreadyDecided(caught as ApiError);
     return true;
   };
 
@@ -85,12 +85,11 @@ export default function PendingCompanyDetailPage() {
         />
       )}
       {alreadyDecided && (
-        <div role="alert" className="alert">
-          <p>{alreadyDecided}</p>
+        <ErrorAlert error={alreadyDecided}>
           <button type="button" onClick={() => void navigate(paths.adminPending)}>
             Ver lista atualizada
           </button>
-        </div>
+        </ErrorAlert>
       )}
       {selected && (
         <>

@@ -1,25 +1,15 @@
 import { useId } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { type Column, DataTable } from '../components/DataTable';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { candidateProfilePath } from '../routes/paths';
 import { useJobs } from '../hooks/useJobs';
 import { useWaitingCandidates } from '../hooks/useWaitingCandidates';
-import type { ApiError } from '../api/ApiError';
+
 import type { JobDto, WaitingCandidateDto } from '../types/api';
 import { jobStatusLabels } from '../types/labels';
 import { formatDateTime } from '../utils/date';
 import './recruiter.css';
-
-function ErrorAlert({ error, onRetry }: Readonly<{ error: ApiError; onRetry: () => void }>) {
-  return (
-    <div role="alert" className="alert">
-      <p>{error.message}</p>
-      <button type="button" onClick={onRetry}>
-        Tentar de novo
-      </button>
-    </div>
-  );
-}
 
 /** Lista dos candidatos em espera de uma vaga; sem ações de decisão (RF060, RF065). */
 function WaitingList({ jobId }: Readonly<{ jobId: string }>) {
@@ -37,7 +27,7 @@ function WaitingList({ jobId }: Readonly<{ jobId: string }>) {
       render: (c) => (
         <button
           type="button"
-          onClick={() => navigate(candidateProfilePath(c.matchId), { state: { jobId } })}
+          onClick={() => void navigate(candidateProfilePath(c.matchId), { state: { jobId } })}
         >
           Abrir perfil
         </button>

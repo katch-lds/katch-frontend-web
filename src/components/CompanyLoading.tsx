@@ -1,4 +1,5 @@
 import { useSession } from '../hooks/useSession';
+import { ErrorAlert } from './ErrorAlert';
 import { SignOutButton } from './SignOutButton';
 
 /**
@@ -11,12 +12,12 @@ export function CompanyLoading() {
     return <p className="route-loading">A carregar…</p>;
   }
   return (
-    <div role="alert" className="form-banner route-loading">
-      <p>{companyError.message}</p>
-      <button type="button" onClick={() => void refreshCompanyStatus()}>
-        Tentar de novo
-      </button>
+    <ErrorAlert
+      error={companyError}
+      onRetry={() => void refreshCompanyStatus()}
+      className="form-banner route-loading"
+    >
       <SignOutButton />
-    </div>
+    </ErrorAlert>
   );
 }

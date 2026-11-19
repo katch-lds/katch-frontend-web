@@ -83,12 +83,9 @@ export function AppRouter() {
                 {/** RF060: Consultar candidatos em espera por vaga */}
                 <Route path={paths.candidates} element={<WaitingCandidatesPage />} />
                 {/** RF061, RF062, RF063, RF064, RF117: Abrir o perfil do Candidato e decidir */}
-                <Route path={`${paths.candidates}/:matchId`} element={<CandidateProfilePage />} />
+                <Route path={paths.candidateProfile} element={<CandidateProfilePage />} />
                 {/** RF066: Confirmar o match após aceitação */}
-                <Route
-                  path={`${paths.candidates}/:matchId/match`}
-                  element={<MatchConfirmedPage />}
-                />
+                <Route path={paths.candidateMatch} element={<MatchConfirmedPage />} />
                 {/** RF067: Consultar os matches da Empresa */}
                 <Route path={paths.matches} element={<MatchesPage />} />
                 {/** RF046, RF047, RF048, RF049: Página e dados de registo da Empresa aprovada */}

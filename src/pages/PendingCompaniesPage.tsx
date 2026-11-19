@@ -1,8 +1,9 @@
 import { useLocation, useNavigate } from 'react-router';
+import { ActionFeedback } from '../components/ActionFeedback';
 import { type Column, DataTable } from '../components/DataTable';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { usePendingCompanies } from '../hooks/usePendingCompanies';
-import { adminPendingPath, paths } from '../routes/paths';
+import { adminPendingPath, navigationState, paths } from '../routes/paths';
 import type { PendingCompanyDto } from '../types/api';
 import { formatDate } from '../utils/date';
 import './admin.css';
@@ -13,7 +14,7 @@ export default function PendingCompaniesPage() {
   const { data, loading, error, reload } = usePendingCompanies();
   const navigate = useNavigate();
   // A03b e A03c: a mensagem da decisão chega com a navegação do detalhe.
-  const notice = (useLocation().state as { notice?: string } | null)?.notice ?? null;
+  const notice = navigationState<{ notice: string }>(useLocation()).notice ?? null;
 
   const columns: Column<PendingCompanyDto>[] = [
     { key: 'name', header: 'Designação social', render: (c) => <strong>{c.companyName}</strong> },
@@ -33,11 +34,7 @@ export default function PendingCompaniesPage() {
   return (
     <section className="recruiter-page admin-page">
       <h1>Empresas pendentes de aprovação</h1>
-      {notice && (
-        <p role="status" className="notice">
-          {notice}
-        </p>
-      )}
+      <ActionFeedback notice={notice} />
       {loading && !data && <p>A carregar as Empresas pendentes…</p>}
       {error && <ErrorAlert error={error} onRetry={reload} />}
       {data?.length === 0 && (
