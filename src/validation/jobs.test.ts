@@ -61,6 +61,13 @@ describe('validateJob', () => {
     expect(validateJob(validForm({ minSalary: value }), NOW).minSalary).toBe(message);
   });
 
+  it.each(['19.99', '8.2', '1.15', '0.07', '1100,50', '1200'])(
+    'aceita o salário %s, com até 2 casas decimais',
+    (value) => {
+      expect(validateJob(validForm({ minSalary: value }), NOW).minSalary).toBeUndefined();
+    },
+  );
+
   it('deixa a verificação do intervalo salarial para a API (RF051)', () => {
     expect(validateJob(validForm({ minSalary: '1500', maxSalary: '1200' }), NOW)).toEqual({});
   });

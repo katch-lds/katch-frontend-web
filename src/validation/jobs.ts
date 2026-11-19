@@ -48,15 +48,17 @@ export function parseEuros(value: string): number | null {
   return /^\d+(\.\d+)?$/.test(text) ? Number(text) : null;
 }
 
+/** As casas decimais contam-se no texto: multiplicar por 100 em vírgula flutuante recusaria 19,99 ou 8,2. */
 function salaryError(value: string, label: string): string | null {
-  if (value.trim().length === 0) {
+  const text = value.trim();
+  if (text.length === 0) {
     return `${label} é obrigatório.`;
   }
-  const amount = parseEuros(value);
+  const amount = parseEuros(text);
   if (amount === null || amount <= 0) {
     return 'O valor tem de ser um número positivo em euros.';
   }
-  if (Math.round(amount * 100) !== amount * 100) {
+  if (!/^\d+([.,]\d{1,2})?$/.test(text)) {
     return 'O valor tem de ter no máximo 2 casas decimais.';
   }
   return amount > MAX_SALARY ? 'O valor não pode exceder 99 999 999,99 euros.' : null;
