@@ -66,11 +66,6 @@ export class SessionStore {
     return this.session !== null && !this.isExpired() ? this.session.token : null;
   }
 
-  /** Usado pelo HttpApiClient. */
-  getToken(): string | null {
-    return this.token();
-  }
-
   /** Sem sessão ou com a data de expiração ilegível, conta como expirada. */
   isExpired(now: Date = new Date()): boolean {
     if (this.session === null) {

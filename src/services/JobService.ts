@@ -1,18 +1,6 @@
 import type { IApiClient } from '../api/IApiClient';
 import type { JobDto, JobRequest } from '../types/api';
 
-export interface IJobService {
-  list(): Promise<JobDto[]>;
-  create(request: JobRequest): Promise<JobDto>;
-  update(jobId: string, request: JobRequest): Promise<JobDto>;
-  publish(jobId: string): Promise<JobDto>;
-  suspend(jobId: string): Promise<JobDto>;
-  republish(jobId: string): Promise<JobDto>;
-  close(jobId: string): Promise<JobDto>;
-  delete(jobId: string): Promise<void>;
-  addPhoto(jobId: string, file: File): Promise<string | null>;
-}
-
 const BASE = '/api/recruiter/jobs';
 
 function jobPath(jobId: string): string {
@@ -20,7 +8,7 @@ function jobPath(jobId: string): string {
 }
 
 /** Vagas da Empresa do Recrutador (JobsController; API v02, 6.5; política ApprovedCompany). */
-export class JobService implements IJobService {
+export class JobService {
   constructor(private readonly api: IApiClient) {}
 
   /** Vagas da própria Empresa, da mais recente para a mais antiga (6.5.1). */

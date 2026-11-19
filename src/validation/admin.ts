@@ -5,7 +5,7 @@ export const MIN_REASON_LENGTH = 10;
 export const MAX_REASON_LENGTH = 500;
 
 /** Designação de uma competência ou de um benefício: não vazia, até 100 caracteres (API v02, 6.13.4). */
-export const MAX_REFERENCE_NAME_LENGTH = 100;
+const MAX_REFERENCE_NAME_LENGTH = 100;
 
 /** Os espaços no início e no fim não contam (API v02, secção 2.3). Devolve a mensagem de erro ou null. */
 export function rejectionReasonError(reason: string): string | null {

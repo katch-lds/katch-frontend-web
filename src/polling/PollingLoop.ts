@@ -30,10 +30,6 @@ export class PollingLoop {
     this.pending = null;
   }
 
-  isRunning(): boolean {
-    return this.running;
-  }
-
   private schedule(delayMs: number): void {
     this.pending = this.scheduler.schedule(delayMs, () => this.tick());
   }

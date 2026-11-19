@@ -7,19 +7,8 @@ import type {
   RejectCompanyRequest,
 } from '../types/api';
 
-export interface IAdminCompanyService {
-  listPending(): Promise<PendingCompanyDto[]>;
-  getSubmittedData(companyId: string): Promise<CompanyRegistrationDto>;
-  approve(companyId: string): Promise<void>;
-  reject(companyId: string, request: RejectCompanyRequest): Promise<void>;
-  suspend(companyId: string): Promise<void>;
-  reactivate(companyId: string): Promise<void>;
-  listCompanies(): Promise<CompanyAdminDto[]>;
-  listPublishedJobs(): Promise<PublishedJobAdminDto[]>;
-}
-
 /** Empresas, para o Administrador (AdminCompaniesController; API v02, 6.11). */
-export class AdminCompanyService implements IAdminCompanyService {
+export class AdminCompanyService {
   constructor(private readonly api: IApiClient) {}
 
   /** Empresas pendentes, da submissão mais antiga para a mais recente (RF091). */

@@ -5,7 +5,7 @@ import type { CandidateFullProfileDto, MatchDto } from '../types/api';
 import { type IResourceState, useResource } from './useResource';
 
 /** Tempo até revogar o endereço local do CV, depois de aberto no novo separador. */
-export const CV_URL_LIFETIME_MS = 60_000;
+const CV_URL_LIFETIME_MS = 60_000;
 
 export type DecisionState = 'idle' | 'submitting' | 'accepted' | 'rejected';
 

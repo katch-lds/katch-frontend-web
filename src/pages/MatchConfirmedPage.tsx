@@ -19,7 +19,7 @@ export default function MatchConfirmedPage() {
   const { match, photoUrl = null } = state;
 
   return (
-    <section className="recruiter-page match-confirmed">
+    <section className="recruiter-page">
       <h1>Match confirmado</h1>
       <div className="profile-grid">
         <ProtectedImage url={photoUrl} alt={`Fotografia de ${match.counterpartName}`} />

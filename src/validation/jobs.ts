@@ -5,11 +5,11 @@ import { collectErrors, type FieldErrors } from './fields';
 // Validação do formulário da vaga (RF050 a RF052). O servidor volta a validar tudo, incluindo o intervalo
 // salarial (RF051), cuja recusa é apresentada com a mensagem da API junto do salário mínimo.
 
-export const MAX_TITLE_LENGTH = 150;
-export const MAX_DESCRIPTION_LENGTH = 5000;
-export const MAX_SALARY = 99_999_999.99;
+const MAX_TITLE_LENGTH = 150;
+const MAX_DESCRIPTION_LENGTH = 5000;
+const MAX_SALARY = 99_999_999.99;
 export const MAX_JOB_PHOTOS = 5;
-export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 export const PHOTO_TYPES = ['image/jpeg', 'image/png'];
 
 /** O formulário guarda o texto escrito; os números e a data só são convertidos no pedido. */

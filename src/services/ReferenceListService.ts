@@ -1,21 +1,11 @@
 import type { IApiClient } from '../api/IApiClient';
 import type { ReferenceItemDto, ReferenceItemRequest } from '../types/api';
 
-export interface IReferenceListService {
-  listLocations(): Promise<ReferenceItemDto[]>;
-  listSkills(): Promise<ReferenceItemDto[]>;
-  listBenefits(): Promise<ReferenceItemDto[]>;
-  addSkill(request: ReferenceItemRequest): Promise<ReferenceItemDto>;
-  renameSkill(skillId: string, request: ReferenceItemRequest): Promise<ReferenceItemDto>;
-  addBenefit(request: ReferenceItemRequest): Promise<ReferenceItemDto>;
-  renameBenefit(benefitId: string, request: ReferenceItemRequest): Promise<ReferenceItemDto>;
-}
-
 /**
  * Listas pré-definidas (ReferenceListsController; API v02, 6.13): localidades sem sessão; competências e benefícios
  * com sessão, com acrescento e alteração só pelo Administrador (RF099 a RF102).
  */
-export class ReferenceListService implements IReferenceListService {
+export class ReferenceListService {
   constructor(private readonly api: IApiClient) {}
 
   listLocations(): Promise<ReferenceItemDto[]> {

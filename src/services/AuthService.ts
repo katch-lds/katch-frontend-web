@@ -6,15 +6,8 @@ import type {
   LoginResponse,
 } from '../types/api';
 
-export interface IAuthService {
-  createRecruiterAccount(request: CreateRecruiterAccountRequest): Promise<LoginResponse>;
-  login(request: LoginRequest): Promise<LoginResponse>;
-  logout(): Promise<void>;
-  changePassword(request: ChangePasswordRequest): Promise<void>;
-}
-
 /** Autenticação: criação de conta de Recrutador, início e fim de sessão (AuthController; API v02, 6.1). */
-export class AuthService implements IAuthService {
+export class AuthService {
   constructor(private readonly api: IApiClient) {}
 
   createRecruiterAccount(request: CreateRecruiterAccountRequest): Promise<LoginResponse> {

@@ -55,7 +55,7 @@ export default function IndicatorsPage() {
     : [];
 
   return (
-    <section className="recruiter-page admin-page indicators-page">
+    <section className="recruiter-page admin-page">
       <h1>Painel de indicadores</h1>
       <p className="summary">
         Valores agregados da plataforma para o período escolhido. Sem dados pessoais nem conteúdo de
@@ -149,7 +149,7 @@ export default function IndicatorsPage() {
             <p className="summary">Mesmos valores, em proporção dos interesses</p>
             {bars.map((bar) => (
               <div key={bar.label} className="funnel-row">
-                <span className="funnel-label">{bar.label}</span>
+                <span>{bar.label}</span>
                 <div className="funnel-track">
                   <div
                     className="funnel-bar"

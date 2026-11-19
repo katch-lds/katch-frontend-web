@@ -204,7 +204,7 @@ function CandidateProfile({ matchId }: Readonly<{ matchId: string }>) {
   }
 
   return (
-    <section className="recruiter-page candidate-profile">
+    <section className="recruiter-page">
       <h1>
         {profile.desiredRole ? `${profile.fullName} — ${profile.desiredRole}` : profile.fullName}
       </h1>

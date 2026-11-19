@@ -1,6 +1,5 @@
 import type { Session } from '../session/SessionStore';
 import type { CompanyStatusDto } from '../types/api';
-import type { LoginArea } from '../types/LoginArea';
 
 export const paths = {
   login: '/entrar',
@@ -60,10 +59,6 @@ export function adminPendingPath(companyId: string): string {
 /** Início de sessão da área a que o caminho pedido pertence. */
 export function loginPathFor(pathname: string): string {
   return pathname === '/admin' || pathname.startsWith('/admin/') ? paths.adminLogin : paths.login;
-}
-
-export function loginPathForArea(area: LoginArea): string {
-  return area === 'Supervision' ? paths.adminLogin : paths.login;
 }
 
 /**

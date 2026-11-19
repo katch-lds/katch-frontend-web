@@ -8,23 +8,11 @@ import type {
   CompanyStatusDto,
 } from '../types/api';
 
-export interface ICompanyService {
-  register(request: CompanyRegistrationRequest): Promise<CompanyStatusDto>;
-  getStatus(): Promise<CompanyStatusDto | null>;
-  getRegistration(): Promise<CompanyRegistrationDto | null>;
-  resubmit(request: CompanyRegistrationRequest): Promise<CompanyStatusDto>;
-  updateRegistration(request: CompanyRegistrationRequest): Promise<CompanyStatusDto>;
-  getPage(): Promise<CompanyPageDto>;
-  updatePage(request: CompanyPageRequest): Promise<CompanyPageDto>;
-  uploadLogo(file: File): Promise<string | null>;
-  addGalleryPhoto(file: File): Promise<string | null>;
-}
-
 /**
  * Empresa do Recrutador: registo, estado, dados de registo, página de apresentação, logótipo e galeria
  * (RecruiterCompanyController; API v02, 6.2 e 6.4).
  */
-export class CompanyService implements ICompanyService {
+export class CompanyService {
   constructor(private readonly api: IApiClient) {}
 
   register(request: CompanyRegistrationRequest): Promise<CompanyStatusDto> {

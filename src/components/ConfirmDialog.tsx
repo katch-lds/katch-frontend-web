@@ -42,7 +42,7 @@ export function ConfirmDialog({
         }}
       >
         <h2 id={titleId}>{title}</h2>
-        <div className="dialog-body">{children}</div>
+        <div>{children}</div>
         <div className="dialog-actions">
           <button
             ref={confirmRef}

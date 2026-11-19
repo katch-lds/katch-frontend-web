@@ -24,7 +24,7 @@ export function CompanyDataPanel({ registration, onSave }: Readonly<CompanyDataP
   return (
     <div className="stack">
       <p>
-        Estado: <span className="status-badge status-approved">{companyStatusLabels.APPROVED}</span>
+        Estado: <span className="status-badge">{companyStatusLabels.APPROVED}</span>
       </p>
       {saved && (
         <p role="status" className="form-notice">
