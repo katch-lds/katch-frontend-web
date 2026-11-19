@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import './form.css';
 
 /** Atributos que o controlo (input, select) recebe para ficar ligado à etiqueta e ao erro. */
 export interface FieldControlProps {

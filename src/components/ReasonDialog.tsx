@@ -4,6 +4,7 @@ import { MAX_REASON_LENGTH, MIN_REASON_LENGTH, rejectionReasonError } from '../v
 import { FormBanner } from './FormBanner';
 import { FormField } from './FormField';
 import { SubmitButton } from './SubmitButton';
+import './dialog.css';
 
 // Pede o motivo da recusa do registo (A04c e A04d), de 10 a 500 caracteres (P12), validado antes do pedido; o erro
 // ERR-10 do servidor aparece no campo.

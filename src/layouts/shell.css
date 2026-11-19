@@ -10,8 +10,8 @@
   flex-direction: column;
   gap: 4px;
   padding: 16px;
-  border-right: 1px solid #e5e7eb;
-  background: #f9fafb;
+  border-right: 1px solid var(--cor-divisoria);
+  background: var(--cor-fundo-lateral);
 }
 
 .shell-brand {
@@ -26,30 +26,35 @@
   justify-content: space-between;
   padding: 8px 10px;
   border-radius: 4px;
-  color: #1f2937;
+  color: var(--cor-escura);
   text-decoration: none;
 }
 
 .shell-sidebar a.active {
-  background: #e5e7eb;
+  background: var(--cor-divisoria);
   font-weight: 600;
+}
+
+.shell-sidebar button,
+.user-menu > button,
+.user-menu-panel button {
+  padding: 6px 12px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: 4px;
+  background: var(--cor-branco);
+  cursor: pointer;
 }
 
 .shell-sidebar button {
   margin-top: 16px;
-  padding: 6px 12px;
-  border: 1px solid #374151;
-  border-radius: 4px;
-  background: #fff;
-  cursor: pointer;
 }
 
 .shell-badge {
   min-width: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background: #b91c1c;
-  color: #fff;
+  background: var(--cor-erro);
+  color: var(--cor-branco);
   font-size: 0.75rem;
   text-align: center;
 }
@@ -60,7 +65,7 @@
 
 .shell-locked {
   padding: 8px 10px;
-  color: #9ca3af;
+  color: var(--cor-desativada);
   cursor: not-allowed;
 }
 
@@ -68,20 +73,11 @@
   display: flex;
   justify-content: flex-end;
   padding: 8px 32px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--cor-divisoria);
 }
 
 .user-menu {
   position: relative;
-}
-
-.user-menu > button,
-.user-menu-panel button {
-  padding: 6px 12px;
-  border: 1px solid #374151;
-  border-radius: 4px;
-  background: #fff;
-  cursor: pointer;
 }
 
 .user-menu-panel {
@@ -94,12 +90,12 @@
   min-width: 240px;
   margin-top: 4px;
   padding: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--cor-divisoria);
   border-radius: 4px;
-  background: #fff;
+  background: var(--cor-branco);
 }
 
 .user-menu-email {
   margin: 0;
-  color: #6b7280;
+  color: var(--cor-secundaria);
 }

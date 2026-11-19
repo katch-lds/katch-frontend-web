@@ -6,7 +6,7 @@ import { useConversations } from '../hooks/useConversations';
 import type { ConversationSummaryDto, MessageDto } from '../types/api';
 import { conversationCloseReasonLabels } from '../types/labels';
 import { formatDateTime } from '../utils/date';
-import '../components/dialog.css';
+
 import './recruiter.css';
 
 /** Dimensão máxima de uma mensagem (P03). */

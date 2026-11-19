@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useId, useRef } from 'react';
+import './dialog.css';
 
 // Confirmação antes de uma ação, com os efeitos, e rejeição com ação alternativa (W15; DF-11).
 
