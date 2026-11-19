@@ -1,4 +1,4 @@
-// I069 — regras de validação dos campos, aplicadas antes de enviar (o servidor volta a validar tudo).
+// Regras de validação dos campos, aplicadas antes de enviar (o servidor volta a validar tudo).
 
 /** Erros por campo, com o nome do campo em camelCase (o mesmo que a API devolve em `fields`). */
 export type FieldErrors = Record<string, string>;
@@ -7,7 +7,7 @@ export const MAX_EMAIL_LENGTH = 255;
 export const MIN_PASSWORD_LENGTH = 8;
 export const MAX_PASSWORD_LENGTH = 128;
 
-/** Formato `local@domínio` com uma única `@`, texto dos dois lados e um `.` no domínio; sem expressões regulares. */
+/** Formato `local@domínio`: uma única `@`, sem espaços, texto dos dois lados e um `.` no domínio. */
 export function isValidEmailFormat(value: string): boolean {
   const at = value.indexOf('@');
   if (at <= 0 || at !== value.lastIndexOf('@') || /\s/.test(value)) {

@@ -1,7 +1,5 @@
 import { FormField } from './FormField';
 
-// I069 — campo de texto com etiqueta e erro por campo (modelo de classes do frontend web v02, secção 8.1).
-
 interface TextFieldProps {
   id: string;
   label: string;
@@ -12,7 +10,7 @@ interface TextFieldProps {
   autoComplete?: string;
   inputMode?: 'text' | 'numeric' | 'decimal' | 'tel';
   placeholder?: string;
-  /** I121 — campo só de leitura (NIF da Empresa aprovada). */
+  /** Campo só de leitura (NIF da Empresa aprovada). */
   readOnly?: boolean;
 }
 

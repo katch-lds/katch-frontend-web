@@ -6,9 +6,6 @@ import { useSession } from '../hooks/useSession';
 import { paths } from '../routes/paths';
 import './shell.css';
 
-// I069 — AdminShell (modelo de classes do frontend web v02, secção 8.1): moldura da área de supervisão. I073 completa
-// a barra lateral com as secções Empresas, Utilizadores e Configuração.
-
 /** Texto fixo do A02b: nenhum DTO tem o nome do Administrador. */
 const ADMIN_DISPLAY_NAME = 'Administrador Katch';
 
@@ -16,9 +13,9 @@ const pendingBadgeLabel = (badge: number) =>
   `${badge} ${badge === 1 ? 'Empresa pendente' : 'Empresas pendentes'}`;
 
 /**
- * Barra lateral por secções e barra superior com o menu do utilizador (alterar palavra-passe e terminar sessão, RF084
- * e RF107). O contador de «Pendentes de aprovação» é o número de Empresas pendentes e atualiza depois de cada decisão
- * (RF091). Não há conversas nem notificações (RF103).
+ * Moldura da área de supervisão: barra lateral por secções e barra superior com o menu do utilizador (alterar
+ * palavra-passe e terminar sessão, RF084 e RF107). O contador de «Pendentes de aprovação» é o número de Empresas
+ * pendentes e atualiza depois de cada decisão (RF091). Não há conversas nem notificações (RF103).
  */
 export default function AdminShell() {
   const { session, signOut } = useSession();

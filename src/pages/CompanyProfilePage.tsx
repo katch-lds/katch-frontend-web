@@ -8,8 +8,6 @@ import './auth.css';
 import './jobs.css';
 import './recruiter.css';
 
-// I121 — CompanyProfilePage (modelo de classes do frontend web v02, secção 8.2; ecrãs W07 e W08).
-
 const TABS = [
   { id: 'page', label: 'Página da Empresa' },
   { id: 'data', label: 'Dados da Empresa' },
@@ -18,8 +16,8 @@ const TABS = [
 type TabId = (typeof TABS)[number]['id'];
 
 /**
- * Página de apresentação (descrição, sítio, logótipo e galeria) e dados de registo da Empresa aprovada, em dois
- * separadores. Os dois painéis ficam montados para não perder o que está por gravar ao mudar de separador.
+ * W07 e W08 — página de apresentação (descrição, sítio, logótipo e galeria) e dados de registo da Empresa aprovada,
+ * em dois separadores. Os dois painéis ficam montados para não perder o que está por gravar ao mudar de separador.
  */
 export default function CompanyProfilePage() {
   const company = useCompanyPage();

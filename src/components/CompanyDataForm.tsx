@@ -9,14 +9,14 @@ import { SelectField } from './SelectField';
 import { SubmitButton } from './SubmitButton';
 import { TextField } from './TextField';
 
-// I069 — formulário com os oito dados da Empresa, partilhado pelo registo (W03, W04) e pela nova submissão (W06).
+// Formulário com os oito dados da Empresa, partilhado pelo registo (W03, W04) e pela nova submissão (W06).
 
 const industryOptions = Object.entries(industryLabels).map(([value, label]) => ({ value, label }));
 
 interface CompanyDataFormProps {
   initialValues: CompanyForm;
   submitLabel: string;
-  /** I121 — NIF só de leitura, para a Empresa aprovada (W08, RF049). */
+  /** NIF só de leitura, para a Empresa aprovada (W08, RF049). */
   taxIdLocked?: boolean;
   /** Envia o pedido; um ApiError lançado aqui aparece no formulário (erro por campo no ERR-10). */
   onSubmit: (request: CompanyRegistrationRequest) => Promise<void>;

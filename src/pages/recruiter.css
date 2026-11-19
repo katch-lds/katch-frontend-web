@@ -193,7 +193,7 @@
   resize: none;
 }
 
-/* I121 — separadores da página da Empresa (W07 e W08). */
+/* Separadores da página da Empresa (W07 e W08). */
 .tabs {
   display: flex;
   gap: 8px;

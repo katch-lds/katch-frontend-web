@@ -2,7 +2,7 @@ import type { ContractType, JobDto, JobRequest, WorkMode } from '../types/api';
 import { contractTypeLabels, workModeLabels } from '../types/labels';
 import { collectErrors, type FieldErrors } from './fields';
 
-// I070 — validação do formulário da vaga (RF050 a RF052). O servidor volta a validar tudo, incluindo o intervalo
+// Validação do formulário da vaga (RF050 a RF052). O servidor volta a validar tudo, incluindo o intervalo
 // salarial (RF051), cuja recusa é apresentada com a mensagem da API junto do salário mínimo.
 
 export const MAX_TITLE_LENGTH = 150;

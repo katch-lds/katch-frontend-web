@@ -13,9 +13,6 @@ import { accountStatusLabels, userTypeLabels } from '../types/labels';
 import './admin.css';
 import './recruiter.css';
 
-// I073 — AccountsPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A07, A07b, A07c e A07d do protótipo
-// v02).
-
 type AccountAction = 'block' | 'reactivate';
 
 interface PendingAction {

@@ -10,11 +10,10 @@ import type { LoginArea } from '../types/LoginArea';
 import { validateLogin } from '../validation/forms';
 import './auth.css';
 
-// I069 — LoginPage (modelo de classes do frontend web v02, secção 8; ecrãs W01, A01 e A01b do protótipo v02).
-
 /**
- * Início de sessão numa só página, em duas rotas: `/entrar` (Recrutador, com «Criar conta») e `/admin/entrar`
- * (supervisão). Depois de iniciada a sessão, o `PublicOnly` encaminha para a página inicial do perfil.
+ * W01, A01 e A01b — início de sessão numa só página, em duas rotas: `/entrar` (Recrutador, com «Criar conta») e
+ * `/admin/entrar` (supervisão). Depois de iniciada a sessão, o `PublicOnly` encaminha para a página inicial do
+ * perfil.
  */
 export default function LoginPage({ area }: Readonly<{ area: LoginArea }>) {
   const { signIn } = useSession();

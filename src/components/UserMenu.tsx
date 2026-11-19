@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-// I069 — UserMenu (modelo de classes do frontend web v02, secção 8.1; ecrã A02b; RF084, RF107).
-
 interface UserMenuProps {
   displayName: string;
   email: string;
@@ -9,7 +7,7 @@ interface UserMenuProps {
   onSignOut: () => void;
 }
 
-/** Menu do utilizador da barra superior: fecha ao clicar fora e com Escape. */
+/** Menu do utilizador da barra superior da supervisão (A02b; RF084, RF107): fecha ao clicar fora e com Escape. */
 export function UserMenu({
   displayName,
   email,

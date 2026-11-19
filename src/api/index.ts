@@ -8,7 +8,7 @@ type ApiErrorListener = (error: ApiError) => void;
 
 const errorListeners = new Set<ApiErrorListener>();
 
-/** I069: a sessão subscreve os erros da API para tratar o ERR-01 e o ERR-07 num único sítio. Devolve o cancelamento. */
+/** A sessão subscreve os erros da API para tratar o ERR-01 e o ERR-07 num único sítio; devolve o cancelamento. */
 export function onApiError(listener: ApiErrorListener): () => void {
   errorListeners.add(listener);
   return () => {

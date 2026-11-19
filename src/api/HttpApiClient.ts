@@ -12,7 +12,7 @@ export interface HttpApiClientOptions {
   session: SessionStore;
   monitor: ConnectionMonitor;
   fetchFn?: FetchFn;
-  /** Chamado com cada resposta de erro da API (I069: ERR-01 e ERR-07 tratados pela sessão). */
+  /** Chamado com cada resposta de erro da API (o ERR-01 e o ERR-07 são tratados pela sessão). */
   onError?: (error: ApiError) => void;
 }
 

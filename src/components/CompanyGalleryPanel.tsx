@@ -4,7 +4,7 @@ import { GALLERY_MAX_MB, GALLERY_MAX_PHOTOS } from '../validation/company';
 import { ImageUploadButton } from './ImageUploadButton';
 import { ProtectedImage } from './ProtectedImage';
 
-// I121 — galeria de fotografias da Empresa (W07, RF048): no máximo 6.
+// Galeria de fotografias da Empresa (W07, RF048): no máximo 6.
 
 interface CompanyGalleryPanelProps {
   photoUrls: string[];

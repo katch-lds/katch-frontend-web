@@ -13,8 +13,6 @@ import { formatDate } from '../utils/date';
 import './jobs.css';
 import './recruiter.css';
 
-// I070 — JobListPage (modelo de classes do frontend web v02, secção 8.2; ecrãs W09 e W12 a W15 do protótipo v02).
-
 type JobAction = 'publish' | 'suspend' | 'republish' | 'close' | 'delete';
 
 interface ActionText {

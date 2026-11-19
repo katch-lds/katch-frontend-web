@@ -12,12 +12,12 @@ export function formatDateTime(iso: string): string {
   return `${dateFormat.format(instant)} ${timeFormat.format(instant)}`;
 }
 
-/** I070 — só a data local de um instante da API, no formato «30/11/2026». */
+/** Só a data local de um instante da API, no formato «30/11/2026». */
 export function formatDate(iso: string): string {
   return dateFormat.format(new Date(iso));
 }
 
-/** I072 — «hoje às 10:32» se o instante for de hoje (fuso do navegador); senão «em 09/11/2026 às 10:32». */
+/** «hoje às 10:32» se o instante for de hoje (fuso do navegador); senão «em 09/11/2026 às 10:32». */
 export function formatDayAndTime(iso: string, now: Date = new Date()): string {
   const instant = new Date(iso);
   const sameDay = instant.toDateString() === now.toDateString();

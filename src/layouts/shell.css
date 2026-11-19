@@ -1,4 +1,4 @@
-/* Moldura do Recrutador (I069): barra lateral fixa e conteúdo, sem deslocamento horizontal entre 1280 e 1920 píxeis. */
+/* Molduras do Recrutador e da supervisão: barra lateral fixa e conteúdo, sem deslocamento horizontal (RNF012). */
 .shell {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);

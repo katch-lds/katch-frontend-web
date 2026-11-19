@@ -11,9 +11,6 @@ import { isConflictWithCode } from '../utils/apiErrors';
 import { useResource } from './useResource';
 import { useSession } from './useSession';
 
-// I121 — useCompanyPage: página de apresentação e dados de registo da Empresa aprovada (W07 e W08). O `useCompany` da
-// I069 fica como está, porque o ecrã do estado do pedido usa-o.
-
 const loadPage = () => companyService.getPage();
 const loadRegistration = () => companyService.getRegistration();
 
@@ -33,6 +30,14 @@ function isNoLongerApproved(error: unknown): boolean {
   return error instanceof ApiError && error.isForbidden() && error.code === 'ERR-07';
 }
 
+/**
+ * Página de apresentação e dados de registo da Empresa aprovada (W07 e W08; RF046 a RF049).
+ *
+ * Depois de cada alteração lê a página de novo; um ERR-07 (a Empresa deixou de estar aprovada) faz ler o estado da
+ * Empresa.
+ *
+ * @returns A página, os dados de registo, o estado de carregamento e as ações de gravar e de carregar imagens.
+ */
 export function useCompanyPage(): CompanyPageState {
   const { refreshCompanyStatus } = useSession();
   const pageResource = useResource(loadPage);

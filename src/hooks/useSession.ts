@@ -1,7 +1,13 @@
 import { useContext } from 'react';
 import { SessionContext, type SessionState } from '../session/SessionProvider';
 
-/** Lê a sessão, o estado da Empresa e as ações de início e fim de sessão (I069). */
+/**
+ * Sessão, estado da Empresa e ações de início e fim de sessão.
+ *
+ * Exige o `SessionProvider`.
+ *
+ * @returns O estado e as ações do `SessionProvider`.
+ */
 export function useSession(): SessionState {
   const state = useContext(SessionContext);
   if (state === null) {

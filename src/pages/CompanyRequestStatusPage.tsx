@@ -11,8 +11,6 @@ import { companyFormFrom } from '../validation/forms';
 import './auth.css';
 import './recruiter.css';
 
-// I069 — CompanyRequestStatusPage (modelo de classes do frontend web v02, secção 8.2; ecrãs W05, W06 e W26).
-
 /**
  * Estado do pedido da Empresa, dentro da moldura do Recrutador. Pendente: aviso e dados só de leitura (W05).
  * Recusada: motivo e formulário preenchido para corrigir e submeter de novo (W06, RF045). Suspensa: dados só de

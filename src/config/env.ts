@@ -1,6 +1,13 @@
+/**
+ * Configuração por ambiente.
+ *
+ * Os valores vêm dos ficheiros `.env.*` do Vite (`VITE_*`), sem segredos. Um tempo limite em falta ou fora do
+ * intervalo (0 a 10 segundos, exclusive) passa ao valor por omissão.
+ *
+ * @returns `appConfig`, com o endereço base da API e o tempo limite de cada pedido.
+ */
 import { trimTrailingSlashes } from '../utils/url';
 
-// Configuração por ambiente (I120). Os valores vêm dos ficheiros .env.* do Vite (VITE_*), sem segredos.
 export interface AppConfig {
   /** Endereço base da API REST, sem a barra final (por exemplo, http://localhost:5180). */
   apiBaseUrl: string;

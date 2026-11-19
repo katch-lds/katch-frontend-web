@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
 
-// I069 — campo de formulário com etiqueta e erro por campo (modelo de classes do frontend web v02, secção 8.1).
-
 /** Atributos que o controlo (input, select) recebe para ficar ligado à etiqueta e ao erro. */
 export interface FieldControlProps {
   id: string;

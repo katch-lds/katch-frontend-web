@@ -4,8 +4,6 @@ import { companyService, jobService, referenceListService } from '../services';
 import type { CompanyRegistrationDto, JobDto, ReferenceItemDto } from '../types/api';
 import { type IResourceState, useResource } from './useResource';
 
-// I070 — dados do formulário da vaga (W10 e W11): listas pré-definidas, vaga a alterar e localidade da Empresa.
-
 export interface JobFormData {
   /** Vaga a alterar; null na criação. */
   job: JobDto | null;
@@ -33,7 +31,15 @@ function companyLocation(registration: Promise<CompanyRegistrationDto | null>) {
   );
 }
 
-/** Pede tudo ao abrir o formulário; `reload` lê de novo a vaga (por exemplo, depois de carregar fotografias). */
+/**
+ * Dados do formulário da vaga (W10 e W11).
+ *
+ * Pede tudo ao abrir o formulário: listas pré-definidas, vaga a alterar e localidade da Empresa. `reload` lê de novo
+ * a vaga (por exemplo, depois de carregar fotografias).
+ *
+ * @param jobId Vaga a alterar; null na criação.
+ * @returns Os dados do formulário, o estado de carregamento e `reload`.
+ */
 export function useJobFormData(jobId: string | null): IResourceState<JobFormData> {
   const load = useCallback(async (): Promise<JobFormData> => {
     const [job, skills, benefits, locations, companyLocationId] = await Promise.all([

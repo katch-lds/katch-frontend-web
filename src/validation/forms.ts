@@ -14,7 +14,7 @@ import {
   requiredText,
 } from './fields';
 
-// I069 — validação dos formulários de início de sessão, de criação de conta e de registo da Empresa.
+// Validação dos formulários de início de sessão, de criação de conta e de registo da Empresa.
 
 /** No início de sessão, só se exige que os campos não estejam vazios: a política da palavra-passe não se aplica. */
 export function validateLogin(values: LoginRequest): FieldErrors {

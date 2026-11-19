@@ -5,8 +5,8 @@ import { FormBanner } from './FormBanner';
 import { FormField } from './FormField';
 import { SubmitButton } from './SubmitButton';
 
-// I073 — ReasonDialog (modelo de classes do frontend web v02, secção 8.1; ecrãs A04c e A04d): pede o motivo da
-// recusa do registo, de 10 a 500 caracteres (P12), validado antes do pedido; o erro ERR-10 do servidor aparece no campo.
+// Pede o motivo da recusa do registo (A04c e A04d), de 10 a 500 caracteres (P12), validado antes do pedido; o erro
+// ERR-10 do servidor aparece no campo.
 
 interface ReasonDialogProps {
   title: string;

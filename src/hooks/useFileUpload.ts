@@ -2,16 +2,23 @@ import { useCallback, useRef, useState } from 'react';
 import { ApiError } from '../api/ApiError';
 import { validateImageFile } from '../validation/company';
 
-// I121 — carregamento de uma imagem: validação no cliente (sem pedido se falhar), um só envio de cada vez e a
-// mensagem do servidor quando recusa o ficheiro (ERR-11, ERR-12, ERR-13, ERR-39).
-
 export interface FileUpload {
   busy: boolean;
   error: string | null;
   upload: (file: File) => Promise<void>;
 }
 
-/** `precheck` devolve o motivo que impede qualquer envio (por exemplo, a galeria cheia) ou null. */
+/**
+ * Carregamento de uma imagem.
+ *
+ * Valida no cliente (sem pedido se falhar), faz um só envio de cada vez e mostra a mensagem do servidor quando recusa
+ * o ficheiro (ERR-11, ERR-12, ERR-13, ERR-39).
+ *
+ * @param maxMb Dimensão máxima do ficheiro, em MB (inclusiva).
+ * @param send Envia o ficheiro ao servidor.
+ * @param precheck Devolve o motivo que impede qualquer envio (por exemplo, a galeria cheia) ou null.
+ * @returns O estado do envio, o último erro e `upload`.
+ */
 export function useFileUpload(
   maxMb: number,
   send: (file: File) => Promise<void>,

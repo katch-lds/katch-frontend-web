@@ -11,8 +11,6 @@ import { formatDate } from '../utils/date';
 import './admin.css';
 import './recruiter.css';
 
-// I073 — CandidatesPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A08 e A08b do protótipo v02).
-
 type CandidateAction = 'suspend' | 'reactivate';
 
 interface PendingAction {

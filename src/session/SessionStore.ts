@@ -1,7 +1,5 @@
 import type { LoginResponse, UserType } from '../types/api';
 
-// I069 — SessionStore completo (modelo de classes do frontend web v02, secção 5; decisão DF-05).
-
 /** Sessão iniciada: a credencial, quem é e quando expira. A palavra-passe nunca é guardada. */
 export interface Session {
   token: string;
@@ -17,7 +15,8 @@ const STORAGE_KEY = 'katch.session';
 
 /**
  * Guarda a sessão em memória e espelha-a no `sessionStorage` (nunca no `localStorage`): sobrevive a recarregar o
- * separador, mas não ao seu fecho. Funciona sem `sessionStorage` (por exemplo, bloqueado pelo browser).
+ * separador, mas não ao seu fecho. Funciona sem `sessionStorage` (por exemplo, bloqueado pelo browser). Decisão
+ * DF-05.
  */
 export class SessionStore {
   private session: Session | null;

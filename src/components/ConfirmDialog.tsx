@@ -1,7 +1,6 @@
 import { type ReactNode, useEffect, useId, useRef } from 'react';
 
-// I070 — ConfirmDialog (modelo de classes do frontend web v02, secção 8.1; DF-11): confirmação antes de uma ação,
-// com os efeitos, e rejeição com ação alternativa (W15).
+// Confirmação antes de uma ação, com os efeitos, e rejeição com ação alternativa (W15; DF-11).
 
 interface ConfirmDialogProps {
   title: string;

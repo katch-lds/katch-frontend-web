@@ -7,8 +7,6 @@ import { paths } from '../routes/paths';
 import './admin.css';
 import './recruiter.css';
 
-// I074 — IndicatorsPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A02, A02c e A02d do protótipo v02).
-
 /** `aaaa-MM-dd` → `dd/mm/aaaa`, sem passar por Date (sem efeito do fuso). */
 function displayDate(date: string): string {
   const [year, month, day] = date.split('-');

@@ -2,7 +2,6 @@ import type { Session } from '../session/SessionStore';
 import type { CompanyStatusDto } from '../types/api';
 import type { LoginArea } from '../types/LoginArea';
 
-// I069 — caminhos e encaminhamento por perfil (modelo de classes do frontend web v02, secção 7.2).
 export const paths = {
   login: '/entrar',
   createAccount: '/criar-conta',
@@ -17,7 +16,7 @@ export const paths = {
   matches: '/matches',
   conversations: '/conversas',
   adminIndicators: '/admin/indicadores',
-  // I073 — área do Administrador (modelo de classes do frontend web v02, secção 7.2).
+
   adminPending: '/admin/pendentes',
   adminPendingDetail: '/admin/pendentes/:companyId',
   adminCompanies: '/admin/empresas',
@@ -30,12 +29,12 @@ export const paths = {
   accessDenied: '/acesso-negado',
 } as const;
 
-/** I070 — alteração de uma vaga (W11). */
+/** Alteração de uma vaga (W11). */
 export function editJobPath(jobId: string): string {
   return `/vagas/${encodeURIComponent(jobId)}/editar`;
 }
 
-/** I072 — perfil do candidato (W17) e match confirmado (W19). */
+/** Perfil do candidato (W17) e match confirmado (W19). */
 export function candidateProfilePath(matchId: string): string {
   return `${paths.candidates}/${encodeURIComponent(matchId)}`;
 }
@@ -53,7 +52,7 @@ export function conversationPath(matchId: string): string {
   return `${paths.conversations}?match=${encodeURIComponent(matchId)}`;
 }
 
-/** I073 — dados submetidos de uma Empresa pendente (A04). */
+/** Dados submetidos de uma Empresa pendente (A04). */
 export function adminPendingPath(companyId: string): string {
   return `${paths.adminPending}/${encodeURIComponent(companyId)}`;
 }

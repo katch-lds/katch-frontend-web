@@ -12,8 +12,6 @@ import { companyStatusLabels } from '../types/labels';
 import './admin.css';
 import './recruiter.css';
 
-// I073 — CompaniesPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A05 e A05b do protótipo v02).
-
 type CompanyAction = 'suspend' | 'reactivate';
 
 interface PendingAction {

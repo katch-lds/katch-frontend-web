@@ -3,8 +3,6 @@ import { adminCompanyService } from '../services';
 import type { CompanyAdminDto, CompanyStatus } from '../types/api';
 import { type IResourceState, useResource } from './useResource';
 
-// I073 — lista global de Empresas (A05; RF097): filtro por estado e nova leitura depois de cada mudança de estado.
-
 const listCompanies = () => adminCompanyService.listCompanies();
 
 export interface CompaniesAdmin extends IResourceState<CompanyAdminDto[]> {
@@ -16,6 +14,13 @@ export interface CompaniesAdmin extends IResourceState<CompanyAdminDto[]> {
   reactivate: (companyId: string) => Promise<void>;
 }
 
+/**
+ * Lista global de Empresas (A05; RF095, RF097, RF116).
+ *
+ * Filtro por estado e nova leitura depois de cada mudança de estado.
+ *
+ * @returns As linhas visíveis com o filtro aplicado, o filtro e as ações de suspender e reativar.
+ */
 export function useCompaniesAdmin(): CompaniesAdmin {
   const resource = useResource(listCompanies);
   const [statusFilter, setStatusFilter] = useState<CompanyStatus | null>(null);

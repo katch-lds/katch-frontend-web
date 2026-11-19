@@ -144,7 +144,7 @@
   text-transform: uppercase;
 }
 
-/* I074 — painel de indicadores (A02): grelhas de 3 e 4 colunas que cabem entre 1280 e 1920 px (RNF012). */
+/* Painel de indicadores (A02): grelhas de 3 e 4 colunas que cabem entre 1280 e 1920 px (RNF012). */
 .period-box {
   display: flex;
   flex-wrap: wrap;

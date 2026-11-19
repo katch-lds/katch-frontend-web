@@ -4,9 +4,10 @@ import { useSession } from '../hooks/useSession';
 import './auth.css';
 import './recruiter.css';
 
-// I069 — AccountPage (modelo de classes do frontend web v02, secção 8.2; ecrã W25 do protótipo v02; RF040, RF106).
-
-/** Conta do Recrutador: correio da sessão, alteração da palavra-passe e fim de sessão, com a Empresa em qualquer estado. */
+/**
+ * W25 — conta do Recrutador: correio da sessão, alteração da palavra-passe e fim de sessão, com a Empresa em
+ * qualquer estado (RF040, RF106).
+ */
 export default function AccountPage() {
   const { session } = useSession();
   return (

@@ -1,9 +1,10 @@
 import { useSession } from '../hooks/useSession';
 import { SignOutButton } from './SignOutButton';
 
-// I069 — espera pelo estado da Empresa do Recrutador, com «Tentar de novo» se a leitura falhar.
-
-/** Mostrado pelas proteções de rota até o estado da Empresa estar lido (por exemplo, ao recarregar o separador). */
+/**
+ * Mostrado pelas proteções de rota até o estado da Empresa estar lido (por exemplo, ao recarregar o separador), com
+ * «Tentar de novo» se a leitura falhar.
+ */
 export function CompanyLoading() {
   const { companyError, refreshCompanyStatus } = useSession();
   if (companyError === null) {

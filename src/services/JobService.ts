@@ -1,7 +1,6 @@
 import type { IApiClient } from '../api/IApiClient';
 import type { JobDto, JobRequest } from '../types/api';
 
-// I070 — JobService (modelo de classes do frontend web v02, secção 5; documentação da API v02, 6.5).
 export interface IJobService {
   list(): Promise<JobDto[]>;
   create(request: JobRequest): Promise<JobDto>;
@@ -20,7 +19,7 @@ function jobPath(jobId: string): string {
   return `${BASE}/${encodeURIComponent(jobId)}`;
 }
 
-/** Vagas da Empresa do Recrutador (JobsController; política ApprovedCompany). */
+/** Vagas da Empresa do Recrutador (JobsController; API v02, 6.5; política ApprovedCompany). */
 export class JobService implements IJobService {
   constructor(private readonly api: IApiClient) {}
 
@@ -55,7 +54,10 @@ export class JobService implements IJobService {
     return this.api.post<JobDto>(`${jobPath(jobId)}/close`);
   }
 
-  /** Sem verificação prévia no cliente: com interesses registados, o servidor responde 409 ERR-38 (secção 5, regra 5). */
+  /**
+   * Sem verificação prévia no cliente: com interesses registados, o servidor responde 409 ERR-38 (secção 5,
+   * regra 5).
+   */
   delete(jobId: string): Promise<void> {
     return this.api.delete(jobPath(jobId));
   }

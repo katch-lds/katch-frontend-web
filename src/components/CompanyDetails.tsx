@@ -1,7 +1,7 @@
 import type { CompanyRegistrationDto } from '../types/api';
 import { industryLabels } from '../types/labels';
 
-// I069 — dados de registo da Empresa só de leitura (W05 e W26 do protótipo v02).
+// Dados de registo da Empresa só de leitura (W05 e W26 do protótipo v02).
 
 export function CompanyDetails({
   registration,

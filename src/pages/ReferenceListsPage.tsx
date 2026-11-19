@@ -5,8 +5,6 @@ import { useReferenceLists } from '../hooks/useReferenceLists';
 import './admin.css';
 import './recruiter.css';
 
-// I073 — ReferenceListsPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A09 e A09b do protótipo v02).
-
 /**
  * A09 — competências e benefícios, com «Alterar designação» na própria lista e «Acrescentar» (RF099 a RF102).
  * A lista de localidades é só de leitura e não aparece.

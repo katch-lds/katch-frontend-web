@@ -13,9 +13,6 @@ import { formatDateTime } from '../utils/date';
 import './admin.css';
 import './recruiter.css';
 
-// I073 — PendingCompanyDetailPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A04, A04b, A04c, A04d e
-// A04e do protótipo v02).
-
 type Dialog = 'approve' | 'reject' | null;
 
 /** A04 — os oito dados submetidos, a data de submissão e o estado; aprovar ou recusar o registo (RF092 a RF094). */

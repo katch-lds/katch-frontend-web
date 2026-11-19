@@ -15,7 +15,14 @@ interface Snapshot<T> {
   error: ApiError | null;
 }
 
-/** Pede o recurso ao montar e em cada `reload`; a resposta de um pedido ultrapassado é descartada. */
+/**
+ * Recurso de um ecrã pedido à API.
+ *
+ * Pede o recurso ao montar e em cada `reload`; a resposta de um pedido ultrapassado é descartada.
+ *
+ * @param load Pede o recurso; tem de ser estável (`useCallback` ou função do módulo), senão o pedido repete-se.
+ * @returns Os dados, o estado de carregamento, o erro e `reload`.
+ */
 export function useResource<T>(load: () => Promise<T>): IResourceState<T> {
   const [snapshot, setSnapshot] = useState<Snapshot<T>>({ data: null, loading: true, error: null });
   const [attempt, setAttempt] = useState(0);

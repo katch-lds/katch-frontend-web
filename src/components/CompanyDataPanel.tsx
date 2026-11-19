@@ -4,7 +4,7 @@ import { companyStatusLabels } from '../types/labels';
 import { companyFormFrom } from '../validation/forms';
 import { CompanyDataForm } from './CompanyDataForm';
 
-// I121 — dados de registo da Empresa aprovada (W08, RF049): o NIF fica bloqueado.
+// Dados de registo da Empresa aprovada (W08, RF049): o NIF fica bloqueado.
 
 interface CompanyDataPanelProps {
   registration: CompanyRegistrationDto | null;

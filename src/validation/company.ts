@@ -2,7 +2,7 @@ import type { CompanyPageDto, CompanyPageRequest } from '../types/api';
 import { collectErrors, type FieldErrors } from './fields';
 import { PHOTO_TYPES } from './jobs';
 
-// I121 — validação da página de apresentação da Empresa e dos ficheiros de imagem (RF046 a RF048). O servidor volta a
+// Validação da página de apresentação da Empresa e dos ficheiros de imagem (RF046 a RF048). O servidor volta a
 // validar tudo, incluindo o conteúdo dos ficheiros (RNF016).
 
 export const MAX_PAGE_DESCRIPTION_LENGTH = 1000;

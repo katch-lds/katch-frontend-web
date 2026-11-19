@@ -4,7 +4,7 @@ import { useSession } from '../hooks/useSession';
 import type { CompanyStatus } from '../types/api';
 import { homePath } from './paths';
 
-// I069 — RequireCompanyStatus (modelo de classes do frontend web v02, secção 7). Proteção de navegação, não de segurança.
+// Proteção de navegação, não de segurança: a autorização é sempre do servidor.
 
 /** `NONE` = o Recrutador ainda não registou a Empresa. */
 export type CompanyAccess = CompanyStatus | 'NONE';

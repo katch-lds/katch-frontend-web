@@ -8,14 +8,11 @@ import { formatDate } from '../utils/date';
 import './admin.css';
 import './recruiter.css';
 
-// I073 — PendingCompaniesPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A03, A03b, A03c e A03d do
-// protótipo v02).
-
 /** A03 — Empresas pendentes, das mais antigas para as mais recentes, como a API as devolve (RF043, RF091). */
 export default function PendingCompaniesPage() {
   const { data, loading, error, reload } = usePendingCompanies();
   const navigate = useNavigate();
-  // A03b e A03c: a mensagem da decisão chega com a navegação do detalhe; não refere aviso ao Recrutador.
+  // A03b e A03c: a mensagem da decisão chega com a navegação do detalhe.
   const notice = (useLocation().state as { notice?: string } | null)?.notice ?? null;
 
   const columns: Column<PendingCompanyDto>[] = [

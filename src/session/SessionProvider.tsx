@@ -13,8 +13,6 @@ import { authService, companyService } from '../services';
 import type { CompanyStatusDto, CreateRecruiterAccountRequest, LoginRequest } from '../types/api';
 import type { Session, SessionStore } from './SessionStore';
 
-// I069 — SessionProvider (modelo de classes do frontend web v02, secções 5 e 7).
-
 /** Estado da sessão e da Empresa do Recrutador, partilhado pelas proteções de rota e pelos ecrãs. */
 export interface SessionState {
   session: Session | null;
@@ -66,6 +64,11 @@ interface SessionProviderProps {
   children: ReactNode;
 }
 
+/**
+ * Fornece a sessão e o estado da Empresa às proteções de rota e aos ecrãs. A sessão vive na `SessionStore`, fora do
+ * React, porque o cliente da API é criado antes do React e lê dela a credencial; o `useSyncExternalStore` liga essa
+ * classe ao React.
+ */
 export function SessionProvider({
   store = sessionStore,
   children,

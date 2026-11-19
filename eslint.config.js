@@ -1,6 +1,12 @@
-// ESLint (QG-05): eslint:recommended + @typescript-eslint/recommended + react-hooks/recommended, com
-// severidade error e sem exclusões de regras (convenções de código e quality gates, secção 5). O ESLint 9 usa a
-// configuração plana (eslint.config.js) em vez do .eslintrc.json.
+/**
+ * Configuração do ESLint (QG-05).
+ *
+ * `eslint:recommended`, `@typescript-eslint/recommended` e `react-hooks/recommended`, com severidade error e sem
+ * exclusões de regras (convenções de código e quality gates, secção 5). Configuração plana do ESLint 10, em vez do
+ * `.eslintrc.json`.
+ *
+ * @returns As configurações por tipo de ficheiro.
+ */
 import js from '@eslint/js';
 import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';

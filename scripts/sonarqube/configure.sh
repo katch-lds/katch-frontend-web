@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Configura uma instância SonarQube Community Build acabada de arrancar, para a análise de um frontend do Katch
-# (I120, a partir do script do backend da I066; QG-05).
+# Configuração da instância SonarQube (QG-05).
+#
+# Configura uma instância SonarQube Community Build acabada de arrancar, para a análise de um frontend do Katch (a
+# partir do script do backend).
 #
 # 1. Espera que a instância fique disponível (UP).
 # 2. Substitui a palavra-passe inicial do administrador pela de SONAR_ADMIN_PASSWORD.
@@ -9,13 +11,14 @@
 #    «Sonar way» de cada uma como predefinido, se existir.
 # 5. Gera um token e escreve-o em SONAR_TOKEN (GITHUB_ENV na pipeline, ou no ficheiro indicado).
 #
-# Variáveis:
-#   SONAR_HOST_URL        endereço da instância (por omissão http://localhost:9000)
-#   SONAR_ADMIN_PASSWORD  palavra-passe nova do administrador (secret do GitHub; localmente, à escolha)
-#   SONAR_TOKEN_FILE      ficheiro onde escrever o token, se não houver GITHUB_ENV (por omissão .sonar-token)
-#   SONAR_LANGUAGES       chaves das linguagens do projeto, separadas por espaços (web: "ts js"; mobile: "dart")
-#
 # O script é idempotente: pode ser executado de novo sobre a mesma instância.
+#
+# @param SONAR_HOST_URL        endereço da instância (por omissão http://localhost:9000)
+# @param SONAR_ADMIN_PASSWORD  palavra-passe nova do administrador (secret do GitHub; localmente, à escolha)
+# @param SONAR_TOKEN_FILE      ficheiro onde escrever o token, se não houver GITHUB_ENV (por omissão .sonar-token)
+# @param SONAR_LANGUAGES       chaves das linguagens do projeto, separadas por espaços (web: "ts js"; mobile: "dart")
+# @returns 0 com a instância configurada e o token escrito; diferente de 0 se a instância não ficar disponível, a
+#          palavra-passe não for aceite, faltar uma linguagem ou um pedido falhar.
 set -euo pipefail
 
 HOST="${SONAR_HOST_URL:-http://localhost:9000}"

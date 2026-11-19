@@ -1,9 +1,15 @@
+/**
+ * Configuração do Vite.
+ *
+ * O endereço da API vem de `VITE_API_BASE_URL` (ficheiros `.env.*`). Em `npm run dev` os pedidos são relativos e o
+ * proxy reencaminha `/api` para `VITE_PROXY_TARGET`, o backend local.
+ *
+ * @param mode Modo do Vite (`development` ou `production`), que escolhe os ficheiros `.env.*`.
+ * @returns A configuração do Vite: plugin do React e proxy de `/api`.
+ */
 import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
 
-// Configuração do Vite (I120, I069). O endereço da API vem de VITE_API_BASE_URL (ficheiros .env.*).
-// Em desenvolvimento, os pedidos a /api passam pelo proxy abaixo (VITE_PROXY_TARGET), porque o backend não tem
-// CORS e o login envia o cabeçalho personalizado X-Client-App, que o browser bloquearia num pedido direto.
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {

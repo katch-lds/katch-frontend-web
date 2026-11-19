@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-// I069 — botão de envio desativado durante o pedido, para evitar pedidos duplicados.
+// Botão de envio desativado durante o pedido, para evitar pedidos duplicados.
 
 export function SubmitButton({ busy, children }: Readonly<{ busy: boolean; children: ReactNode }>) {
   return (

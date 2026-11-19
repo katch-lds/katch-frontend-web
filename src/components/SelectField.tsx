@@ -1,7 +1,5 @@
 import { FormField } from './FormField';
 
-// I069 — lista de escolha com etiqueta e erro por campo (modelo de classes do frontend web v02, secção 8.1).
-
 export interface SelectOption {
   value: string;
   label: string;

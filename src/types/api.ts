@@ -14,7 +14,7 @@ export interface ApiErrorDto {
 
 export type JobStatus = 'UNPUBLISHED' | 'PUBLISHED' | 'SUSPENDED' | 'CLOSED';
 
-// I070 — vagas da Empresa (documentação da API v02, 6.5 e secção 4.1).
+// Vagas da Empresa (documentação da API v02, 6.5 e secção 4.1).
 export type ContractType = 'PERMANENT' | 'FIXED_TERM' | 'INTERNSHIP' | 'SERVICE_PROVISION';
 
 export type WorkMode = 'ON_SITE' | 'HYBRID' | 'REMOTE';
@@ -95,7 +95,7 @@ export interface SendMessageRequest {
   content: string;
 }
 
-// I069 — autenticação, Empresa e listas de referência (API v02, secções 4.1, 6.1, 6.2 e 6.9).
+// Autenticação, Empresa e listas de referência (API v02, secções 4.1, 6.1, 6.2 e 6.9).
 export type UserType = 'CANDIDATE' | 'RECRUITER' | 'ADMIN';
 
 export type CompanyStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED';
@@ -154,7 +154,7 @@ export interface ReferenceItemDto {
   name: string;
 }
 
-// I069 (parte 2) — alteração da palavra-passe e dados de registo da Empresa (API v02, secções 6.1 e 6.4).
+// Alteração da palavra-passe e dados de registo da Empresa (API v02, secções 6.1 e 6.4).
 export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
@@ -174,7 +174,7 @@ export interface CompanyRegistrationDto {
   submittedAt: string;
 }
 
-// I121 — página de apresentação da Empresa (API v02, secções 6.4.5 e 6.4.9).
+// Página de apresentação da Empresa (API v02, secções 6.4.5 e 6.4.9).
 export interface CompanyPageDto {
   companyId: string;
   companyName: string;
@@ -190,7 +190,7 @@ export interface CompanyPageRequest {
   website: string | null;
 }
 
-// I071 — candidatos em espera (API v02, secção 6.6.1).
+// Candidatos em espera (API v02, secção 6.6.1).
 export interface WaitingCandidateDto {
   matchId: string;
   candidateId: string;
@@ -200,7 +200,7 @@ export interface WaitingCandidateDto {
   interestAt: string;
 }
 
-// I073 — supervisão: contas, Empresas e listas pré-definidas (API v02, secções 6.10, 6.11, 6.13 e 8.5).
+// Supervisão: contas, Empresas e listas pré-definidas (API v02, secções 6.10, 6.11, 6.13 e 8.5).
 export type AccountStatus = 'ACTIVE' | 'BLOCKED' | 'SUSPENDED';
 
 export interface AccountDto {
@@ -251,7 +251,7 @@ export interface ReferenceItemRequest {
   name: string;
 }
 
-// I072 — perfil completo do candidato (API v02, secções 6.6.2 a 6.6.5 e 8).
+// Perfil completo do candidato (API v02, secções 6.6.2 a 6.6.5 e 8).
 export type Availability = 'IMMEDIATE' | 'FIFTEEN_DAYS' | 'ONE_MONTH' | 'TO_BE_AGREED';
 
 export interface SkillTagDto {
@@ -273,7 +273,7 @@ export interface CandidateFullProfileDto {
   profileOpenedAt: string;
 }
 
-// I074 — indicadores do Administrador (API v02, 6.12.1): os três primeiros são o estado na data final; os outros
+// Indicadores do Administrador (API v02, 6.12.1): os três primeiros são o estado na data final; os outros
 // quatro contam acontecimentos no período.
 export interface IndicatorsDto {
   activeCandidates: number;

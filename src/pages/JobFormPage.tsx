@@ -28,8 +28,6 @@ import {
 import './jobs.css';
 import './recruiter.css';
 
-// I070 — JobFormPage (modelo de classes do frontend web v02, secção 8.2; ecrãs W10 e W11 do protótipo v02).
-
 const contractOptions = Object.entries(contractTypeLabels).map(([value, label]) => ({
   value,
   label,

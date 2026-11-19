@@ -7,7 +7,6 @@ import type {
   RejectCompanyRequest,
 } from '../types/api';
 
-// I073 — AdminCompanyService (modelo de classes do frontend web v02, secção 5; API v02, 6.11).
 export interface IAdminCompanyService {
   listPending(): Promise<PendingCompanyDto[]>;
   getSubmittedData(companyId: string): Promise<CompanyRegistrationDto>;
@@ -19,7 +18,7 @@ export interface IAdminCompanyService {
   listPublishedJobs(): Promise<PublishedJobAdminDto[]>;
 }
 
-/** Empresas, para o Administrador (AdminCompaniesController). */
+/** Empresas, para o Administrador (AdminCompaniesController; API v02, 6.11). */
 export class AdminCompanyService implements IAdminCompanyService {
   constructor(private readonly api: IApiClient) {}
 

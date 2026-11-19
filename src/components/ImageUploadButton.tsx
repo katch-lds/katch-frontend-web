@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 
-// I121 — escolha de uma imagem (FileUpload do modelo de classes, secção 8.1): botão, estado de envio e erro junto do campo.
+// Escolha de uma imagem: botão, estado de envio e erro junto do campo.
 
 interface ImageUploadButtonProps {
   label: string;

@@ -1,4 +1,4 @@
-// I073 — validação dos formulários do Administrador. O servidor volta a validar tudo (ERR-10).
+// Validação dos formulários do Administrador. O servidor volta a validar tudo (ERR-10).
 
 /** Motivo da recusa do registo da Empresa: 10 a 500 caracteres (P12; RF094). */
 export const MIN_REASON_LENGTH = 10;
@@ -26,12 +26,15 @@ export function referenceNameError(name: string): string | null {
     : null;
 }
 
-// I074 — período dos indicadores (API v02, 6.12.1): datas `aaaa-MM-dd`, inclusivas. O servidor repete estas
+// Período dos indicadores (API v02, 6.12.1): datas `aaaa-MM-dd`, inclusivas. O servidor repete estas
 // verificações (ERR-10).
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-/** Milissegundos UTC de uma data `aaaa-MM-dd` real; null se estiver mal formada ou não existir (por exemplo, 2026-02-30). */
+/**
+ * Milissegundos UTC de uma data `aaaa-MM-dd` real; null se estiver mal formada ou não existir (por exemplo,
+ * 2026-02-30).
+ */
 function utcDay(date: string): number | null {
   const match = ISO_DATE.exec(date);
   if (!match) {
