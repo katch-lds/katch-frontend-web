@@ -1,27 +1,27 @@
 /* Ecrãs W21 a W23 do protótipo v02, sem deslocamento horizontal entre 1280 e 1920 píxeis (RNF012). */
 .recruiter-page {
   padding: 24px 32px;
-  color: #1f2937;
+  color: var(--cor-escura);
 }
 
 .recruiter-page button {
   padding: 6px 12px;
-  border: 1px solid #374151;
+  border: 1px solid var(--cor-contorno);
   border-radius: 4px;
-  background: #fff;
+  background: var(--cor-branco);
   cursor: pointer;
 }
 
 .recruiter-page button:disabled {
-  border-color: #d1d5db;
-  color: #9ca3af;
+  border-color: var(--cor-borda);
+  color: var(--cor-desativada);
   cursor: default;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: var(--cor-branco);
 }
 
 .data-table th {
@@ -32,14 +32,14 @@
 .data-table th,
 .data-table td {
   padding: 10px 8px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--cor-divisoria);
 }
 
 .status-badge,
 .tag {
   display: inline-block;
   padding: 2px 8px;
-  border: 1px solid #6b7280;
+  border: 1px solid var(--cor-secundaria);
   border-radius: 4px;
   font-size: 0.8rem;
 }
@@ -47,7 +47,7 @@
 .note,
 .empty-state,
 .conversation-placeholder {
-  color: #6b7280;
+  color: var(--cor-secundaria);
 }
 
 .conversation-list.empty-state {
@@ -55,9 +55,23 @@
   padding: 12px;
 }
 
-.alert,
+.alert {
+  color: var(--cor-erro);
+}
+
 .field-error {
-  color: #b91c1c;
+  margin: 0 0 12px;
+  color: var(--cor-erro);
+}
+
+.notice {
+  color: #065f46;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .conversations {
@@ -73,8 +87,8 @@
   padding: 0;
   list-style: none;
   overflow-y: auto;
-  background: #fff;
-  border: 1px solid #d1d5db;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
 }
 
 .recruiter-page .conversation-item {
@@ -84,13 +98,13 @@
   width: 100%;
   padding: 12px;
   border: 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--cor-divisoria);
   border-radius: 0;
   text-align: left;
 }
 
 .conversation-item[aria-current='true'] {
-  background: #f3f4f6;
+  background: var(--cor-fundo-suave);
 }
 
 .conversation-name {
@@ -101,7 +115,7 @@
   display: block;
   grid-column: 1;
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--cor-secundaria);
 }
 
 .conversation-item .tag {
@@ -114,8 +128,8 @@
   grid-row: 1;
   padding: 2px 8px;
   border-radius: 999px;
-  background: #1f2937;
-  color: #fff;
+  background: var(--cor-escura);
+  color: var(--cor-branco);
   font-size: 0.75rem;
 }
 
@@ -123,8 +137,8 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  background: #fff;
-  border: 1px solid #d1d5db;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
 }
 
 .conversation-header {
@@ -132,15 +146,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--cor-divisoria);
 }
 
 .closed-banner {
   display: block;
   margin: 0;
   padding: 10px 16px;
-  background: #f3f4f6;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--cor-fundo-suave);
+  border-bottom: 1px solid var(--cor-divisoria);
 }
 
 .message-thread {
@@ -155,9 +169,9 @@
   max-width: 65%;
   margin-bottom: 12px;
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--cor-borda);
   border-radius: 6px;
-  background: #f9fafb;
+  background: var(--cor-fundo-lateral);
 }
 
 .message p {
@@ -168,13 +182,13 @@
 
 .message.own {
   margin-left: auto;
-  background: #1f2937;
-  color: #fff;
+  background: var(--cor-escura);
+  color: var(--cor-branco);
 }
 
 .composer {
   padding: 12px 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--cor-divisoria);
 }
 
 .composer label {
@@ -193,12 +207,12 @@
   resize: none;
 }
 
-/* I121 — separadores da página da Empresa (W07 e W08). */
+/* Separadores da página da Empresa (W07 e W08). */
 .tabs {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
-  border-bottom: 1px solid #d1d5db;
+  border-bottom: 1px solid var(--cor-borda);
 }
 
 .recruiter-page .tabs button {
@@ -208,7 +222,7 @@
 }
 
 .recruiter-page .tabs button[aria-selected='true'] {
-  border-bottom-color: #1f2937;
+  border-bottom-color: var(--cor-escura);
   font-weight: 600;
 }
 

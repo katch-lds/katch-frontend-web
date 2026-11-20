@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
-import type { ApiError } from '../api/ApiError';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { ProtectedImage } from '../components/ProtectedImage';
 import { SkillTag } from '../components/SkillTag';
 import { useCandidateProfile } from '../hooks/useCandidateProfile';
-import { matchConfirmedPath, waitingCandidatesPath } from '../routes/paths';
+import { matchConfirmedPath, navigationState, waitingCandidatesPath } from '../routes/paths';
 import type { CandidateFullProfileDto } from '../types/api';
 import { availabilityLabels } from '../types/labels';
 import { formatDayAndTime } from '../utils/date';
@@ -94,19 +94,6 @@ function CvSection({
   ) : null;
 }
 
-function ErrorAlert({ error, onRetry }: Readonly<{ error: ApiError; onRetry?: () => void }>) {
-  return (
-    <div role="alert" className="alert">
-      <p>{error.message}</p>
-      {onRetry && (
-        <button type="button" onClick={onRetry}>
-          Tentar de novo
-        </button>
-      )}
-    </div>
-  );
-}
-
 function DecisionDialog({
   kind,
   busy,
@@ -161,7 +148,7 @@ export default function CandidateProfilePage() {
 function CandidateProfile({ matchId }: Readonly<{ matchId: string }>) {
   const location = useLocation();
   const navigate = useNavigate();
-  const jobId = (location.state as { jobId?: string } | null)?.jobId;
+  const { jobId } = navigationState<{ jobId: string }>(location);
   const state = useCandidateProfile(matchId);
   const [pending, setPending] = useState<Pending>(null);
   const { data: profile, decision } = state;
@@ -204,7 +191,7 @@ function CandidateProfile({ matchId }: Readonly<{ matchId: string }>) {
   }
 
   return (
-    <section className="recruiter-page candidate-profile">
+    <section className="recruiter-page">
       <h1>
         {profile.desiredRole ? `${profile.fullName} — ${profile.desiredRole}` : profile.fullName}
       </h1>

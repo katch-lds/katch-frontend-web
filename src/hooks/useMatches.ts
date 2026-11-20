@@ -4,7 +4,13 @@ import { type IResourceState, useResource } from './useResource';
 
 const listMatches = () => matchService.list();
 
-/** Matches da Empresa, pedidos ao abrir o ecrã (W21; RF067). */
+/**
+ * Matches da Empresa (W21; RF067).
+ *
+ * Pedidos ao abrir o ecrã.
+ *
+ * @returns Os matches, o estado de carregamento e `reload`.
+ */
 export function useMatches(): IResourceState<MatchDto[]> {
   return useResource(listMatches);
 }

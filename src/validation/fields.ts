@@ -1,13 +1,13 @@
-// I069 — regras de validação dos campos, aplicadas antes de enviar (o servidor volta a validar tudo).
+// Regras de validação dos campos, aplicadas antes de enviar (o servidor volta a validar tudo).
 
 /** Erros por campo, com o nome do campo em camelCase (o mesmo que a API devolve em `fields`). */
 export type FieldErrors = Record<string, string>;
 
-export const MAX_EMAIL_LENGTH = 255;
-export const MIN_PASSWORD_LENGTH = 8;
-export const MAX_PASSWORD_LENGTH = 128;
+const MAX_EMAIL_LENGTH = 255;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 128;
 
-/** Formato `local@domínio` com uma única `@`, texto dos dois lados e um `.` no domínio; sem expressões regulares. */
+/** Formato `local@domínio`: uma única `@`, sem espaços, texto dos dois lados e um `.` no domínio. */
 export function isValidEmailFormat(value: string): boolean {
   const at = value.indexOf('@');
   if (at <= 0 || at !== value.lastIndexOf('@') || /\s/.test(value)) {
@@ -26,11 +26,19 @@ export function isDigits(value: string, length: number): boolean {
   return value.length === length && /^\d+$/.test(value);
 }
 
-/** Obrigatório e até `max` caracteres; devolve a mensagem de erro ou null. */
-export function requiredText(value: string, label: string, max: number): string | null {
+/**
+ * Obrigatório e até `max` caracteres, depois de aparar; devolve a mensagem de erro ou null. `required` concorda
+ * com o género do rótulo («obrigatório» ou «obrigatória»).
+ */
+export function requiredText(
+  value: string,
+  label: string,
+  max: number,
+  required = 'obrigatório',
+): string | null {
   const text = value.trim();
   if (text.length === 0) {
-    return `${label} é obrigatório.`;
+    return `${label} é ${required}.`;
   }
   return text.length > max ? `${label} pode ter no máximo ${max} caracteres.` : null;
 }

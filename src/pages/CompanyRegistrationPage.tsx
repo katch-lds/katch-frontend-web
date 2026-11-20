@@ -9,9 +9,7 @@ import { isConflictWithCode } from '../utils/apiErrors';
 import { EMPTY_COMPANY_FORM } from '../validation/forms';
 import './auth.css';
 
-// I069 — CompanyRegistrationPage (modelo de classes do frontend web v02, secção 8; ecrãs W03 e W04 do protótipo v02).
-
-/** Primeiro registo da Empresa, com os oito dados e o erro por campo; segue para o estado do pedido. */
+/** W03 e W04 — primeiro registo da Empresa, com os oito dados e o erro por campo; segue para o estado do pedido. */
 export default function CompanyRegistrationPage() {
   const { refreshCompanyStatus } = useSession();
   const navigate = useNavigate();

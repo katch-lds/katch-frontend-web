@@ -42,9 +42,9 @@
 }
 
 .skill-match {
-  border-color: #1f2937;
-  background: #1f2937;
-  color: #fff;
+  border-color: var(--cor-escura);
+  background: var(--cor-escura);
+  color: var(--cor-branco);
   font-weight: 600;
 }
 
@@ -65,15 +65,15 @@
 
 .button-link {
   padding: 6px 12px;
-  border: 1px solid #374151;
+  border: 1px solid var(--cor-contorno);
   border-radius: 4px;
-  background: #fff;
-  color: #1f2937;
+  background: var(--cor-branco);
+  color: var(--cor-escura);
   text-decoration: none;
 }
 
 .button-link.primary,
 .decision-actions .primary {
-  background: #1f2937;
-  color: #fff;
+  background: var(--cor-escura);
+  color: var(--cor-branco);
 }

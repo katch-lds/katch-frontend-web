@@ -3,7 +3,7 @@ import { useSession } from '../hooks/useSession';
 import type { UserType } from '../types/api';
 import { paths } from './paths';
 
-// I069 — RequireUserType (modelo de classes do frontend web v02, secção 7). Proteção de navegação, não de segurança.
+// Proteção de navegação, não de segurança: a autorização é sempre do servidor.
 
 /**
  * Só deixa passar o tipo de conta indicado. Um Administrador numa rota do Recrutador vai para os indicadores (regra 3

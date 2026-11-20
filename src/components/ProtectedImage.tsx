@@ -1,7 +1,6 @@
 import { useProtectedFile } from '../hooks/useProtectedFile';
 
-// I070 — ProtectedImage (modelo de classes do frontend web v02, secção 8.1): sem ficheiro, ou com 404, mostra o
-// marcador vazio do protótipo.
+// Sem ficheiro, ou com 404, mostra o marcador vazio do protótipo.
 
 export function ProtectedImage({ url, alt }: Readonly<{ url: string | null; alt: string }>) {
   const source = useProtectedFile(url);

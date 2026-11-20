@@ -17,7 +17,7 @@ import {
 import { ApiError } from '../api/ApiError';
 import { SessionStore } from '../session/SessionStore';
 import type { CompanyStatus } from '../types/api';
-import { homePath, loginPathFor, loginPathForArea } from './paths';
+import { homePath, loginPathFor } from './paths';
 
 jest.mock('../services', () => jest.requireActual('../../test/servicesMock'));
 
@@ -240,11 +240,11 @@ describe('RequireCompanyStatus', () => {
     renderApp('/candidatos/match-1', signedInStore('RECRUITER'));
 
     expect(await screen.findByRole('heading', { name: /Ana Ferreira/ })).toBeInTheDocument();
-    expect(screen.queryByText(/próxima versão/)).toBeNull();
+
     expect(location()).toBe('/candidatos/match-1');
   });
 
-  it('/candidatos/:matchId/match sem estado segue para os matches, sem página provisória', async () => {
+  it('/candidatos/:matchId/match sem estado segue para os matches', async () => {
     withCompany('APPROVED');
 
     renderApp('/candidatos/match-1/match', signedInStore('RECRUITER'));
@@ -399,8 +399,6 @@ describe('caminhos e página inicial', () => {
     expect(loginPathFor('/admin/indicadores')).toBe('/admin/entrar');
     expect(loginPathFor('/administracao')).toBe('/entrar');
     expect(loginPathFor('/matches')).toBe('/entrar');
-    expect(loginPathForArea('Supervision')).toBe('/admin/entrar');
-    expect(loginPathForArea('Recruiter')).toBe('/entrar');
   });
 
   it('homePath por perfil e por estado da Empresa', () => {

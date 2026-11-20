@@ -15,7 +15,32 @@ interface Snapshot<T> {
   error: ApiError | null;
 }
 
-/** Pede o recurso ao montar e em cada `reload`; a resposta de um pedido ultrapassado é descartada. */
+/**
+ * Corre a ação e lê o recurso de novo, mesmo que a ação falhe: o servidor é a fonte de verdade.
+ *
+ * @param action Pedido que altera o recurso.
+ * @param reload Lê o recurso de novo.
+ * @returns A promessa da ação; uma falha é propagada depois de pedida a nova leitura.
+ */
+export async function reloadAfter(
+  action: () => Promise<unknown>,
+  reload: () => void,
+): Promise<void> {
+  try {
+    await action();
+  } finally {
+    reload();
+  }
+}
+
+/**
+ * Recurso de um ecrã pedido à API.
+ *
+ * Pede o recurso ao montar e em cada `reload`; a resposta de um pedido ultrapassado é descartada.
+ *
+ * @param load Pede o recurso; tem de ser estável (`useCallback` ou função do módulo), senão o pedido repete-se.
+ * @returns Os dados, o estado de carregamento, o erro e `reload`.
+ */
 export function useResource<T>(load: () => Promise<T>): IResourceState<T> {
   const [snapshot, setSnapshot] = useState<Snapshot<T>>({ data: null, loading: true, error: null });
   const [attempt, setAttempt] = useState(0);
@@ -23,9 +48,16 @@ export function useResource<T>(load: () => Promise<T>): IResourceState<T> {
   useEffect(() => {
     let current = true;
     load().then(
-      (data) => current && setSnapshot({ data, loading: false, error: null }),
-      (error: unknown) =>
-        current && setSnapshot({ data: null, loading: false, error: ApiError.from(error) }),
+      (data) => {
+        if (current) {
+          setSnapshot({ data, loading: false, error: null });
+        }
+      },
+      (error: unknown) => {
+        if (current) {
+          setSnapshot({ data: null, loading: false, error: ApiError.from(error) });
+        }
+      },
     );
     return () => {
       current = false;

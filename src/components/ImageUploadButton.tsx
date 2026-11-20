@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react';
+import { IMAGE_TYPES } from '../validation/files';
 
-// I121 — escolha de uma imagem (FileUpload do modelo de classes, secção 8.1): botão, estado de envio e erro junto do campo.
+// Escolha de uma imagem: botão, estado de envio e erro junto do campo.
 
 interface ImageUploadButtonProps {
   label: string;
@@ -36,7 +37,7 @@ export function ImageUploadButton({
         {label}
         <input
           type="file"
-          accept="image/jpeg,image/png"
+          accept={IMAGE_TYPES.join(',')}
           disabled={disabled || busy}
           aria-invalid={error ? true : undefined}
           onChange={handleChange}

@@ -2,8 +2,6 @@ import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '../api/ApiError';
 import { type FieldErrors, hasErrors } from '../validation/fields';
 
-// I069 — envio de um formulário: validação local, erro por campo do servidor (ERR-10) e foco no primeiro campo em erro.
-
 export interface SubmissionBanner {
   message: string;
   /** Falha de ligação: o formulário pode ser enviado de novo. */
@@ -45,6 +43,14 @@ function bannerOf(errors: FieldErrors, failure: ApiError | null): SubmissionBann
     : { message: failure.message, canRetry: failure.isConnectionFailure() };
 }
 
+/**
+ * Envio de um formulário.
+ *
+ * Validação local, erro por campo do servidor (ERR-10), foco no primeiro campo em erro e proteção contra o envio
+ * duplo.
+ *
+ * @returns O estado do envio, os erros por campo, o aviso do formulário e `submit`.
+ */
 export function useFormSubmission(): FormSubmission {
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});

@@ -22,6 +22,45 @@ describe('ConfirmDialog', () => {
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 
+  it('prende o Tab dentro do diálogo e devolve o foco a quem o abriu', () => {
+    function Page({ open }: Readonly<{ open: boolean }>) {
+      return (
+        <>
+          <button type="button">Abrir</button>
+          {open && (
+            <ConfirmDialog
+              title="Publicar vaga"
+              confirmLabel="Publicar"
+              onConfirm={jest.fn()}
+              onCancel={jest.fn()}
+            >
+              <p>Efeitos</p>
+            </ConfirmDialog>
+          )}
+        </>
+      );
+    }
+    const { rerender } = render(<Page open={false} />);
+    screen.getByRole('button', { name: 'Abrir' }).focus();
+    rerender(<Page open />);
+    const dialog = screen.getByRole('dialog');
+    const confirm = screen.getByRole('button', { name: 'Publicar' });
+    const cancel = screen.getByRole('button', { name: 'Cancelar' });
+
+    expect(confirm).toHaveFocus();
+    fireEvent.keyDown(dialog, { key: 'a' });
+    expect(confirm).toHaveFocus();
+    expect(fireEvent.keyDown(dialog, { key: 'Tab' })).toBe(true);
+    cancel.focus();
+    expect(fireEvent.keyDown(dialog, { key: 'Tab' })).toBe(false);
+    expect(confirm).toHaveFocus();
+    fireEvent.keyDown(dialog, { key: 'Tab', shiftKey: true });
+    expect(cancel).toHaveFocus();
+
+    rerender(<Page open={false} />);
+    expect(screen.getByRole('button', { name: 'Abrir' })).toHaveFocus();
+  });
+
   it('durante o pedido, desativa os botões e ignora o Escape', () => {
     const onCancel = jest.fn();
     render(

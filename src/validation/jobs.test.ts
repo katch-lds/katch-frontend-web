@@ -8,7 +8,6 @@ import {
   photoError,
   toJobForm,
   toJobRequest,
-  todayLocal,
   validateJob,
 } from './jobs';
 
@@ -61,6 +60,13 @@ describe('validateJob', () => {
   ])('rejeita o salário %s', (_name, value, message) => {
     expect(validateJob(validForm({ minSalary: value }), NOW).minSalary).toBe(message);
   });
+
+  it.each(['19.99', '8.2', '1.15', '0.07', '1100,50', '1200'])(
+    'aceita o salário %s, com até 2 casas decimais',
+    (value) => {
+      expect(validateJob(validForm({ minSalary: value }), NOW).minSalary).toBeUndefined();
+    },
+  );
 
   it('deixa a verificação do intervalo salarial para a API (RF051)', () => {
     expect(validateJob(validForm({ minSalary: '1500', maxSalary: '1200' }), NOW)).toEqual({});
@@ -117,10 +123,6 @@ describe('conversões', () => {
       expiresAt: '2026-11-30',
     });
     expect(toJobForm(job({ expiresAt: null })).expiresAt).toBe('');
-  });
-
-  it('todayLocal usa a data local', () => {
-    expect(todayLocal(NOW)).toBe('2026-11-06');
   });
 });
 

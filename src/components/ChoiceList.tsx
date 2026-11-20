@@ -1,6 +1,6 @@
 import type { ReferenceItemDto } from '../types/api';
 
-// I070 — escolha múltipla de uma lista pré-definida (competências e benefícios da vaga; RF050).
+// Escolha múltipla de uma lista pré-definida (competências e benefícios da vaga; RF050).
 
 interface ChoiceListProps {
   id: string;

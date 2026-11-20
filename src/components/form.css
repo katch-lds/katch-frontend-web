@@ -1,0 +1,23 @@
+/* Campos de formulário (FormField, TextField, SelectField): etiqueta, controlo e erro por campo. */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-field input:not([type='checkbox']),
+.form-field select {
+  padding: 8px;
+  border: 1px solid var(--cor-desativada);
+  border-radius: 4px;
+}
+
+.form-field [aria-invalid='true'] {
+  border-color: var(--cor-erro);
+}
+
+.form-error {
+  margin: 0;
+  color: var(--cor-erro);
+  font-size: 0.85rem;
+}

@@ -1,7 +1,5 @@
 import { NavLink } from 'react-router';
 
-// I069 — item da barra lateral (modelo de classes do frontend web v02, secção 8.1: Sidebar e NavItem).
-
 interface NavItemProps {
   to: string;
   label: string;
@@ -9,7 +7,7 @@ interface NavItemProps {
   locked?: boolean;
   /** Contador ao lado do nome, quando maior que zero. */
   badge?: number;
-  /** I073 — descrição do contador para leitores de ecrã, por omissão «n mensagens por ler». */
+  /** Descrição do contador para leitores de ecrã, por omissão «n mensagens por ler». */
   badgeLabel?: (badge: number) => string;
 }
 

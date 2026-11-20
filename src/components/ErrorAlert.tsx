@@ -1,16 +1,32 @@
+import type { ReactNode } from 'react';
 import type { ApiError } from '../api/ApiError';
 
-// I073 — erro de carregamento de uma página, com «Tentar de novo» (RNF018: a falha de ligação é indicada antes do
-// tempo limite de 10 segundos do cliente da API).
+interface ErrorAlertProps {
+  error: ApiError;
+  /** Com esta função aparece «Tentar de novo», que repete o último pedido. */
+  onRetry?: () => void;
+  /** Estilo do ecrã: `alert` (por omissão) ou `form-banner`. */
+  className?: string;
+  /** Outras ações, depois de «Tentar de novo». */
+  children?: ReactNode;
+}
 
-/** Mensagem do servidor (ou de falha de ligação) com `role="alert"`; «Tentar de novo» repete o último pedido. */
-export function ErrorAlert({ error, onRetry }: Readonly<{ error: ApiError; onRetry: () => void }>) {
+/** Erro com `role="alert"`: a mensagem do servidor, ou de falha de ligação (RNF018). */
+export function ErrorAlert({
+  error,
+  onRetry,
+  className = 'alert',
+  children,
+}: Readonly<ErrorAlertProps>) {
   return (
-    <div role="alert" className="alert">
+    <div role="alert" className={className}>
       <p>{error.message}</p>
-      <button type="button" onClick={onRetry}>
-        Tentar de novo
-      </button>
+      {onRetry && (
+        <button type="button" onClick={onRetry}>
+          Tentar de novo
+        </button>
+      )}
+      {children}
     </div>
   );
 }

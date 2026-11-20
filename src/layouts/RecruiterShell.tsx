@@ -8,9 +8,6 @@ import { paths } from '../routes/paths';
 import type { CompanyStatus } from '../types/api';
 import './shell.css';
 
-// I069 — RecruiterShell (modelo de classes do frontend web v02, secção 8.1 e divergências P1 e P2): moldura do
-// Recrutador com barra lateral.
-
 function Sidebar({ status }: Readonly<{ status: CompanyStatus | null }>) {
   // Sem o ConversationsProvider (Empresa pendente, recusada ou sem registo) não há contador.
   const unreadTotal = useContext(ConversationsContext)?.unreadTotal ?? 0;
@@ -40,10 +37,10 @@ function Sidebar({ status }: Readonly<{ status: CompanyStatus | null }>) {
 }
 
 /**
- * Barra lateral e conteúdo do Recrutador. Com a Empresa não aprovada a barra fica na variante bloqueada: Vagas e
- * Candidatos dão lugar a «Estado do pedido», o Matches fica bloqueado e as Conversas só abrem com a Empresa aprovada ou suspensa (P1 e P2); a Conta está sempre
- * acessível. O `ConversationsProvider` só monta nesses dois estados: a lista lê-se ao montar e, com a Empresa
- * pendente ou recusada, o servidor recusaria (ERR-07).
+ * Moldura do Recrutador: barra lateral e conteúdo. Com a Empresa não aprovada, a barra fica na variante bloqueada
+ * (P1 e P2): Vagas e Candidatos dão lugar a «Estado do pedido», o Matches fica bloqueado e as Conversas só abrem com
+ * a Empresa aprovada ou suspensa; a Conta está sempre acessível. O `ConversationsProvider` só monta nesses dois
+ * estados: a lista lê-se ao montar e, com a Empresa pendente ou recusada, o servidor recusaria (ERR-07).
  */
 export default function RecruiterShell() {
   const { session, companyStatus } = useSession();
@@ -54,9 +51,9 @@ export default function RecruiterShell() {
   const content = (
     <div className="shell">
       <Sidebar status={status} />
-      <div className="shell-content">
+      <main className="shell-content">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
   if (status !== 'APPROVED' && status !== 'SUSPENDED') {

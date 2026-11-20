@@ -1,7 +1,6 @@
 /**
  * @jest-environment node
  */
-import { pollingConfig } from './config';
 import type { IPollingScheduler } from './IPollingScheduler';
 import { PollingLoop } from './PollingLoop';
 import { TimeoutPollingScheduler } from './TimeoutPollingScheduler';
@@ -22,13 +21,6 @@ describe('TimeoutPollingScheduler', () => {
     await jest.advanceTimersByTimeAsync(1);
 
     expect(task).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe('pollingConfig', () => {
-  it('fixa a consulta das conversas em 3 segundos (P17)', () => {
-    expect(pollingConfig.conversationsIntervalMs).toBe(3000);
-    expect(PollingLoop.DEFAULT_INTERVAL_MS).toBe(3000);
   });
 });
 

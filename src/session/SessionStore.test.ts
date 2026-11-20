@@ -42,10 +42,9 @@ describe('SessionStore', () => {
 
     expect(store.get()).toEqual({ ...response(), email: 'ana@exemplo.pt' });
     expect(store.token()).toBe('abc');
-    expect(store.getToken()).toBe('abc');
     store.clear();
     expect(store.get()).toBeNull();
-    expect(store.getToken()).toBeNull();
+    expect(store.token()).toBeNull();
   });
 
   it('avisa quem subscreveu em cada mudança e deixa de avisar depois de cancelar', () => {

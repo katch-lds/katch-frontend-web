@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { ActionFeedback } from '../components/ActionFeedback';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { type Column, DataTable } from '../components/DataTable';
 import { ErrorAlert } from '../components/ErrorAlert';
@@ -10,8 +11,6 @@ import type { CandidateAdminDto } from '../types/api';
 import { formatDate } from '../utils/date';
 import './admin.css';
 import './recruiter.css';
-
-// I073 — CandidatesPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A08 e A08b do protótipo v02).
 
 type CandidateAction = 'suspend' | 'reactivate';
 
@@ -48,6 +47,7 @@ function summary(total: number, active: number): string {
 export default function CandidatesPage() {
   const candidates = useCandidatesAdmin();
   const action = useActionConfirmation<PendingAction>();
+  const { pending } = action;
 
   const run = ({ candidate, action: kind }: PendingAction) => {
     const operation = kind === 'suspend' ? candidates.suspend : candidates.reactivate;
@@ -93,12 +93,7 @@ export default function CandidatesPage() {
   return (
     <section className="recruiter-page admin-page">
       <h1>Candidatos</h1>
-      {action.notice && (
-        <p role="status" className="notice">
-          {action.notice}
-        </p>
-      )}
-      {action.failure && <ErrorAlert error={action.failure} onRetry={candidates.reload} />}
+      <ActionFeedback notice={action.notice} failure={action.failure} onRetry={candidates.reload} />
       {candidates.loading && !candidates.data && <p>A carregar os Candidatos…</p>}
       {candidates.error && <ErrorAlert error={candidates.error} onRetry={candidates.reload} />}
       {candidates.data && (
@@ -112,17 +107,16 @@ export default function CandidatesPage() {
           />
         </>
       )}
-      {action.pending && (
+      {pending && (
         <ConfirmDialog
-          title={actionTexts[action.pending.action].title}
-          confirmLabel={action.pending.action === 'suspend' ? 'Suspender' : 'Reativar'}
+          title={actionTexts[pending.action].title}
+          confirmLabel={pending.action === 'suspend' ? 'Suspender' : 'Reativar'}
           busy={action.busy}
-          onConfirm={() => void run(action.pending as PendingAction)}
+          onConfirm={() => void run(pending)}
           onCancel={action.cancel}
         >
           <p>
-            Candidato {action.pending.candidate.fullName}.{' '}
-            {actionTexts[action.pending.action].effects}
+            Candidato {pending.candidate.fullName}. {actionTexts[pending.action].effects}
           </p>
         </ConfirmDialog>
       )}

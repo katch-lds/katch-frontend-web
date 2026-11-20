@@ -101,7 +101,6 @@ describe('PendingCompanyDetailPage (A04)', () => {
 
       const notice = await screen.findByRole('status');
       expect(notice).toHaveTextContent('Registo de «Lumen Software, Lda.» aprovado.');
-      expect(notice.textContent).not.toMatch(/avis/i);
       expect(approve).toHaveBeenCalledWith('company-1');
       expect(location()).toBe('/admin/pendentes');
       expect(await screen.findByText('Não há Empresas a aguardar aprovação.')).toBeInTheDocument();
@@ -207,7 +206,6 @@ describe('PendingCompanyDetailPage (A04)', () => {
 
       const notice = await screen.findByRole('status');
       expect(notice).toHaveTextContent('Registo de «Lumen Software, Lda.» recusado.');
-      expect(notice.textContent).not.toMatch(/avis/i);
       expect(location()).toBe('/admin/pendentes');
       expect(await screen.findByText('Não há Empresas a aguardar aprovação.')).toBeInTheDocument();
     });

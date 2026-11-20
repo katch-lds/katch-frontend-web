@@ -14,7 +14,7 @@ import {
   requiredText,
 } from './fields';
 
-// I069 — validação dos formulários de início de sessão, de criação de conta e de registo da Empresa.
+// Validação dos formulários de início de sessão, de criação de conta e de registo da Empresa.
 
 /** No início de sessão, só se exige que os campos não estejam vazios: a política da palavra-passe não se aplica. */
 export function validateLogin(values: LoginRequest): FieldErrors {
@@ -64,7 +64,7 @@ export function validateCompany(values: CompanyForm): FieldErrors {
     companyName: requiredText(values.companyName, 'O nome da Empresa', 200),
     taxId: digitsError(values.taxId, 'O NIF', 9),
     industry: industryError(values.industry),
-    address: requiredText(values.address, 'A morada', 255),
+    address: requiredText(values.address, 'A morada', 255, 'obrigatória'),
     locationId: values.locationId === '' ? 'A localidade é obrigatória.' : null,
     contactEmail: emailError(values.contactEmail, 'O e-mail de contacto'),
     contactPhone: digitsError(values.contactPhone, 'O telefone de contacto', 9),

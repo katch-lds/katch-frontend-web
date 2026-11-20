@@ -4,7 +4,13 @@ import { type IResourceState, useResource } from './useResource';
 
 const listLocations = () => referenceListService.listLocations();
 
-/** Localidades para o registo da Empresa (I069; lista pública). */
+/**
+ * Localidades para o registo da Empresa.
+ *
+ * Lista pública, pedida sem sessão.
+ *
+ * @returns As localidades, o estado de carregamento e `reload`.
+ */
 export function useLocations(): IResourceState<ReferenceItemDto[]> {
   return useResource(listLocations);
 }

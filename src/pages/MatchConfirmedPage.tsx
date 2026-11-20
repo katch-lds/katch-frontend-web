@@ -1,6 +1,6 @@
 import { Link, Navigate, useLocation } from 'react-router';
 import { ProtectedImage } from '../components/ProtectedImage';
-import { conversationPath, paths, waitingCandidatesPath } from '../routes/paths';
+import { conversationPath, navigationState, paths, waitingCandidatesPath } from '../routes/paths';
 import type { MatchDto } from '../types/api';
 import './recruiter.css';
 import './candidate.css';
@@ -12,14 +12,14 @@ interface MatchState {
 
 /** W19 — Match confirmado, com os contactos do candidato (RF066, RF067). O match só chega por `location.state`. */
 export default function MatchConfirmedPage() {
-  const state = useLocation().state as Partial<MatchState> | null;
-  if (!state?.match) {
+  const state = navigationState<MatchState>(useLocation());
+  if (!state.match) {
     return <Navigate to={paths.matches} replace />;
   }
   const { match, photoUrl = null } = state;
 
   return (
-    <section className="recruiter-page match-confirmed">
+    <section className="recruiter-page">
       <h1>Match confirmado</h1>
       <div className="profile-grid">
         <ProtectedImage url={photoUrl} alt={`Fotografia de ${match.counterpartName}`} />
@@ -30,7 +30,7 @@ export default function MatchConfirmedPage() {
           <dd>{match.jobTitle}</dd>
           <dt>Localidade</dt>
           <dd>{match.locationName}</dd>
-          <dt>Email</dt>
+          <dt>E-mail</dt>
           <dd>
             <a href={`mailto:${match.contactEmail}`}>{match.contactEmail}</a>
           </dd>

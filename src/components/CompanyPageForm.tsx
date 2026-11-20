@@ -13,7 +13,7 @@ import { FormField } from './FormField';
 import { SubmitButton } from './SubmitButton';
 import { TextField } from './TextField';
 
-// I121 — descrição e sítio na Internet da página da Empresa (W07, RF046).
+// Descrição e sítio na Internet da página da Empresa (W07, RF046).
 
 interface CompanyPageFormProps {
   page: CompanyPageDto;

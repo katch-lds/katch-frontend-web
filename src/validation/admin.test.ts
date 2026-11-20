@@ -1,10 +1,4 @@
-import {
-  addDays,
-  periodDays,
-  periodError,
-  referenceNameError,
-  rejectionReasonError,
-} from './admin';
+import { periodError, referenceNameError, rejectionReasonError } from './admin';
 
 // I074 — período dos indicadores.
 describe('periodError', () => {
@@ -37,37 +31,6 @@ describe('periodError', () => {
     ['2026-10-01', '2026-13-01'],
   ])('rejeita datas em falta ou mal formadas (%s, %s)', (from, to) => {
     expect(periodError(from, to, today)).toBe('Indique a data inicial e a data final.');
-  });
-});
-
-describe('periodDays', () => {
-  it('conta os dias de forma inclusiva', () => {
-    expect(periodDays('2026-10-05', '2026-10-05')).toBe(1);
-    expect(periodDays('2026-10-01', '2026-10-31')).toBe(31);
-    expect(periodDays('2026-10-15', '2026-10-16')).toBe(2);
-  });
-
-  it('não é afetado pela mudança de hora de outubro (25 de outubro de 2026)', () => {
-    expect(periodDays('2026-10-24', '2026-10-26')).toBe(3);
-    expect(periodDays('2026-10-25', '2026-10-25')).toBe(1);
-    expect(periodDays('2026-10-01', '2026-11-01')).toBe(32);
-  });
-
-  it('devolve 0 com datas mal formadas', () => {
-    expect(periodDays('', '2026-10-01')).toBe(0);
-    expect(periodDays('2026-02-30', '2026-03-01')).toBe(0);
-  });
-});
-
-describe('addDays', () => {
-  it('soma e subtrai dias, atravessando meses e a mudança de hora', () => {
-    expect(addDays('2026-11-13', -29)).toBe('2026-10-15');
-    expect(addDays('2026-10-25', 1)).toBe('2026-10-26');
-    expect(addDays('2026-03-01', -1)).toBe('2026-02-28');
-  });
-
-  it('devolve a data tal como veio se estiver mal formada', () => {
-    expect(addDays('abc', 3)).toBe('abc');
   });
 });
 

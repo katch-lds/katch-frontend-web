@@ -1,4 +1,4 @@
-/* Ecrãs W09 a W15 do protótipo v02 (I070), sem deslocamento horizontal entre 1280 e 1920 píxeis (RNF012). */
+/* Ecrãs W09 a W15 do protótipo v02, sem deslocamento horizontal entre 1280 e 1920 píxeis (RNF012). */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -7,30 +7,20 @@
 
 .recruiter-page button.primary,
 .dialog button.primary {
-  border-color: #1f2937;
-  background: #1f2937;
-  color: #fff;
-}
-
-.row-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  border-color: var(--cor-escura);
+  background: var(--cor-escura);
+  color: var(--cor-branco);
 }
 
 .tag.urgent {
   margin-left: 8px;
 }
 
-.notice {
-  color: #065f46;
-}
-
 .info-box {
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--cor-borda);
   border-radius: 4px;
-  background: #fff;
+  background: var(--cor-branco);
 }
 
 .job-form {
@@ -56,7 +46,7 @@
 .job-form .form-field select,
 .job-form .form-field textarea {
   padding: 8px;
-  border: 1px solid #9ca3af;
+  border: 1px solid var(--cor-desativada);
   border-radius: 4px;
   font: inherit;
 }
@@ -68,7 +58,7 @@
 .job-form .form-field input[aria-invalid='true'],
 .job-form .form-field select[aria-invalid='true'],
 .job-form .form-field textarea[aria-invalid='true'] {
-  border-color: #b91c1c;
+  border-color: var(--cor-erro);
 }
 
 .field-pair {
@@ -80,12 +70,12 @@
 .choice-list {
   margin: 0;
   padding: 8px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--cor-borda);
   border-radius: 4px;
 }
 
 .choice-list[aria-invalid='true'] {
-  border-color: #b91c1c;
+  border-color: var(--cor-erro);
 }
 
 .choices {
@@ -103,9 +93,9 @@
 
 .photos-box {
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--cor-borda);
   border-radius: 6px;
-  background: #fff;
+  background: var(--cor-branco);
 }
 
 .photos-box h2 {
@@ -130,8 +120,8 @@
   width: 96px;
   height: 72px;
   object-fit: cover;
-  border: 1px solid #d1d5db;
-  color: #6b7280;
+  border: 1px solid var(--cor-borda);
+  color: var(--cor-secundaria);
   font-size: 0.75rem;
 }
 
@@ -152,7 +142,7 @@
 .file-button {
   display: inline-block;
   padding: 6px 12px;
-  border: 1px solid #374151;
+  border: 1px solid var(--cor-contorno);
   border-radius: 4px;
   cursor: pointer;
 }
@@ -166,38 +156,4 @@
 .form-actions {
   display: flex;
   gap: 8px;
-}
-
-.dialog-backdrop {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgb(0 0 0 / 30%);
-}
-
-.dialog {
-  width: min(480px, 90vw);
-  padding: 20px 24px;
-  border-radius: 6px;
-  background: #fff;
-  color: #1f2937;
-}
-
-.dialog h2 {
-  margin: 0 0 8px;
-}
-
-.dialog-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.dialog button {
-  padding: 6px 12px;
-  border: 1px solid #374151;
-  border-radius: 4px;
-  background: #fff;
-  cursor: pointer;
 }

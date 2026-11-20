@@ -6,16 +6,14 @@ import { FormBanner } from './FormBanner';
 import { SubmitButton } from './SubmitButton';
 import { TextField } from './TextField';
 
-// I069 — ChangePasswordForm (modelo de classes do frontend web v02, secção 8.1; ecrãs W25, A10 e A10b; RF040, RF084).
-
 interface ChangePasswordFormProps {
   /** Quando existe, mostra «Cancelar» (área de supervisão). */
   onCancel?: () => void;
 }
 
 /**
- * Alteração da própria palavra-passe, comum ao Recrutador e ao Administrador. As palavras-passe só existem neste
- * formulário e são limpas depois do sucesso; a confirmação nunca vai para a API.
+ * Alteração da própria palavra-passe, comum ao Recrutador e ao Administrador (W25, A10 e A10b; RF040, RF084). As
+ * palavras-passe só existem neste formulário e são limpas depois do sucesso; a confirmação nunca vai para a API.
  */
 export function ChangePasswordForm({ onCancel }: Readonly<ChangePasswordFormProps>) {
   const form = useFormSubmission();

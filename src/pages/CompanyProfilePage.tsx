@@ -3,23 +3,22 @@ import { CompanyDataPanel } from '../components/CompanyDataPanel';
 import { CompanyGalleryPanel } from '../components/CompanyGalleryPanel';
 import { CompanyLogoPanel } from '../components/CompanyLogoPanel';
 import { CompanyPageForm } from '../components/CompanyPageForm';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { useCompanyPage } from '../hooks/useCompanyPage';
 import './auth.css';
 import './jobs.css';
 import './recruiter.css';
 
-// I121 — CompanyProfilePage (modelo de classes do frontend web v02, secção 8.2; ecrãs W07 e W08).
+type TabId = 'page' | 'data';
 
-const TABS = [
+const TABS: { id: TabId; label: string }[] = [
   { id: 'page', label: 'Página da Empresa' },
   { id: 'data', label: 'Dados da Empresa' },
-] as const;
-
-type TabId = (typeof TABS)[number]['id'];
+];
 
 /**
- * Página de apresentação (descrição, sítio, logótipo e galeria) e dados de registo da Empresa aprovada, em dois
- * separadores. Os dois painéis ficam montados para não perder o que está por gravar ao mudar de separador.
+ * W07 e W08 — página de apresentação (descrição, sítio, logótipo e galeria) e dados de registo da Empresa aprovada,
+ * em dois separadores. Os dois painéis ficam montados para não perder o que está por gravar ao mudar de separador.
  */
 export default function CompanyProfilePage() {
   const company = useCompanyPage();
@@ -33,14 +32,7 @@ export default function CompanyProfilePage() {
 
   let content;
   if (company.error !== null) {
-    content = (
-      <div role="alert" className="form-banner">
-        <p>{company.error.message}</p>
-        <button type="button" onClick={company.reload}>
-          Tentar de novo
-        </button>
-      </div>
-    );
+    content = <ErrorAlert error={company.error} onRetry={company.reload} className="form-banner" />;
   } else if (company.page === null || company.loading) {
     content = <p>A carregar os dados da Empresa…</p>;
   } else {

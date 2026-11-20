@@ -6,16 +6,8 @@ import type {
   LoginResponse,
 } from '../types/api';
 
-// I069 — AuthService (modelo de classes do frontend web v02, secção 4; API v02, 6.1).
-export interface IAuthService {
-  createRecruiterAccount(request: CreateRecruiterAccountRequest): Promise<LoginResponse>;
-  login(request: LoginRequest): Promise<LoginResponse>;
-  logout(): Promise<void>;
-  changePassword(request: ChangePasswordRequest): Promise<void>;
-}
-
-/** Autenticação: criação de conta de Recrutador, início e fim de sessão (AuthController). */
-export class AuthService implements IAuthService {
+/** Autenticação: criação de conta de Recrutador, início e fim de sessão (AuthController; API v02, 6.1). */
+export class AuthService {
   constructor(private readonly api: IApiClient) {}
 
   createRecruiterAccount(request: CreateRecruiterAccountRequest): Promise<LoginResponse> {

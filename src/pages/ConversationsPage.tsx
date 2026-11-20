@@ -1,15 +1,13 @@
 import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { ErrorAlert } from '../components/ErrorAlert';
+import { MAX_MESSAGE_LENGTH } from '../config/app';
 import { useConversations } from '../hooks/useConversations';
 import type { ConversationSummaryDto, MessageDto } from '../types/api';
 import { conversationCloseReasonLabels } from '../types/labels';
 import { formatDateTime } from '../utils/date';
-import '../components/dialog.css';
 import './recruiter.css';
-
-/** Dimensão máxima de uma mensagem (P03). */
-const MAX_MESSAGE_LENGTH = 1000;
 
 /**
  * W22 e W23 — lista de conversas com as mensagens por ler, conversa escolhida com o histórico, envio e encerramento;
@@ -34,14 +32,7 @@ export default function ConversationsPage() {
     <section className="recruiter-page">
       <h1>Conversas</h1>
       {loading && <p>A carregar as conversas…</p>}
-      {error && data === null && (
-        <div role="alert" className="alert">
-          <p>{error.message}</p>
-          <button type="button" onClick={reload}>
-            Tentar de novo
-          </button>
-        </div>
-      )}
+      {error && data === null && <ErrorAlert error={error} onRetry={reload} />}
       {data && (
         <div className="conversations">
           <ConversationList
