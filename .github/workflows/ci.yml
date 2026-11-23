@@ -103,6 +103,34 @@ jobs:
             psql -d katch -v ON_ERROR_STOP=1 -q -f "katch-backend/database/${script}.sql"
           done
 
+      # As palavras-passe de demonstração não estão no repositório (só os resumos). Para a pipeline não depender delas,
+      # as contas de demonstração e o Administrador recebem resumos novos (formato V3 do ASP.NET Core Identity:
+      # PBKDF2-HMAC-SHA512, 100 000 iterações, sal de 16 bytes) das palavras-passe guardadas nos segredos.
+      - name: QG-06 Palavras-passe das contas de teste
+        env:
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          E2E_DEMO_PASSWORD: ${{ secrets.E2E_DEMO_PASSWORD }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+        run: |
+          python3 - > e2e-passwords.sql <<'PY'
+          import base64, hashlib, os, struct
+
+          def identity_v3(password: str) -> str:
+              salt = os.urandom(16)
+              subkey = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100_000, 32)
+              header = b'\x01' + struct.pack('>III', 2, 100_000, len(salt))
+              return base64.b64encode(header + salt + subkey).decode('ascii')
+
+          demo = identity_v3(os.environ['E2E_DEMO_PASSWORD'])
+          admin = identity_v3(os.environ['E2E_ADMIN_PASSWORD'])
+          print(f"UPDATE app_user SET password_hash = '{demo}' WHERE email LIKE '%@demo.katch.pt';")
+          print(f"UPDATE app_user SET password_hash = '{admin}' WHERE email = 'admin@katch.pt';")
+          PY
+          psql -d katch -v ON_ERROR_STOP=1 -q -f e2e-passwords.sql
+          rm e2e-passwords.sql
+
       - name: QG-06 Arrancar a API
         env:
           ConnectionStrings__Katch: Host=localhost;Port=5432;Database=katch;Username=postgres;Password=postgres
