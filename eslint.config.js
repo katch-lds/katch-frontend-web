@@ -13,7 +13,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage', 'sonarqube-report'] },
+  { ignores: ['dist', 'coverage', 'sonarqube-report', 'playwright-report', 'test-results'] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
@@ -27,7 +27,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.test.{ts,tsx}', 'test/**/*.ts'],
+    files: ['**/*.test.{ts,tsx}', 'test/**/*.ts', 'e2e/**/*.ts', 'playwright.config.ts'],
     languageOptions: { globals: { ...globals.jest, ...globals.node } },
   },
   {
