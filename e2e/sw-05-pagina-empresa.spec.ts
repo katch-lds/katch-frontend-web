@@ -48,13 +48,11 @@ test.describe('SW-05 Página e dados da Empresa', () => {
     await expect(page.getByRole('alert').first()).toBeVisible();
     await expect(page.getByText('0/6')).toBeVisible();
 
-    await page
-      .getByLabel('Adicionar fotografia')
-      .setInputFiles({
-        name: 'falso.png',
-        mimeType: 'image/png',
-        buffer: Buffer.from('isto não é uma imagem'),
-      });
+    await page.getByLabel('Adicionar fotografia').setInputFiles({
+      name: 'falso.png',
+      mimeType: 'image/png',
+      buffer: Buffer.from('isto não é uma imagem'),
+    });
     await expect(page.getByRole('alert').first()).toBeVisible();
     await expect(page.getByText('0/6')).toBeVisible();
   });
