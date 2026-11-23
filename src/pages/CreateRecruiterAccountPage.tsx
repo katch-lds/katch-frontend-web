@@ -10,9 +10,10 @@ import { paths } from '../routes/paths';
 import { validateAccount } from '../validation/forms';
 import './auth.css';
 
-// I069 — CreateRecruiterAccountPage (modelo de classes do frontend web v02, secção 8; ecrã W02 do protótipo v02).
-
-/** Criação de conta de Recrutador; com a conta criada a sessão fica iniciada e segue-se o registo da Empresa. */
+/**
+ * W02 — criação de conta de Recrutador; com a conta criada, a sessão fica iniciada e segue-se o registo da
+ * Empresa.
+ */
 export default function CreateRecruiterAccountPage() {
   const { signUp } = useSession();
   const form = useFormSubmission();

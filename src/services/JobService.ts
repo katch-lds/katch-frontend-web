@@ -1,27 +1,14 @@
 import type { IApiClient } from '../api/IApiClient';
 import type { JobDto, JobRequest } from '../types/api';
 
-// I070 — JobService (modelo de classes do frontend web v02, secção 5; documentação da API v02, 6.5).
-export interface IJobService {
-  list(): Promise<JobDto[]>;
-  create(request: JobRequest): Promise<JobDto>;
-  update(jobId: string, request: JobRequest): Promise<JobDto>;
-  publish(jobId: string): Promise<JobDto>;
-  suspend(jobId: string): Promise<JobDto>;
-  republish(jobId: string): Promise<JobDto>;
-  close(jobId: string): Promise<JobDto>;
-  delete(jobId: string): Promise<void>;
-  addPhoto(jobId: string, file: File): Promise<string | null>;
-}
-
 const BASE = '/api/recruiter/jobs';
 
 function jobPath(jobId: string): string {
   return `${BASE}/${encodeURIComponent(jobId)}`;
 }
 
-/** Vagas da Empresa do Recrutador (JobsController; política ApprovedCompany). */
-export class JobService implements IJobService {
+/** Vagas da Empresa do Recrutador (JobsController; API v02, 6.5; política ApprovedCompany). */
+export class JobService {
   constructor(private readonly api: IApiClient) {}
 
   /** Vagas da própria Empresa, da mais recente para a mais antiga (6.5.1). */
@@ -55,7 +42,10 @@ export class JobService implements IJobService {
     return this.api.post<JobDto>(`${jobPath(jobId)}/close`);
   }
 
-  /** Sem verificação prévia no cliente: com interesses registados, o servidor responde 409 ERR-38 (secção 5, regra 5). */
+  /**
+   * Sem verificação prévia no cliente: com interesses registados, o servidor responde 409 ERR-38 (secção 5,
+   * regra 5).
+   */
   delete(jobId: string): Promise<void> {
     return this.api.delete(jobPath(jobId));
   }

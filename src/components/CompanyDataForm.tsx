@@ -4,19 +4,20 @@ import { useLocations } from '../hooks/useLocations';
 import type { CompanyRegistrationRequest, Industry } from '../types/api';
 import { industryLabels } from '../types/labels';
 import { type CompanyForm, toCompanyRequest, validateCompany } from '../validation/forms';
+import { ErrorAlert } from './ErrorAlert';
 import { FormBanner } from './FormBanner';
-import { SelectField } from './SelectField';
+import { optionsOf, SelectField } from './SelectField';
 import { SubmitButton } from './SubmitButton';
 import { TextField } from './TextField';
 
-// I069 — formulário com os oito dados da Empresa, partilhado pelo registo (W03, W04) e pela nova submissão (W06).
+// Formulário com os oito dados da Empresa, partilhado pelo registo (W03, W04) e pela nova submissão (W06).
 
-const industryOptions = Object.entries(industryLabels).map(([value, label]) => ({ value, label }));
+const industryOptions = optionsOf(industryLabels);
 
 interface CompanyDataFormProps {
   initialValues: CompanyForm;
   submitLabel: string;
-  /** I121 — NIF só de leitura, para a Empresa aprovada (W08, RF049). */
+  /** NIF só de leitura, para a Empresa aprovada (W08, RF049). */
   taxIdLocked?: boolean;
   /** Envia o pedido; um ApiError lançado aqui aparece no formulário (erro por campo no ERR-10). */
   onSubmit: (request: CompanyRegistrationRequest) => Promise<void>;
@@ -93,12 +94,7 @@ export function CompanyDataForm({
         error={form.errors.locationId}
       />
       {locations.error && (
-        <div role="alert" className="form-banner">
-          <p>{locations.error.message}</p>
-          <button type="button" onClick={locations.reload}>
-            Tentar de novo
-          </button>
-        </div>
+        <ErrorAlert error={locations.error} onRetry={locations.reload} className="form-banner" />
       )}
       <TextField
         id="contactEmail"

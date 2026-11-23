@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router';
 import { type Column, DataTable } from '../components/DataTable';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { StatusBadge } from '../components/StatusBadge';
 import { useMatches } from '../hooks/useMatches';
+import { conversationPath } from '../routes/paths';
 import type { MatchDto } from '../types/api';
 import './recruiter.css';
 
@@ -25,10 +27,7 @@ export default function MatchesPage() {
       key: 'action',
       header: 'Ação',
       render: (m) => (
-        <button
-          type="button"
-          onClick={() => navigate(`/conversas?match=${encodeURIComponent(m.matchId)}`)}
-        >
+        <button type="button" onClick={() => void navigate(conversationPath(m.matchId))}>
           Abrir conversa
         </button>
       ),
@@ -39,14 +38,7 @@ export default function MatchesPage() {
     <section className="recruiter-page">
       <h1>Matches da Empresa</h1>
       {loading && <p>A carregar os matches…</p>}
-      {error && (
-        <div role="alert" className="alert">
-          <p>{error.message}</p>
-          <button type="button" onClick={reload}>
-            Tentar de novo
-          </button>
-        </div>
-      )}
+      {error && <ErrorAlert error={error} onRetry={reload} />}
       {data && (
         <>
           <DataTable

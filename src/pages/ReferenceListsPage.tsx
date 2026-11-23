@@ -1,11 +1,10 @@
 import { useState } from 'react';
+import { ActionFeedback } from '../components/ActionFeedback';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { ReferenceListSection } from '../components/ReferenceListSection';
 import { useReferenceLists } from '../hooks/useReferenceLists';
 import './admin.css';
 import './recruiter.css';
-
-// I073 — ReferenceListsPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A09 e A09b do protótipo v02).
 
 /**
  * A09 — competências e benefícios, com «Alterar designação» na própria lista e «Acrescentar» (RF099 a RF102).
@@ -22,11 +21,7 @@ export default function ReferenceListsPage() {
   return (
     <section className="recruiter-page admin-page">
       <h1>Listas pré-definidas</h1>
-      {notice && (
-        <p role="status" className="notice">
-          {notice}
-        </p>
-      )}
+      <ActionFeedback notice={notice} />
       {lists.loading && !lists.data && <p>A carregar as listas…</p>}
       {lists.error && <ErrorAlert error={lists.error} onRetry={lists.reload} />}
       {lists.data && (

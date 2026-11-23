@@ -1,16 +1,16 @@
+import { JOB_PHOTO_MAX_MB } from '../config/app';
 import type { ContractType, JobDto, JobRequest, WorkMode } from '../types/api';
 import { contractTypeLabels, workModeLabels } from '../types/labels';
-import { collectErrors, type FieldErrors } from './fields';
+import { localDate } from '../utils/date';
+import { collectErrors, type FieldErrors, requiredText } from './fields';
+import { validateImageFile } from './files';
 
-// I070 — validação do formulário da vaga (RF050 a RF052). O servidor volta a validar tudo, incluindo o intervalo
+// Validação do formulário da vaga (RF050 a RF052). O servidor volta a validar tudo, incluindo o intervalo
 // salarial (RF051), cuja recusa é apresentada com a mensagem da API junto do salário mínimo.
 
-export const MAX_TITLE_LENGTH = 150;
-export const MAX_DESCRIPTION_LENGTH = 5000;
-export const MAX_SALARY = 99_999_999.99;
-export const MAX_JOB_PHOTOS = 5;
-export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
-export const PHOTO_TYPES = ['image/jpeg', 'image/png'];
+const MAX_TITLE_LENGTH = 150;
+const MAX_DESCRIPTION_LENGTH = 5000;
+const MAX_SALARY = 99_999_999.99;
 
 /** O formulário guarda o texto escrito; os números e a data só são convertidos no pedido. */
 export interface JobForm {
@@ -48,37 +48,20 @@ export function parseEuros(value: string): number | null {
   return /^\d+(\.\d+)?$/.test(text) ? Number(text) : null;
 }
 
+/** As casas decimais contam-se no texto: multiplicar por 100 em vírgula flutuante recusaria 19,99 ou 8,2. */
 function salaryError(value: string, label: string): string | null {
-  if (value.trim().length === 0) {
+  const text = value.trim();
+  if (text.length === 0) {
     return `${label} é obrigatório.`;
   }
-  const amount = parseEuros(value);
+  const amount = parseEuros(text);
   if (amount === null || amount <= 0) {
     return 'O valor tem de ser um número positivo em euros.';
   }
-  if (Math.round(amount * 100) !== amount * 100) {
+  if (!/^\d+([.,]\d{1,2})?$/.test(text)) {
     return 'O valor tem de ter no máximo 2 casas decimais.';
   }
   return amount > MAX_SALARY ? 'O valor não pode exceder 99 999 999,99 euros.' : null;
-}
-
-function textError(value: string, label: string, max: number): string | null {
-  const text = value.trim();
-  if (text.length === 0) {
-    return `${label} é obrigatória.`;
-  }
-  return text.length > max ? `${label} pode ter no máximo ${max} caracteres.` : null;
-}
-
-/** Data de hoje no fuso do browser, no formato `aaaa-mm-dd`. */
-export function todayLocal(now: Date = new Date()): string {
-  return toLocalDate(now);
-}
-
-function toLocalDate(instant: Date): string {
-  const month = String(instant.getMonth() + 1).padStart(2, '0');
-  const day = String(instant.getDate()).padStart(2, '0');
-  return `${instant.getFullYear()}-${month}-${day}`;
 }
 
 /** A data-limite é o fim do dia local escolhido, em UTC (ISO 8601). */
@@ -88,8 +71,13 @@ export function expiresAtInstant(date: string): string {
 
 export function validateJob(values: JobForm, now: Date = new Date()): FieldErrors {
   return collectErrors({
-    title: textError(values.title, 'A função', MAX_TITLE_LENGTH),
-    description: textError(values.description, 'A descrição', MAX_DESCRIPTION_LENGTH),
+    title: requiredText(values.title, 'A função', MAX_TITLE_LENGTH, 'obrigatória'),
+    description: requiredText(
+      values.description,
+      'A descrição',
+      MAX_DESCRIPTION_LENGTH,
+      'obrigatória',
+    ),
     minSalary: salaryError(values.minSalary, 'O salário mínimo'),
     maxSalary: salaryError(values.maxSalary, 'O salário máximo'),
     locationId: values.locationId === '' ? 'A localidade é obrigatória.' : null,
@@ -98,7 +86,7 @@ export function validateJob(values: JobForm, now: Date = new Date()): FieldError
     workMode: values.workMode in workModeLabels ? null : 'O regime de trabalho é obrigatório.',
     skillIds: values.skillIds.length === 0 ? 'Escolha pelo menos uma competência.' : null,
     expiresAt:
-      values.expiresAt !== '' && values.expiresAt < todayLocal(now)
+      values.expiresAt !== '' && values.expiresAt < localDate(now)
         ? 'A data-limite tem de ser posterior ao momento atual.'
         : null,
   });
@@ -134,16 +122,14 @@ export function toJobForm(job: JobDto): JobForm {
     skillIds: job.skills.map((skill) => skill.id),
     benefitIds: job.benefits.map((benefit) => benefit.id),
     isUrgent: job.isUrgent,
-    expiresAt: job.expiresAt === null ? '' : toLocalDate(new Date(job.expiresAt)),
+    expiresAt: job.expiresAt === null ? '' : localDate(new Date(job.expiresAt)),
   };
 }
 
 /** Formato e dimensão de uma fotografia antes do carregamento (secção 5, regra 8; RF052). */
 export function photoError(file: File): string | null {
-  if (!PHOTO_TYPES.includes(file.type)) {
-    return `${file.name}: a fotografia tem de estar no formato JPEG ou PNG.`;
-  }
-  return file.size > MAX_PHOTO_BYTES ? `${file.name}: a fotografia pode ter no máximo 5 MB.` : null;
+  const reason = validateImageFile(file, JOB_PHOTO_MAX_MB, 'a fotografia');
+  return reason === null ? null : `${file.name}: ${reason}`;
 }
 
 /** Erro de um campo, incluindo os erros por elemento da lista que a API devolve como `skillIds[0]`. */

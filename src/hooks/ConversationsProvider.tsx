@@ -41,9 +41,15 @@ interface ConversationsProviderProps {
 }
 
 /**
+ * Estado partilhado das conversas do Recrutador.
+ *
  * Montado na moldura do Recrutador: lê a lista ao montar e de cada vez que o Recrutador muda de página (contador da
  * barra lateral, DF-14) e, enquanto a página de conversas o pede, repete de 3 em 3 segundos a lista e a conversa
- * escolhida (RF073, P17).
+ * escolhida (RF073, P17). É um contexto, e não um hook por página, para que a barra lateral e a página de conversas
+ * partilhem uma só lista e uma só consulta periódica.
+ *
+ * @param props `userId` da sessão e os elementos que usam o estado.
+ * @returns O fornecedor do `ConversationsContext`.
  */
 export function ConversationsProvider({ userId, children }: Readonly<ConversationsProviderProps>) {
   const [conversations, setConversations] = useState<ConversationSummaryDto[] | null>(null);
@@ -251,8 +257,8 @@ export function ConversationsProvider({ userId, children }: Readonly<Conversatio
 }
 
 /**
- * Junta por `messageId`, sem duplicados, e ordena por envio. Uma mensagem já conhecida é substituída se a indicação de
- * leitura mudou (RF072); sem alterações devolve a mesma lista.
+ * Junta por `messageId`, sem duplicados, e ordena por envio. Uma mensagem já conhecida é substituída se a indicação
+ * de leitura mudou (RF072); sem alterações devolve a mesma lista.
  */
 export function mergeMessages(current: MessageDto[], received: MessageDto[]): MessageDto[] {
   const byId = new Map(current.map((m) => [m.messageId, m]));
@@ -272,8 +278,8 @@ export function mergeMessages(current: MessageDto[], received: MessageDto[]): Me
 
 /**
  * Instante `after` da consulta seguinte: o da última mensagem recebida (modelo de classes, secção 6, regra 3) ou,
- * enquanto houver mensagens do próprio Recrutador por ler, o da mensagem anterior à mais antiga delas, para a consulta
- * as devolver com a indicação de leitura do Candidato (RF072).
+ * enquanto houver mensagens do próprio Recrutador por ler, o da mensagem anterior à mais antiga delas, para a
+ * consulta as devolver com a indicação de leitura do Candidato (RF072).
  */
 export function nextAfter(messages: MessageDto[], userId: string): string | null {
   const unread = messages.findIndex((m) => m.senderId === userId && m.readAt === null);

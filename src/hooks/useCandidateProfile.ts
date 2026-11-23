@@ -5,7 +5,7 @@ import type { CandidateFullProfileDto, MatchDto } from '../types/api';
 import { type IResourceState, useResource } from './useResource';
 
 /** Tempo até revogar o endereço local do CV, depois de aberto no novo separador. */
-export const CV_URL_LIFETIME_MS = 60_000;
+const CV_URL_LIFETIME_MS = 60_000;
 
 export type DecisionState = 'idle' | 'submitting' | 'accepted' | 'rejected';
 
@@ -29,9 +29,14 @@ interface InFlight {
 }
 
 /**
- * Perfil do candidato e decisão sobre o interesse (W17; RF061 a RF064, RF117, RF118). O pedido do perfil tem efeito
- * no servidor, por isso é feito uma só vez por `matchId` (também com o StrictMode); só «reload» o repete. O estado da
- * decisão pertence a um candidato: quem usa o hook remonta-o (`key`) quando o `matchId` muda.
+ * Perfil do candidato e decisão sobre o interesse (W17; RF061 a RF064, RF117, RF118).
+ *
+ * O pedido do perfil tem efeito no servidor (regista a abertura), por isso é feito uma só vez por `matchId`, também
+ * com o StrictMode; só `reload` o repete. O estado da decisão pertence a um candidato: quem usa o hook remonta-o
+ * (`key`) quando o `matchId` muda.
+ *
+ * @param matchId Interesse a avaliar.
+ * @returns O perfil, o estado da decisão e as ações de aceitar, recusar e abrir o CV.
  */
 export function useCandidateProfile(matchId: string): ICandidateProfileState {
   const inFlight = useRef<InFlight | null>(null);

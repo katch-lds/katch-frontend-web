@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
-# Exporta os resultados da análise SonarQube de um frontend do Katch para ficheiros JSON e um resumo em Markdown
-# (I120, a partir do script do backend da I066).
-# A instância da pipeline é efémera: estes ficheiros, publicados como artefacto, são o registo da análise.
+# Exportação do relatório SonarQube (QG-05).
 #
-# Variáveis: SONAR_HOST_URL (por omissão http://localhost:9000), SONAR_TOKEN, SONAR_PROJECT_KEY (por omissão
-# katch-frontend-web) e SONAR_REPORT_DIR (por omissão sonarqube-report).
+# Exporta os resultados da análise de um frontend do Katch para ficheiros JSON e um resumo em Markdown (a partir do
+# script do backend). A instância da pipeline é efémera: estes ficheiros, publicados como artefacto, são o registo da
+# análise.
+#
+# @param SONAR_HOST_URL     endereço da instância (por omissão http://localhost:9000)
+# @param SONAR_TOKEN        token de análise
+# @param SONAR_PROJECT_KEY  chave do projeto (por omissão katch-frontend-web)
+# @param SONAR_REPORT_DIR   pasta de saída (por omissão sonarqube-report)
+# @returns 0 com os ficheiros e o resumo escritos (o resumo também vai para a saída); diferente de 0 se faltar o
+#          token ou um pedido falhar.
 set -euo pipefail
 
 HOST="${SONAR_HOST_URL:-http://localhost:9000}"

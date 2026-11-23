@@ -8,21 +8,11 @@ import type {
   CompanyStatusDto,
 } from '../types/api';
 
-// I069 — CompanyService, só o registo e o estado (modelo de classes do frontend web v02, secção 4; API v02, 6.2).
-export interface ICompanyService {
-  register(request: CompanyRegistrationRequest): Promise<CompanyStatusDto>;
-  getStatus(): Promise<CompanyStatusDto | null>;
-  getRegistration(): Promise<CompanyRegistrationDto | null>;
-  resubmit(request: CompanyRegistrationRequest): Promise<CompanyStatusDto>;
-  updateRegistration(request: CompanyRegistrationRequest): Promise<CompanyStatusDto>;
-  getPage(): Promise<CompanyPageDto>;
-  updatePage(request: CompanyPageRequest): Promise<CompanyPageDto>;
-  uploadLogo(file: File): Promise<string | null>;
-  addGalleryPhoto(file: File): Promise<string | null>;
-}
-
-/** Empresa do Recrutador (RecruiterCompanyController). */
-export class CompanyService implements ICompanyService {
+/**
+ * Empresa do Recrutador: registo, estado, dados de registo, página de apresentação, logótipo e galeria
+ * (RecruiterCompanyController; API v02, 6.2 e 6.4).
+ */
+export class CompanyService {
   constructor(private readonly api: IApiClient) {}
 
   register(request: CompanyRegistrationRequest): Promise<CompanyStatusDto> {
@@ -44,27 +34,27 @@ export class CompanyService implements ICompanyService {
     return this.api.post<CompanyStatusDto>('/api/recruiter/company/resubmission', request);
   }
 
-  /** I121 — altera os dados de registo da Empresa aprovada; o NIF tem de ser igual ao registado (RF049). */
+  /** Altera os dados de registo da Empresa aprovada; o NIF tem de ser igual ao registado (RF049). */
   updateRegistration(request: CompanyRegistrationRequest): Promise<CompanyStatusDto> {
     return this.api.put<CompanyStatusDto>('/api/recruiter/company', request);
   }
 
-  /** I121 — página de apresentação da própria Empresa aprovada (RF046 a RF048). */
+  /** Página de apresentação da própria Empresa aprovada (RF046 a RF048). */
   getPage(): Promise<CompanyPageDto> {
     return this.api.get<CompanyPageDto>('/api/recruiter/company/page');
   }
 
-  /** I121 — grava a descrição e o sítio; `null` limpa o campo (RF046). */
+  /** Grava a descrição e o sítio; `null` limpa o campo (RF046). */
   updatePage(request: CompanyPageRequest): Promise<CompanyPageDto> {
     return this.api.put<CompanyPageDto>('/api/recruiter/company/page', request);
   }
 
-  /** I121 — substitui o logótipo; devolve o endereço do ficheiro (RF047). */
+  /** Substitui o logótipo; devolve o endereço do ficheiro (RF047). */
   uploadLogo(file: File): Promise<string | null> {
     return this.api.upload('PUT', '/api/recruiter/company/logo', file);
   }
 
-  /** I121 — acrescenta uma fotografia no fim da galeria; devolve o endereço do ficheiro (RF048). */
+  /** Acrescenta uma fotografia no fim da galeria; devolve o endereço do ficheiro (RF048). */
   addGalleryPhoto(file: File): Promise<string | null> {
     return this.api.upload('POST', '/api/recruiter/company/photos', file);
   }

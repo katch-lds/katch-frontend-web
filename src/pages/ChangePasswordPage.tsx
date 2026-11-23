@@ -4,9 +4,7 @@ import { paths } from '../routes/paths';
 import './auth.css';
 import './recruiter.css';
 
-// I069 — ChangePasswordPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A10 e A10b; RF084).
-
-/** Alteração da palavra-passe do Administrador; «Cancelar» volta aos indicadores. */
+/** A10 — alteração da palavra-passe do Administrador (RF084); «Cancelar» volta aos indicadores. */
 export default function ChangePasswordPage() {
   const navigate = useNavigate();
   return (

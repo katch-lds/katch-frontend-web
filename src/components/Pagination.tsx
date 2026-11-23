@@ -1,4 +1,4 @@
-// I073 — paginação com «Anterior» e «Seguinte» (modelo de classes do frontend web v02, secção 8.1: DataTable; A06 e A07).
+// Paginação com «Anterior» e «Seguinte» (A06 e A07).
 
 interface PaginationProps {
   page: number;

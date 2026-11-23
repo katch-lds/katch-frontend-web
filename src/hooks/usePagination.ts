@@ -1,10 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-
-// I073 — paginação no cliente sobre a lista completa devolvida pela API (modelo de classes do frontend web v02,
-// secção 8.1: DataTable; documentação da API v02, secção 11, L-02).
-
-/** Linhas por página das listas do Administrador (A06 e A07). */
-export const ADMIN_PAGE_SIZE = 12;
+import { ADMIN_PAGE_SIZE } from '../config/app';
 
 export interface Pagination<T> {
   /** Página atual, a partir de 1. */
@@ -14,7 +9,15 @@ export interface Pagination<T> {
   goToPage: (page: number) => void;
 }
 
-/** A página pedida fica sempre entre 1 e a última, mesmo que a lista encolha depois de uma nova leitura. */
+/**
+ * Paginação no cliente sobre a lista completa devolvida pela API (A06 e A07; API v02, secção 11, L-02).
+ *
+ * A página pedida fica sempre entre 1 e a última, mesmo que a lista encolha depois de uma nova leitura.
+ *
+ * @param rows Lista completa.
+ * @param pageSize Linhas por página.
+ * @returns A página atual, o número de páginas, as linhas visíveis e `goToPage`.
+ */
 export function usePagination<T>(rows: T[], pageSize: number = ADMIN_PAGE_SIZE): Pagination<T> {
   const [requested, setRequested] = useState(1);
   const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));

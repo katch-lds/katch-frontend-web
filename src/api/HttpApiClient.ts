@@ -1,7 +1,6 @@
 import type { SessionStore } from '../session/SessionStore';
 import { trimTrailingSlashes } from '../utils/url';
 import { ApiError } from './ApiError';
-import type { ConnectionMonitor } from './ConnectionMonitor';
 import type { IApiClient } from './IApiClient';
 
 type FetchFn = typeof fetch;
@@ -10,9 +9,8 @@ export interface HttpApiClientOptions {
   baseUrl: string;
   timeoutMs: number;
   session: SessionStore;
-  monitor: ConnectionMonitor;
   fetchFn?: FetchFn;
-  /** Chamado com cada resposta de erro da API (I069: ERR-01 e ERR-07 tratados pela sessão). */
+  /** Chamado com cada resposta de erro da API (o ERR-01 e o ERR-07 são tratados pela sessão). */
   onError?: (error: ApiError) => void;
 }
 
@@ -26,8 +24,6 @@ export class HttpApiClient implements IApiClient {
 
   private readonly session: SessionStore;
 
-  private readonly monitor: ConnectionMonitor;
-
   private readonly fetchFn: FetchFn;
 
   private readonly onError?: (error: ApiError) => void;
@@ -36,7 +32,6 @@ export class HttpApiClient implements IApiClient {
     this.baseUrl = trimTrailingSlashes(options.baseUrl);
     this.timeoutMs = options.timeoutMs;
     this.session = options.session;
-    this.monitor = options.monitor;
     this.fetchFn = options.fetchFn ?? ((input, init) => fetch(input, init));
     this.onError = options.onError;
   }
@@ -90,12 +85,10 @@ export class HttpApiClient implements IApiClient {
         signal: controller.signal,
       });
     } catch {
-      this.monitor.reportFailure();
       throw ApiError.connectionFailure();
     } finally {
       clearTimeout(timer);
     }
-    this.monitor.reportSuccess();
     if (!response.ok) {
       const error = await toApiError(response);
       this.onError?.(error);
@@ -112,7 +105,7 @@ export class HttpApiClient implements IApiClient {
     if (body !== undefined && !(body instanceof FormData)) {
       headers.set('Content-Type', 'application/json');
     }
-    const token = this.session.getToken();
+    const token = this.session.token();
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }

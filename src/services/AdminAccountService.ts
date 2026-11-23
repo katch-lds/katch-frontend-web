@@ -1,17 +1,8 @@
 import type { IApiClient } from '../api/IApiClient';
 import type { AccountDto, CandidateAdminDto } from '../types/api';
 
-// I073 — AdminAccountService (modelo de classes do frontend web v02, secção 5; API v02, 6.10).
-export interface IAdminAccountService {
-  listAccounts(): Promise<AccountDto[]>;
-  listCandidates(): Promise<CandidateAdminDto[]>;
-  block(userId: string): Promise<void>;
-  suspendCandidate(candidateId: string): Promise<void>;
-  reactivate(userId: string): Promise<void>;
-}
-
-/** Contas de utilizador e Candidatos (AdminAccountsController); só para o Administrador. */
-export class AdminAccountService implements IAdminAccountService {
+/** Contas de utilizador e Candidatos (AdminAccountsController; API v02, 6.10); só para o Administrador. */
+export class AdminAccountService {
   constructor(private readonly api: IApiClient) {}
 
   /** Todas as contas, por ordem alfabética do correio eletrónico (RF085). */

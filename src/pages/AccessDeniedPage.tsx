@@ -2,9 +2,7 @@ import { Link } from 'react-router';
 import { SignOutButton } from '../components/SignOutButton';
 import './auth.css';
 
-// I069 — AccessDeniedPage (modelo de classes do frontend web v02, secção 8; ecrã A11 do protótipo v02).
-
-/** Destino de quem abre uma área que não é do seu perfil (por exemplo, o Recrutador na supervisão). */
+/** A11 — destino de quem abre uma área que não é do seu perfil (por exemplo, o Recrutador na supervisão). */
 export default function AccessDeniedPage() {
   return (
     <main className="auth-page">

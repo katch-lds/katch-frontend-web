@@ -6,8 +6,8 @@ import { FormBanner } from './FormBanner';
 import { SubmitButton } from './SubmitButton';
 import { TextField } from './TextField';
 
-// I073 — uma das listas pré-definidas editáveis (A09 e A09b): alterar a designação na própria lista e acrescentar.
-// A designação vazia é rejeitada aqui; a repetida, com o motivo do servidor (ERR-10), junto do campo.
+// Uma das listas pré-definidas editáveis (A09 e A09b): alterar a designação na própria lista e acrescentar. A
+// designação vazia é rejeitada aqui; a repetida, com o motivo do servidor (ERR-10), junto do campo.
 
 interface ReferenceListSectionProps {
   /** Identificador único da secção (ids dos campos). */

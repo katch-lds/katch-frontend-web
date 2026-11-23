@@ -10,6 +10,14 @@ beforeEach(() => resetServiceMocks());
 
 const openMenu = () => fireEvent.click(screen.getByRole('button', { name: 'Administrador Katch' }));
 
+/** Painel do menu, encontrado pelo `aria-controls` do botão; null com o menu fechado. */
+function menuPanel(): HTMLElement | null {
+  const id = screen
+    .getByRole('button', { name: 'Administrador Katch' })
+    .getAttribute('aria-controls');
+  return id === null ? null : document.getElementById(id);
+}
+
 describe('AdminShell e UserMenu', () => {
   it('mostra a barra lateral por secções, sem conversas nem notificações, e o menu fechado', () => {
     renderApp('/admin/indicadores', signedInStore('ADMIN'));
@@ -31,7 +39,7 @@ describe('AdminShell e UserMenu', () => {
       expect(within(nav).getByText(section)).toBeInTheDocument(),
     );
     expect(within(nav).queryByText(/conversas|notificações/i)).not.toBeInTheDocument();
-    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(menuPanel()).toBeNull();
     expect(screen.getByRole('button', { name: 'Administrador Katch' })).toHaveAttribute(
       'aria-expanded',
       'false',
@@ -65,34 +73,35 @@ describe('AdminShell e UserMenu', () => {
 
     openMenu();
 
-    expect(screen.getByRole('menu')).toHaveTextContent('utilizador@exemplo.pt');
-    expect(screen.getByRole('menuitem', { name: 'Alterar palavra-passe' })).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: 'Terminar sessão' })).toBeInTheDocument();
+    expect(menuPanel()).toHaveTextContent('utilizador@exemplo.pt');
+    expect(screen.getByRole('button', { name: 'Alterar palavra-passe' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Terminar sessão' })).toBeInTheDocument();
     openMenu();
-    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(menuPanel()).toBeNull();
   });
 
   it('fecha o menu ao clicar fora e com Escape, mas não ao clicar dentro', () => {
     renderApp('/admin/indicadores', signedInStore('ADMIN'));
 
     openMenu();
-    fireEvent.mouseDown(screen.getByRole('menu'));
-    expect(screen.getByRole('menu')).toBeInTheDocument();
+    fireEvent.mouseDown(menuPanel() as HTMLElement);
+    expect(menuPanel()).toBeInTheDocument();
     fireEvent.mouseDown(document.body);
-    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(menuPanel()).toBeNull();
 
     openMenu();
     fireEvent.keyDown(document, { key: 'Enter' });
-    expect(screen.getByRole('menu')).toBeInTheDocument();
+    expect(menuPanel()).toBeInTheDocument();
     fireEvent.keyDown(document, { key: 'Escape' });
-    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(menuPanel()).toBeNull();
+    expect(screen.getByRole('button', { name: 'Administrador Katch' })).toHaveFocus();
   });
 
   it('«Alterar palavra-passe» leva a /admin/conta, dentro da moldura', async () => {
     renderApp('/admin/indicadores', signedInStore('ADMIN'));
 
     openMenu();
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Alterar palavra-passe' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Alterar palavra-passe' }));
 
     expect(await screen.findByLabelText('Palavra-passe atual')).toBeInTheDocument();
     expect(screen.getByTestId('location')).toHaveTextContent('/admin/conta');
@@ -104,7 +113,7 @@ describe('AdminShell e UserMenu', () => {
     const store = renderApp('/admin/indicadores', signedInStore('ADMIN'));
 
     openMenu();
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Terminar sessão' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Terminar sessão' }));
 
     expect(await screen.findByText('Os Candidatos utilizam a aplicação móvel')).toBeInTheDocument();
     expect(store.get()).toBeNull();
@@ -124,7 +133,7 @@ describe('AdminShell e UserMenu', () => {
     const store = renderApp('/admin/indicadores', signedInStore('ADMIN'));
 
     openMenu();
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Terminar sessão' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Terminar sessão' }));
 
     expect(await screen.findByText('Os Candidatos utilizam a aplicação móvel')).toBeInTheDocument();
     expect(store.get()).toBeNull();

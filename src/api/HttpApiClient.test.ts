@@ -3,7 +3,6 @@
  */
 import { SessionStore } from '../session/SessionStore';
 import { ApiError } from './ApiError';
-import { ConnectionMonitor } from './ConnectionMonitor';
 import { HttpApiClient } from './HttpApiClient';
 
 function jsonResponse(
@@ -19,16 +18,14 @@ function jsonResponse(
 
 function setup(fetchFn: jest.Mock, onError?: (error: ApiError) => void) {
   const session = new SessionStore(null);
-  const monitor = new ConnectionMonitor();
   const client = new HttpApiClient({
     baseUrl: 'http://api.test/',
     timeoutMs: 50,
     session,
-    monitor,
     fetchFn: fetchFn as unknown as typeof fetch,
     onError,
   });
-  return { client, session, monitor };
+  return { client, session };
 }
 
 describe('HttpApiClient', () => {
@@ -103,14 +100,13 @@ describe('HttpApiClient', () => {
     expect(error.httpStatus).toBe(500);
   });
 
-  it('reporta a falha de ligação e lança ApiError sem resposta', async () => {
+  it('lança o ApiError de falha de ligação quando não há resposta', async () => {
     const fetchFn = jest.fn().mockRejectedValue(new TypeError('Failed to fetch'));
-    const { client, monitor } = setup(fetchFn);
+    const { client } = setup(fetchFn);
 
     const error = (await client.get('/api/x').catch((e: unknown) => e)) as ApiError;
 
     expect(error.isConnectionFailure()).toBe(true);
-    expect(monitor.isOnline()).toBe(false);
   });
 
   it('envia o ficheiro em multipart e devolve o cabeçalho Location', async () => {

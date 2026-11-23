@@ -1,15 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
+import { DEFAULT_PERIOD_DAYS } from '../config/app';
 import { indicatorService } from '../services';
 import type { IndicatorsDto } from '../types/api';
-import { addDays, periodDays, periodError as validatePeriod } from '../validation/admin';
-import { todayLocal } from '../validation/jobs';
+import { addDays, localDate, periodDays } from '../utils/date';
+import { periodError as validatePeriod } from '../validation/admin';
 import { type IResourceState, useResource } from './useResource';
-
-// I074 — useIndicators (modelo de classes do frontend web v02, secção 9): o período escolhido, validado antes do
-// pedido à API (RF096), e os sete indicadores desse período.
-
-/** Período por omissão (não definido na documentação): os últimos 30 dias, de hoje − 29 dias a hoje. */
-const DEFAULT_PERIOD_DAYS = 30;
 
 export interface Indicators extends IResourceState<IndicatorsDto> {
   from: string;
@@ -27,11 +22,18 @@ interface Period {
 }
 
 function defaultPeriod(): Period {
-  const to = todayLocal();
+  const to = localDate();
   return { from: addDays(to, 1 - DEFAULT_PERIOD_DAYS), to };
 }
 
-/** Só o período aplicado, sempre válido, chega ao serviço; o período por omissão é válido por construção. */
+/**
+ * Indicadores da plataforma no período escolhido (A02; RF096).
+ *
+ * O período é validado antes do pedido: só o período aplicado, sempre válido, chega ao serviço; o período por
+ * omissão é válido por construção.
+ *
+ * @returns Os sete indicadores, o período aplicado, o erro do período e `applyPeriod`.
+ */
 export function useIndicators(): Indicators {
   const [applied, setApplied] = useState<Period>(defaultPeriod);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -41,7 +43,7 @@ export function useIndicators(): Indicators {
 
   const applyPeriod = useCallback(
     (from: string, to: string) => {
-      const error = validatePeriod(from, to, todayLocal());
+      const error = validatePeriod(from, to, localDate());
       setLocalError(error);
       if (error !== null) {
         return;

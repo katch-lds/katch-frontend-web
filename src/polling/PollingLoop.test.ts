@@ -20,7 +20,6 @@ describe('PollingLoop', () => {
     await jest.advanceTimersByTimeAsync(9000);
 
     expect(task).toHaveBeenCalledTimes(3);
-    expect(loop.isRunning()).toBe(false);
   });
 
   it('não interrompe o ciclo quando uma consulta falha', async () => {

@@ -1,8 +1,9 @@
 name: CI
 
-# Pipeline CI do frontend web (I120), no modelo da pipeline do backend (I066): QG-01 (build), QG-05 (ESLint,
-# Prettier e análise SonarQube com o Quality Gate «Katch QG-05») e a cobertura mínima de 40% das linhas dos testes
-# unitários (Jest). O passo do QG-06 (Playwright) fica preparado e corre logo que exista playwright.config.ts.
+# Pipeline CI do frontend web, no modelo da pipeline do backend: QG-01 (build, com a verificação de tipos da
+# aplicação e dos testes), QG-05 (ESLint, Prettier e análise SonarQube com o Quality Gate «Katch QG-05») e a
+# cobertura mínima de 40% das linhas dos testes unitários (Jest). O passo do QG-06 (Playwright) fica preparado e
+# corre logo que exista playwright.config.ts.
 # Corre em cada Merge Request para a main e em cada push na main; a regra de proteção da main exige os dois jobs com
 # sucesso antes do merge.
 on:

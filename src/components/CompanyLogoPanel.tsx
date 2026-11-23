@@ -1,9 +1,9 @@
 import { useFileUpload } from '../hooks/useFileUpload';
-import { LOGO_MAX_MB } from '../validation/company';
+import { LOGO_MAX_MB } from '../config/app';
 import { ImageUploadButton } from './ImageUploadButton';
 import { ProtectedImage } from './ProtectedImage';
 
-// I121 — logótipo da Empresa (W07, RF047).
+// Logótipo da Empresa (W07, RF047).
 
 interface CompanyLogoPanelProps {
   logoUrl: string | null;

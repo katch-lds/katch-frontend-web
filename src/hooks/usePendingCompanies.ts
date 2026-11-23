@@ -2,15 +2,11 @@ import { useCallback, useEffect } from 'react';
 import { ApiError } from '../api/ApiError';
 import { adminCompanyService } from '../services';
 import type { CompanyRegistrationDto, PendingCompanyDto, RejectCompanyRequest } from '../types/api';
-import { type IResourceState, useResource } from './useResource';
-
-// I073 — Empresas pendentes (modelo de classes do frontend web v02, secção 9): a lista (A03), os dados submetidos
-// da Empresa aberta (A04) e as decisões. Também serve o contador da barra lateral e, na I074, a faixa dos
-// indicadores («Há n Empresa(s) a aguardar aprovação»).
+import { type IResourceState, reloadAfter, useResource } from './useResource';
 
 const listPending = () => adminCompanyService.listPending();
 
-/** Instâncias montadas, para que uma decisão atualize a lista, o contador da barra lateral e a faixa dos indicadores. */
+/** Instâncias montadas: uma decisão atualiza a lista, o contador da barra lateral e a faixa dos indicadores. */
 const reloaders = new Set<() => void>();
 
 function reloadAll(): void {
@@ -30,8 +26,13 @@ export interface PendingCompanies extends IResourceState<PendingCompanyDto[]> {
 }
 
 /**
- * `companyId` abre os dados submetidos dessa Empresa (A04). Depois de cada decisão, certa ou falhada, todas as
- * instâncias montadas leem a lista de novo: o servidor é a fonte de verdade.
+ * Empresas pendentes (A03), dados submetidos da Empresa aberta (A04) e decisões (RF091 a RF094).
+ *
+ * Também serve o contador da barra lateral e a faixa dos indicadores. Depois de cada decisão, certa ou falhada,
+ * todas as instâncias montadas leem a lista de novo: o servidor é a fonte de verdade.
+ *
+ * @param companyId Empresa cujos dados submetidos se abrem; null só lê a lista.
+ * @returns A lista, os dados da Empresa aberta e as ações de aprovar e recusar.
  */
 export function usePendingCompanies(companyId: string | null = null): PendingCompanies {
   const list = useResource(listPending);
@@ -50,21 +51,16 @@ export function usePendingCompanies(companyId: string | null = null): PendingCom
     };
   }, [reload]);
 
-  const approve = useCallback(async (id: string) => {
-    try {
-      await adminCompanyService.approve(id);
-    } finally {
-      reloadAll();
-    }
-  }, []);
+  const approve = useCallback(
+    (id: string) => reloadAfter(() => adminCompanyService.approve(id), reloadAll),
+    [],
+  );
 
-  const reject = useCallback(async (id: string, request: RejectCompanyRequest) => {
-    try {
-      await adminCompanyService.reject(id, request);
-    } finally {
-      reloadAll();
-    }
-  }, []);
+  const reject = useCallback(
+    (id: string, request: RejectCompanyRequest) =>
+      reloadAfter(() => adminCompanyService.reject(id, request), reloadAll),
+    [],
+  );
 
   return {
     ...list,

@@ -7,8 +7,6 @@ import { formatDate } from '../utils/date';
 import './admin.css';
 import './recruiter.css';
 
-// I073 — PublishedJobsPage (modelo de classes do frontend web v02, secção 8.3; ecrã A06 do protótipo v02).
-
 const columns: Column<PublishedJobAdminDto>[] = [
   { key: 'title', header: 'Função', render: (job) => <strong>{job.title}</strong> },
   { key: 'company', header: 'Empresa', render: (job) => job.companyName },

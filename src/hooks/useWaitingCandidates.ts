@@ -3,7 +3,14 @@ import { candidateEvaluationService } from '../services';
 import type { WaitingCandidateDto } from '../types/api';
 import { type IResourceState, useResource } from './useResource';
 
-/** Candidatos em espera de uma vaga (W16; RF060). Ao mudar de vaga repete o pedido e descarta a resposta anterior. */
+/**
+ * Candidatos em espera de uma vaga (W16; RF060).
+ *
+ * Ao mudar de vaga repete o pedido e descarta a resposta anterior.
+ *
+ * @param jobId Vaga escolhida.
+ * @returns Os candidatos em espera, o estado de carregamento e `reload`.
+ */
 export function useWaitingCandidates(jobId: string): IResourceState<WaitingCandidateDto[]> {
   const load = useCallback(() => candidateEvaluationService.listWaiting(jobId), [jobId]);
   return useResource(load);

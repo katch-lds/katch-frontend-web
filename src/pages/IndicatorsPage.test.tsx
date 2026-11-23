@@ -3,19 +3,17 @@ import { indicators, pendingCompany } from '../../test/fixtures';
 import { renderApp, signedInStore } from '../../test/renderApp';
 import { adminCompanyService, indicatorService, resetServiceMocks } from '../../test/servicesMock';
 import { ApiError } from '../api/ApiError';
-import { addDays } from '../validation/admin';
-import { todayLocal } from '../validation/jobs';
+import { addDays, localDate } from '../utils/date';
 
 jest.mock('../services', () => jest.requireActual('../../test/servicesMock'));
 
 const { get } = indicatorService;
-const today = todayLocal();
+const today = localDate();
 const defaultFrom = addDays(today, -29);
 const display = (date: string) => date.split('-').reverse().join('/');
 const location = () => screen.getByTestId('location').textContent;
 const open = () => renderApp('/admin/indicadores', signedInStore('ADMIN'));
-const barWidths = () =>
-  screen.getAllByTestId('funnel-bar').map((bar) => (bar as HTMLElement).style.width);
+const barWidths = () => screen.getAllByRole('progressbar').map((bar) => bar.style.width);
 
 function applyPeriod(from: string, to: string) {
   fireEvent.change(screen.getByLabelText('Data inicial'), { target: { value: from } });

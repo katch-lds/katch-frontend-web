@@ -1,7 +1,13 @@
 import { useContext } from 'react';
 import { ConversationsContext, type ConversationsState } from './ConversationsProvider';
 
-/** Lê o estado da área de conversas, partilhado com o contador da barra lateral (DF-14). */
+/**
+ * Estado da área de conversas.
+ *
+ * Partilhado com o contador da barra lateral (DF-14); exige o `ConversationsProvider`.
+ *
+ * @returns O estado e as ações do `ConversationsProvider` mais próximo.
+ */
 export function useConversations(): ConversationsState {
   const state = useContext(ConversationsContext);
   if (state === null) {

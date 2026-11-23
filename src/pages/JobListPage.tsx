@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { ApiError } from '../api/ApiError';
+import { ActionFeedback } from '../components/ActionFeedback';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { type Column, DataTable } from '../components/DataTable';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { StatusBadge } from '../components/StatusBadge';
 import { useJobs } from '../hooks/useJobs';
-import { editJobPath, paths } from '../routes/paths';
+import { editJobPath, navigationState, paths } from '../routes/paths';
 import { jobService } from '../services';
 import type { JobDto, JobStatus } from '../types/api';
 import { isConflictWithCode } from '../utils/apiErrors';
 import { formatDate } from '../utils/date';
 import './jobs.css';
 import './recruiter.css';
-
-// I070 — JobListPage (modelo de classes do frontend web v02, secção 8.2; ecrãs W09 e W12 a W15 do protótipo v02).
 
 type JobAction = 'publish' | 'suspend' | 'republish' | 'close' | 'delete';
 
@@ -97,9 +97,9 @@ export default function JobListPage() {
   const [pending, setPending] = useState<Pending | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(
-    (location.state as { notice?: string } | null)?.notice ?? null,
+    navigationState<{ notice: string }>(location).notice ?? null,
   );
-  const [failure, setFailure] = useState<string | null>(null);
+  const [failure, setFailure] = useState<ApiError | null>(null);
 
   const confirm = async (job: JobDto, action: JobAction) => {
     setBusy(true);
@@ -117,7 +117,7 @@ export default function JobListPage() {
       } else {
         // ERR-30: o estado mudou entretanto; a lista é lida de novo (secção 6).
         setPending(null);
-        setFailure(apiError.message);
+        setFailure(apiError);
         reload();
       }
     } finally {
@@ -156,7 +156,7 @@ export default function JobListPage() {
           <span className="note">sem ações</span>
         ) : (
           <div className="row-actions">
-            <button type="button" onClick={() => navigate(editJobPath(job.jobId))}>
+            <button type="button" onClick={() => void navigate(editJobPath(job.jobId))}>
               Editar
             </button>
             {actionsByStatus[job.status].map((action) => (
@@ -173,29 +173,13 @@ export default function JobListPage() {
     <section className="recruiter-page">
       <div className="page-header">
         <h1>Vagas</h1>
-        <button type="button" className="primary" onClick={() => navigate(paths.newJob)}>
+        <button type="button" className="primary" onClick={() => void navigate(paths.newJob)}>
           Nova vaga
         </button>
       </div>
-      {notice && (
-        <p role="status" className="notice">
-          {notice}
-        </p>
-      )}
-      {failure && (
-        <p role="alert" className="alert">
-          {failure}
-        </p>
-      )}
+      <ActionFeedback notice={notice} failure={failure} />
       {loading && data === null && <p>A carregar as vagas…</p>}
-      {error && (
-        <div role="alert" className="alert">
-          <p>{error.message}</p>
-          <button type="button" onClick={reload}>
-            Tentar de novo
-          </button>
-        </div>
-      )}
+      {error && <ErrorAlert error={error} onRetry={reload} />}
       {data && (
         <DataTable
           columns={columns}

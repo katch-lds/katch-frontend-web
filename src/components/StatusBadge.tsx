@@ -5,9 +5,5 @@ import { badgeStatusLabels } from '../types/labels';
 export function StatusBadge({
   status,
 }: Readonly<{ status: JobStatus | CompanyStatus | AccountStatus }>) {
-  return (
-    <span className={`status-badge status-${status.toLowerCase()}`}>
-      {badgeStatusLabels[status]}
-    </span>
-  );
+  return <span className="status-badge">{badgeStatusLabels[status]}</span>;
 }

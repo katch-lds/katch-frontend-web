@@ -4,16 +4,9 @@ import { ErrorAlert } from '../components/ErrorAlert';
 import { useIndicators } from '../hooks/useIndicators';
 import { usePendingCompanies } from '../hooks/usePendingCompanies';
 import { paths } from '../routes/paths';
+import { formatIsoDate } from '../utils/date';
 import './admin.css';
 import './recruiter.css';
-
-// I074 — IndicatorsPage (modelo de classes do frontend web v02, secção 8.3; ecrãs A02, A02c e A02d do protótipo v02).
-
-/** `aaaa-MM-dd` → `dd/mm/aaaa`, sem passar por Date (sem efeito do fuso). */
-function displayDate(date: string): string {
-  const [year, month, day] = date.split('-');
-  return `${day}/${month}/${year}`;
-}
 
 function Card({ label, value, note }: Readonly<{ label: string; value: number; note?: string }>) {
   return (
@@ -57,7 +50,7 @@ export default function IndicatorsPage() {
     : [];
 
   return (
-    <section className="recruiter-page admin-page indicators-page">
+    <section className="recruiter-page admin-page">
       <h1>Painel de indicadores</h1>
       <p className="summary">
         Valores agregados da plataforma para o período escolhido. Sem dados pessoais nem conteúdo de
@@ -105,7 +98,9 @@ export default function IndicatorsPage() {
 
       {data && !periodError && (
         <>
-          <h2 className="indicator-section">Estado na data final ({displayDate(indicators.to)})</h2>
+          <h2 className="indicator-section">
+            Estado na data final ({formatIsoDate(indicators.to)})
+          </h2>
           <div className="indicator-grid indicator-grid-3">
             <Card
               label="Candidatos com conta ativa"
@@ -125,7 +120,7 @@ export default function IndicatorsPage() {
           </div>
 
           <h2 className="indicator-section">
-            Atividade no período ({displayDate(indicators.from)} a {displayDate(indicators.to)})
+            Atividade no período ({formatIsoDate(indicators.from)} a {formatIsoDate(indicators.to)})
           </h2>
           <div className="indicator-grid indicator-grid-4">
             <Card
@@ -151,11 +146,15 @@ export default function IndicatorsPage() {
             <p className="summary">Mesmos valores, em proporção dos interesses</p>
             {bars.map((bar) => (
               <div key={bar.label} className="funnel-row">
-                <span className="funnel-label">{bar.label}</span>
+                <span>{bar.label}</span>
                 <div className="funnel-track">
                   <div
                     className="funnel-bar"
-                    data-testid="funnel-bar"
+                    role="progressbar"
+                    aria-label={bar.label}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={barWidth(bar.value, data.interestsExpressed)}
                     style={{ width: `${barWidth(bar.value, data.interestsExpressed)}%` }}
                   />
                 </div>
@@ -171,7 +170,7 @@ export default function IndicatorsPage() {
           <p>
             Há {pendingCount} {pendingCount === 1 ? 'Empresa' : 'Empresas'} a aguardar aprovação.
           </p>
-          <button type="button" onClick={() => navigate(paths.adminPending)}>
+          <button type="button" onClick={() => void navigate(paths.adminPending)}>
             Ver pendentes
           </button>
         </div>

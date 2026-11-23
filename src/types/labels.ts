@@ -45,7 +45,7 @@ export const companyStatusLabels: Record<CompanyStatus, string> = {
   SUSPENDED: 'Suspensa',
 };
 
-// I070 — tipo de contrato e regime de trabalho da vaga (RF050).
+// Tipo de contrato e regime de trabalho da vaga (RF050).
 export const contractTypeLabels: Record<ContractType, string> = {
   PERMANENT: 'Sem termo',
   FIXED_TERM: 'A termo',
@@ -59,7 +59,7 @@ export const workModeLabels: Record<WorkMode, string> = {
   REMOTE: 'Remoto',
 };
 
-// I072 — disponibilidade do candidato (RF061).
+// Disponibilidade do candidato (RF061).
 export const availabilityLabels: Record<Availability, string> = {
   IMMEDIATE: 'Imediata',
   FIFTEEN_DAYS: 'Quinze dias',
@@ -67,7 +67,7 @@ export const availabilityLabels: Record<Availability, string> = {
   TO_BE_AGREED: 'A combinar',
 };
 
-// I073 — contas de utilizador (RF085 a RF090).
+// Contas de utilizador (RF085 a RF090).
 export const accountStatusLabels: Record<AccountStatus, string> = {
   ACTIVE: 'Ativa',
   BLOCKED: 'Bloqueada',

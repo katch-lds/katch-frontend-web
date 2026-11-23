@@ -1,5 +1,11 @@
-// Jest (I120): testes unitários e cobertura de linhas. A cobertura mínima de 40% das linhas é a do frontend web
-// (convenções de código e quality gates, secção 6) e falha o comando quando não é atingida.
+/**
+ * Configuração do Jest: testes unitários e cobertura de linhas.
+ *
+ * A cobertura mínima de 40% das linhas é a do frontend web (convenções de código e quality gates, secção 6) e faz
+ * falhar o comando quando não é atingida.
+ *
+ * @returns A configuração do Jest.
+ */
 module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src'],

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { CompanyRegistrationDto, CompanyRegistrationRequest } from '../types/api';
-import { companyStatusLabels } from '../types/labels';
 import { companyFormFrom } from '../validation/forms';
 import { CompanyDataForm } from './CompanyDataForm';
+import { StatusBadge } from './StatusBadge';
 
-// I121 — dados de registo da Empresa aprovada (W08, RF049): o NIF fica bloqueado.
+// Dados de registo da Empresa aprovada (W08, RF049): o NIF fica bloqueado.
 
 interface CompanyDataPanelProps {
   registration: CompanyRegistrationDto | null;
@@ -24,7 +24,7 @@ export function CompanyDataPanel({ registration, onSave }: Readonly<CompanyDataP
   return (
     <div className="stack">
       <p>
-        Estado: <span className="status-badge status-approved">{companyStatusLabels.APPROVED}</span>
+        Estado: <StatusBadge status="APPROVED" />
       </p>
       {saved && (
         <p role="status" className="form-notice">

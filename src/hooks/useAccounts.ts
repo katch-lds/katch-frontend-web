@@ -2,10 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { adminAccountService } from '../services';
 import type { AccountDto, AccountStatus, UserType } from '../types/api';
 import { type Pagination, usePagination } from './usePagination';
-import { type IResourceState, useResource } from './useResource';
-
-// I073 — contas de utilizador (A07; RF085 a RF087): pesquisa por correio eletrónico, filtros por tipo e estado,
-// paginação de 12 linhas e nova leitura depois de cada ação.
+import { type IResourceState, reloadAfter, useResource } from './useResource';
 
 const listAccounts = () => adminAccountService.listAccounts();
 
@@ -21,6 +18,14 @@ export interface Accounts extends IResourceState<AccountDto[]>, Pagination<Accou
   reactivate: (userId: string) => Promise<void>;
 }
 
+/**
+ * Contas de utilizador (A07; RF085 a RF087).
+ *
+ * Pesquisa por correio eletrónico, filtros por tipo e estado, paginação de 12 linhas e nova leitura depois de cada
+ * ação.
+ *
+ * @returns A página visível das contas filtradas, os filtros e as ações de bloquear e reativar.
+ */
 export function useAccounts(): Accounts {
   const resource = useResource(listAccounts);
   const [emailQuery, setEmailQuery] = useState('');
@@ -58,24 +63,12 @@ export function useAccounts(): Accounts {
   );
 
   const block = useCallback(
-    async (userId: string) => {
-      try {
-        await adminAccountService.block(userId);
-      } finally {
-        reload();
-      }
-    },
+    (userId: string) => reloadAfter(() => adminAccountService.block(userId), reload),
     [reload],
   );
 
   const reactivate = useCallback(
-    async (userId: string) => {
-      try {
-        await adminAccountService.reactivate(userId);
-      } finally {
-        reload();
-      }
-    },
+    (userId: string) => reloadAfter(() => adminAccountService.reactivate(userId), reload),
     [reload],
   );
 
