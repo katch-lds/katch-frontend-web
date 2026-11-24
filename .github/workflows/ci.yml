@@ -136,6 +136,12 @@ jobs:
         env:
           ConnectionStrings__Katch: Host=localhost;Port=5432;Database=katch;Username=postgres;Password=postgres
           Cors__AllowedOrigins: http://localhost:4173
+          # Os 40 testes criam contas e iniciam sessão a partir do mesmo IP em poucos minutos: os limites por IP da API
+          # (Limits, por omissão 10 por minuto) são alargados só nesta instância de teste (ERR-14 da I136).
+          Limits__LoginPermitLimit: '1000'
+          Limits__RegistrationPermitLimit: '1000'
+          Limits__LocationsPermitLimit: '1000'
+          Limits__UserPermitLimit: '10000'
         run: |
           export Jwt__Secret="$(openssl rand -hex 32)"
           nohup dotnet run --project katch-backend/src/Katch.Backend --launch-profile http > api.log 2>&1 &
