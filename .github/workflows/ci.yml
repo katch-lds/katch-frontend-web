@@ -100,7 +100,8 @@ jobs:
           PGPASSWORD: postgres
         run: |
           for script in 01-create-schema 02-seed-reference-data 03-seed-demo-data; do
-            psql -d katch -v ON_ERROR_STOP=1 -q -f "katch-backend/database/${script}.sql"
+            # -v demo=1: o script 03 só aceita correr numa base de desenvolvimento ou de demonstração.
+            psql -d katch -v ON_ERROR_STOP=1 -v demo=1 -q -f "katch-backend/database/${script}.sql"
           done
 
       # As palavras-passe de demonstração não estão no repositório (só os resumos). Para a pipeline não depender delas,
