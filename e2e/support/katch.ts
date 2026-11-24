@@ -226,6 +226,46 @@ export async function createJob(session: Session, title = unique('Vaga E2E')): P
   return { jobId: job.jobId, title };
 }
 
+/** PDF mínimo válido (assinatura %PDF-), para o curriculum vitae enviado pelos testes. */
+export const tinyPdf = Buffer.from(
+  '%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n' +
+    '2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n' +
+    '3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>endobj\n' +
+    'trailer<</Root 1 0 R>>\n%%EOF\n',
+  'latin1',
+);
+
+/**
+ * Prepara o perfil de um Candidato de demonstração pela API da aplicação móvel: envia a fotografia e o
+ * curriculum vitae e garante a competência indicada (a pretendida pela vaga criada com `createJob`).
+ */
+export async function prepareCandidateProfile(candidateEmail: string, skillId: string) {
+  const candidate = await apiLogin(candidateEmail, demoPassword(), 'mobile');
+  await ok(
+    await candidate.api.put('/api/candidate/profile/photo', {
+      multipart: { file: { name: 'foto.png', mimeType: 'image/png', buffer: tinyPng } },
+    }),
+    'enviar fotografia do Candidato',
+  );
+  await ok(
+    await candidate.api.put('/api/candidate/profile/cv', {
+      multipart: { file: { name: 'cv.pdf', mimeType: 'application/pdf', buffer: tinyPdf } },
+    }),
+    'enviar CV do Candidato',
+  );
+  const profile = await ok<{ skills: { id: string }[] }>(
+    await candidate.api.get('/api/candidate/profile'),
+    'perfil do Candidato',
+  );
+  if (!profile.skills.some((skill) => skill.id === skillId)) {
+    await ok(
+      await candidate.api.post('/api/candidate/profile/skills', { data: { skillId } }),
+      'acrescentar competência',
+    );
+  }
+  await candidate.api.dispose();
+}
+
 /** O Candidato de demonstração manifesta interesse na vaga (pedido direto da aplicação móvel). */
 export async function candidateInterest(candidateEmail: string, jobId: string): Promise<Session> {
   const candidate = await apiLogin(candidateEmail, demoPassword(), 'mobile');
@@ -305,6 +345,9 @@ export const tinyPng = Buffer.from(
 
 /** Procura a linha nas páginas de uma tabela paginada («Seguinte»). */
 export async function findRow(page: Page, text: string | RegExp) {
+  // Espera que a tabela carregue: sem isto, a linha pode ser procurada antes de a lista chegar
+  // e a paginação começar já com os dados, saltando a primeira página.
+  await expect(page.getByRole('row').nth(1)).toBeVisible();
   for (let i = 0; i < 30; i += 1) {
     const line = row(page, text);
     if (await line.count()) {

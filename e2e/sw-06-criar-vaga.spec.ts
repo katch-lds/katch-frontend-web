@@ -30,11 +30,22 @@ test.describe('SW-06 Criação e publicação de vaga', () => {
     await page.getByLabel('Marcar como urgente').check();
     const deadline = new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString().slice(0, 10);
     await page.getByLabel('Data-limite (opcional)').fill(deadline);
-    const photos = page.getByLabel('Adicionar fotografia');
-    if (await photos.count()) {
-      await photos.setInputFiles({ name: 'vaga.png', mimeType: 'image/png', buffer: tinyPng });
-    }
+    // M11: as fotografias da vaga são escolhidas neste formulário e enviadas depois de a vaga existir.
+    await page
+      .getByLabel('Adicionar fotografia')
+      .setInputFiles({ name: 'vaga.png', mimeType: 'image/png', buffer: tinyPng });
+    const photos = page.locator('.photos-box');
+    await expect(photos.getByRole('listitem').filter({ hasText: 'vaga.png' })).toBeVisible();
+    await expect(photos).toContainText('(1/5)');
+    const upload = page.waitForResponse(
+      (response) =>
+        response.request().method() === 'POST' &&
+        /\/api\/recruiter\/jobs\/[^/]+\/photos$/.test(response.url()),
+    );
     await page.getByRole('button', { name: 'Guardar' }).click();
+    const photoResponse = await upload;
+    expect(photoResponse.ok()).toBe(true);
+    const jobId = /\/jobs\/([^/]+)\/photos$/.exec(photoResponse.url())?.[1] ?? '';
 
     await expect(page).toHaveURL(/\/vagas$/);
     const line = row(page, title);
@@ -42,5 +53,14 @@ test.describe('SW-06 Criação e publicação de vaga', () => {
     await line.getByRole('button', { name: 'Publicar' }).click();
     await page.getByRole('dialog').getByRole('button', { name: 'Publicar' }).click();
     await expect(line).toContainText('Publicada');
+
+    // A fotografia ficou guardada: a alteração da vaga mostra-a já carregada (1 de 5).
+    await page.goto(`/vagas/${jobId}/editar`);
+    await expect(photos).toContainText('(1/5)');
+    const image = photos.locator('img[alt="Fotografia 1 da vaga"]');
+    await expect(image).toBeVisible();
+    await expect
+      .poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth))
+      .toBeGreaterThan(0);
   });
 });
