@@ -23,9 +23,7 @@ test.describe('SW-15 Empresas e vagas (Administrador)', () => {
 
     await page.goto('/admin/empresas');
     await expect(page.getByRole('heading', { name: 'Empresas' })).toBeVisible();
-    await expect(
-      page.getByText('Nortecode Soluções Digitais, Lda.').or(page.getByRole('row')).first(),
-    ).toBeVisible();
+    await expect(await findRow(page, recruiter.companyName)).toContainText('Aprovada');
 
     await (
       await findRow(page, recruiter.companyName)

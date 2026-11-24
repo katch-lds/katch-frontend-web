@@ -16,7 +16,8 @@ async function noHorizontalScroll(page: Page, path: string) {
   for (const width of widths) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(path);
-    await page.waitForLoadState('networkidle');
+    // A página está desenhada quando o título principal aparece (sem depender de networkidle).
+    await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );

@@ -84,16 +84,38 @@ export async function apiLogin(
 
 export const adminApi = (): Promise<Session> => apiLogin(adminEmail, adminPassword());
 
+/** Resultado de um pedido à API: estado HTTP e, num erro, o código ERR-nn do corpo. */
+export interface ApiOutcome {
+  status: number;
+  code?: string;
+}
+
+/** Estado HTTP e código de erro de uma resposta, sem a verificar (casos de erro). */
+export async function outcome(
+  response: Awaited<ReturnType<APIRequestContext['get']>>,
+): Promise<ApiOutcome> {
+  const status = response.status();
+  if (response.ok()) {
+    return { status };
+  }
+  const body = (await response.json().catch(() => ({}))) as { code?: string };
+  return { status, code: body.code };
+}
+
 /** Pedido de início de sessão sem verificar o resultado (casos de erro). */
-export async function rawLogin(email: string, password: string, client: 'web' | 'mobile') {
+export async function rawLogin(
+  email: string,
+  password: string,
+  client: 'web' | 'mobile',
+): Promise<ApiOutcome> {
   const anonymous = await request.newContext({ baseURL: apiUrl });
   const response = await anonymous.post('/api/auth/login', {
     headers: { 'X-Client-App': client },
     data: { email, password },
   });
-  const status = response.status();
+  const result = await outcome(response);
   await anonymous.dispose();
-  return status;
+  return result;
 }
 
 export async function ok<T>(
@@ -294,8 +316,11 @@ export async function findRow(page: Page, text: string | RegExp) {
     if (!(await next.count()) || (await next.isDisabled())) {
       break;
     }
+    // Espera que a página seguinte substitua as linhas, em vez de um tempo fixo.
+    const firstRow = page.getByRole('row').nth(1);
+    const before = await firstRow.innerText();
     await next.click();
-    await page.waitForTimeout(300);
+    await expect(firstRow).not.toHaveText(before);
   }
   return row(page, text).first();
 }

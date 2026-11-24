@@ -26,11 +26,15 @@ test.describe('SW-01 Início e fim de sessão', () => {
 
   test('SW-01b palavra-passe errada mostra o motivo uniforme e não entra', async ({ page }) => {
     await loginUi(page, demo.recruiter1, `${demoPassword()}x`);
-    await expect(page.getByRole('alert')).toBeVisible();
+    const wrongPassword = page.getByRole('alert');
+    await expect(wrongPassword).toBeVisible();
+    const uniformReason = (await wrongPassword.innerText()).trim();
+    expect(uniformReason).not.toBe('');
     await expect(page).toHaveURL(/\/entrar$/);
 
+    // O motivo é o mesmo com um correio inexistente: não revela se a conta existe (RF107).
     await loginUi(page, 'inexistente@teste.katch.pt', `${demoPassword()}x`);
-    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('alert')).toHaveText(uniformReason);
     await expect(page).toHaveURL(/\/entrar$/);
   });
 
@@ -43,7 +47,7 @@ test.describe('SW-01 Início e fim de sessão', () => {
     );
 
     await loginUi(page, recruiter.email, recruiter.password);
-    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('alert')).toContainText(/bloqueada/i);
     await expect(page).toHaveURL(/\/entrar$/);
   });
 

@@ -79,13 +79,15 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
           fi
 
-      # QG-06 — testes de sistema (I079). A API corre a partir da main do katch-backend, sobre a base criada pelos
+      # QG-06 — testes de sistema (I079). A API corre a partir do katch-backend (versão fixa abaixo), sobre a base criada pelos
       # scripts 01 a 03 (esquema, listas e dados de demonstração). As palavras-passe vêm dos segredos do repositório.
       - name: QG-06 Obter o katch-backend
         uses: actions/checkout@v4
         with:
           repository: katch-lds/katch-backend
-          ref: main
+          # Versão fixa do backend (main da I136, 796f81e), para uma alteração no backend não partir esta pipeline sem
+          # alterações neste repositório. Para testar outra versão, definir a variável do repositório KATCH_BACKEND_REF.
+          ref: ${{ vars.KATCH_BACKEND_REF || '796f81e99ef9d955eab4d27095443accf821f171' }}
           path: katch-backend
           token: ${{ secrets.KATCH_BACKEND_TOKEN || github.token }}
 

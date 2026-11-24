@@ -39,6 +39,13 @@ test.describe('SW-17 Painel de indicadores', () => {
     await expect(
       page.getByRole('alert').or(page.locator('[aria-invalid="true"]')).first(),
     ).toBeVisible();
-    expect(requested).toBeFalsy();
+    // Um pedido que chegasse depois do alerta também seria detetado: espera até 2 s por ele.
+    const late = await page
+      .waitForRequest((r) => r.url().includes('/api/admin/indicators'), { timeout: 2_000 })
+      .then(
+        () => true,
+        () => false,
+      );
+    expect(requested || late).toBeFalsy();
   });
 });

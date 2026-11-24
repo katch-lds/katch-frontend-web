@@ -9,6 +9,7 @@ import {
   demo,
   loginRecruiter,
   ok,
+  outcome,
 } from './support/katch';
 
 // SW-13 — Encerramento e modo apenas de consulta (RF070, RF074, RF075).
@@ -65,7 +66,7 @@ test.describe('SW-13 Encerramento e modo apenas de consulta', () => {
       const noMatch = await session.api.post(`/api/conversations/${waiting[0].matchId}/messages`, {
         data: { content: 'Olá' },
       });
-      expect(noMatch.status()).toBeGreaterThanOrEqual(400);
+      expect(await outcome(noMatch)).toEqual({ status: 409, code: 'ERR-37' });
       await page.goto(`/conversas?match=${waiting[0].matchId}`);
       await expect(page.getByRole('button', { name: 'Enviar' })).toBeDisabled();
     } finally {
@@ -98,6 +99,6 @@ test.describe('SW-13 Encerramento e modo apenas de consulta', () => {
     const send = await candidate.api.post(`/api/conversations/${matchId}/messages`, {
       data: { content: 'Olá' },
     });
-    expect(send.status()).toBeGreaterThanOrEqual(400);
+    expect(await outcome(send)).toEqual({ status: 409, code: 'ERR-36' });
   });
 });

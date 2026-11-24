@@ -18,15 +18,20 @@ test.describe('SW-05 Página e dados da Empresa', () => {
     await page.getByRole('button', { name: 'Guardar', exact: true }).click();
     await expect(page.getByText('Página guardada')).toBeVisible();
 
+    const logoSaved = page.waitForResponse(
+      (r) => r.url().endsWith('/api/recruiter/company/logo') && r.request().method() === 'PUT',
+    );
     await page.getByLabel('Escolher').setInputFiles(png('logo.png'));
-    await expect(page.getByText('A enviar…')).toHaveCount(0);
+    expect((await logoSaved).ok()).toBeTruthy();
 
     const gallery = page.getByLabel('Adicionar fotografia');
     for (let i = 1; i <= 6; i += 1) {
       await gallery.setInputFiles(png(`foto-${i}.png`));
       await expect(page.getByText(`${i}/6`)).toBeVisible();
     }
-    await gallery.setInputFiles(png('foto-7.png')).catch(() => undefined);
+    // A 7.ª fotografia é recusada antes do envio (RF048).
+    await gallery.setInputFiles(png('foto-7.png'));
+    await expect(page.getByRole('alert')).toContainText('A galeria já tem 6 fotografias.');
     await expect(page.getByText('6/6')).toBeVisible();
 
     await page.reload();

@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
+  adminApi,
+  apiLogin,
   confirmDialog,
   createRecruiter,
   demo,
@@ -21,30 +23,43 @@ test.describe('SW-14 Contas e Candidatos (Administrador)', () => {
     await line.getByRole('button', { name: 'Bloquear' }).click();
     await confirmDialog(page, 'Bloquear');
     await expect(await findRow(page, recruiter.email)).toContainText('Bloqueada');
-    expect(await rawLogin(recruiter.email, recruiter.password, 'web')).toBeGreaterThanOrEqual(400);
+    expect(await rawLogin(recruiter.email, recruiter.password, 'web')).toEqual({
+      status: 403,
+      code: 'ERR-03',
+    });
 
     await (await findRow(page, recruiter.email)).getByRole('button', { name: 'Reativar' }).click();
     await confirmDialog(page, 'Reativar');
     await expect(await findRow(page, recruiter.email)).toContainText('Ativa');
-    expect(await rawLogin(recruiter.email, recruiter.password, 'web')).toBe(200);
+    expect((await rawLogin(recruiter.email, recruiter.password, 'web')).status).toBe(200);
   });
 
   test('SW-14b suspende e reativa um Candidato; o suspenso não inicia sessão por pedido direto', async ({
     page,
   }) => {
     const email = demo.candidate(17);
+    const candidate = await apiLogin(email, demoPassword(), 'mobile');
     await loginAdmin(page);
     await page.goto('/admin/candidatos');
     await expect(page.getByRole('heading', { name: 'Candidatos' })).toBeVisible();
 
-    await (await findRow(page, email)).getByRole('button', { name: 'Suspender' }).click();
-    await confirmDialog(page, 'Suspender');
-    await expect(await findRow(page, email)).toContainText('Suspensa');
-    expect(await rawLogin(email, demoPassword(), 'mobile')).toBeGreaterThanOrEqual(400);
+    try {
+      await (await findRow(page, email)).getByRole('button', { name: 'Suspender' }).click();
+      await confirmDialog(page, 'Suspender');
+      await expect(await findRow(page, email)).toContainText('Suspensa');
+      expect(await rawLogin(email, demoPassword(), 'mobile')).toEqual({
+        status: 403,
+        code: 'ERR-04',
+      });
 
-    await (await findRow(page, email)).getByRole('button', { name: 'Reativar' }).click();
-    await confirmDialog(page, 'Reativar');
-    await expect(await findRow(page, email)).toContainText('Ativa');
-    expect(await rawLogin(email, demoPassword(), 'mobile')).toBe(200);
+      await (await findRow(page, email)).getByRole('button', { name: 'Reativar' }).click();
+      await confirmDialog(page, 'Reativar');
+      await expect(await findRow(page, email)).toContainText('Ativa');
+      expect((await rawLogin(email, demoPassword(), 'mobile')).status).toBe(200);
+    } finally {
+      // Repõe a conta, se o teste falhar com o Candidato suspenso (a reativação de uma conta ativa é ignorada).
+      const admin = await adminApi();
+      await admin.api.post(`/api/admin/accounts/${candidate.userId}/reactivate`);
+    }
   });
 });

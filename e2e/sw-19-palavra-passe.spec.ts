@@ -40,8 +40,11 @@ test.describe('SW-19 Alteração da própria palavra-passe', () => {
     const updated = newPassword();
     await change(page, recruiter.password, updated);
     await expect(page.getByText('Palavra-passe alterada.')).toBeVisible();
-    expect(await rawLogin(recruiter.email, updated, 'web')).toBe(200);
-    expect(await rawLogin(recruiter.email, recruiter.password, 'web')).toBeGreaterThanOrEqual(400);
+    expect((await rawLogin(recruiter.email, updated, 'web')).status).toBe(200);
+    expect(await rawLogin(recruiter.email, recruiter.password, 'web')).toEqual({
+      status: 401,
+      code: 'ERR-02',
+    });
   });
 
   test('SW-19b o Administrador altera a palavra-passe e entra com a nova', async ({ page }) => {
@@ -52,7 +55,7 @@ test.describe('SW-19 Alteração da própria palavra-passe', () => {
     await change(page, original, updated);
     try {
       await expect(page.getByText('Palavra-passe alterada.')).toBeVisible();
-      expect(await rawLogin('admin@katch.pt', updated, 'web')).toBe(200);
+      expect((await rawLogin('admin@katch.pt', updated, 'web')).status).toBe(200);
     } finally {
       // Repõe a palavra-passe do Administrador para os cenários seguintes.
       const admin = await apiLogin('admin@katch.pt', updated);
