@@ -15,7 +15,7 @@ test.describe('SW-01 Início e fim de sessão', () => {
     page,
   }) => {
     await loginUi(page, demo.recruiter1, demoPassword());
-    await expect(page).toHaveURL(/\/vagas$/);
+    await expect(page).toHaveURL(/\/vagas-inexistente$/);
     await expect(page.getByRole('heading', { name: 'Vagas', level: 1 })).toBeVisible();
 
     await page.getByRole('button', { name: 'Terminar sessão' }).click();
