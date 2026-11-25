@@ -2,8 +2,8 @@ name: CI
 
 # Pipeline CI do frontend web, no modelo da pipeline do backend: QG-01 (build, com a verificação de tipos da
 # aplicação e dos testes), QG-05 (ESLint, Prettier e análise SonarQube com o Quality Gate «Katch QG-05») e a
-# cobertura mínima de 40% das linhas dos testes unitários (Jest). O passo do QG-06 (Playwright) fica preparado e
-# corre logo que exista playwright.config.ts.
+# cobertura mínima de 40% das linhas dos testes unitários (Jest) e QG-06 (testes de sistema Playwright, I079), contra
+# a API do katch-backend e o PostgreSQL com os dados de demonstração, com o frontend servido por vite preview.
 # Corre em cada Merge Request para a main e em cada push na main; a regra de proteção da main exige os dois jobs com
 # sucesso antes do merge.
 on:
@@ -29,7 +29,19 @@ jobs:
   build-and-test:
     name: build-and-test
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
+    services:
+      # Base de dados da API usada pelos testes de sistema (QG-06), com locale UTF-8 (database/README.md do backend).
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: katch
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
       - uses: actions/checkout@v4
 
@@ -67,11 +79,101 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
           fi
 
-      - name: QG-06 Testes de sistema (Playwright)
-        if: hashFiles('playwright.config.ts') != ''
+      # QG-06 — testes de sistema (I079). A API corre a partir do katch-backend (versão fixa abaixo), sobre a base criada pelos
+      # scripts 01 a 03 (esquema, listas e dados de demonstração). As palavras-passe vêm dos segredos do repositório.
+      - name: QG-06 Obter o katch-backend
+        uses: actions/checkout@v4
+        with:
+          repository: katch-lds/katch-backend
+          # Versão fixa do backend (main da I136, 796f81e), para uma alteração no backend não partir esta pipeline sem
+          # alterações neste repositório. Para testar outra versão, definir a variável do repositório KATCH_BACKEND_REF.
+          ref: ${{ vars.KATCH_BACKEND_REF || '796f81e99ef9d955eab4d27095443accf821f171' }}
+          path: katch-backend
+          token: ${{ secrets.KATCH_BACKEND_TOKEN || github.token }}
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: QG-06 Base de dados com os dados de demonstração
+        env:
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
         run: |
-          npx playwright install --with-deps
+          for script in 01-create-schema 02-seed-reference-data 03-seed-demo-data; do
+            # -v demo=1: o script 03 só aceita correr numa base de desenvolvimento ou de demonstração.
+            psql -d katch -v ON_ERROR_STOP=1 -v demo=1 -q -f "katch-backend/database/${script}.sql"
+          done
+
+      # As palavras-passe de demonstração não estão no repositório (só os resumos). Para a pipeline não depender delas,
+      # as contas de demonstração e o Administrador recebem resumos novos (formato V3 do ASP.NET Core Identity:
+      # PBKDF2-HMAC-SHA512, 100 000 iterações, sal de 16 bytes) das palavras-passe guardadas nos segredos.
+      - name: QG-06 Palavras-passe das contas de teste
+        env:
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          E2E_DEMO_PASSWORD: ${{ secrets.E2E_DEMO_PASSWORD }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+        run: |
+          python3 - > e2e-passwords.sql <<'PY'
+          import base64, hashlib, os, struct
+
+          def identity_v3(password: str) -> str:
+              salt = os.urandom(16)
+              subkey = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100_000, 32)
+              header = b'\x01' + struct.pack('>III', 2, 100_000, len(salt))
+              return base64.b64encode(header + salt + subkey).decode('ascii')
+
+          demo = identity_v3(os.environ['E2E_DEMO_PASSWORD'])
+          admin = identity_v3(os.environ['E2E_ADMIN_PASSWORD'])
+          print(f"UPDATE app_user SET password_hash = '{demo}' WHERE email LIKE '%@demo.katch.pt';")
+          print(f"UPDATE app_user SET password_hash = '{admin}' WHERE email = 'admin@katch.pt';")
+          PY
+          psql -d katch -v ON_ERROR_STOP=1 -q -f e2e-passwords.sql
+          rm e2e-passwords.sql
+
+      - name: QG-06 Arrancar a API
+        env:
+          ConnectionStrings__Katch: Host=localhost;Port=5432;Database=katch;Username=postgres;Password=postgres
+          Cors__AllowedOrigins: http://localhost:4173
+          # Os 40 testes criam contas e iniciam sessão a partir do mesmo IP em poucos minutos: os limites por IP da API
+          # (Limits, por omissão 10 por minuto) são alargados só nesta instância de teste (ERR-14 da I136).
+          Limits__LoginPermitLimit: '1000'
+          Limits__RegistrationPermitLimit: '1000'
+          Limits__LocationsPermitLimit: '1000'
+          Limits__UserPermitLimit: '10000'
+        run: |
+          export Jwt__Secret="$(openssl rand -hex 32)"
+          nohup dotnet run --project katch-backend/src/Katch.Backend --launch-profile http > api.log 2>&1 &
+          for i in $(seq 1 90); do
+            if curl -s -o /dev/null http://localhost:5180/swagger/index.html; then echo "API pronta"; exit 0; fi
+            sleep 2
+          done
+          cat api.log
+          exit 1
+
+      - name: QG-06 Testes de sistema (Playwright)
+        env:
+          E2E_API_URL: http://localhost:5180
+          E2E_DEMO_PASSWORD: ${{ secrets.E2E_DEMO_PASSWORD }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+        run: |
+          npx playwright install --with-deps chromium
           npx playwright test
+
+      - name: Publicar relatório do Playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          if-no-files-found: ignore
+
+      - name: Registo da API
+        if: always()
+        run: if [[ -f api.log ]]; then tail -n 200 api.log; fi
 
       - name: Publicar relatório de cobertura
         if: always()
